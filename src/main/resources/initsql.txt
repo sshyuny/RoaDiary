@@ -1,0 +1,22 @@
+CREATE USER 'rduser'@'localhost' IDENTIFIED BY 'rduserps';
+
+CREATE DATABASE rddb CHARACTER SET=UTF8;
+
+GRANT ALL PRIVILEGES ON rddb.* tO 'rduser'@'localhost';
+
+CREATE TABLE rddb.users(
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(96),
+    name VARCHAR(72),
+    password VARCHAR(72),
+    regis_date DATETIME,
+    lastvisit_date DATETIME
+)
+
+CREATE TABLE rddb.things(
+    things_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    FOREIGN KEY(user_id) REFERENCES users(user_id),
+    time DATETIME,
+    content VARCHAR(255),
+    FOREIGN KEY(category_id) REFERENCES category(category_id)
+)
