@@ -1,6 +1,7 @@
 package controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,11 +24,16 @@ public class AccountController {
         return "main";
     }
 
-    @PostMapping("/account/register")
+    @GetMapping("/account/register1")
+    public String register1() {
+        return "account/register1";
+    }
+
+    @PostMapping("/account/register2")
     public String accountRegister(AccountRegisterRequest regReq) {
         try {
             accountRegisterService.regist(regReq);
-            return "account/register";
+            return "account/registered";
         } catch (DuplicateAccountException ex) {
             return "main";
         }

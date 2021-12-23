@@ -20,7 +20,7 @@
     <init-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>
-        config.MemberConfig
+        config.AccountConfig
         config.MvcConfig
         config.ControllerConfig
       </param-value>
