@@ -30,6 +30,11 @@ public class AccountController {
     }
 
     @PostMapping("/account/register2")
+    public String register2() {
+        return "account/register2";
+    }
+
+    @PostMapping("/account/registered")
     public String accountRegister(AccountRegisterRequest regReq) {
         try {
             accountRegisterService.regist(regReq);

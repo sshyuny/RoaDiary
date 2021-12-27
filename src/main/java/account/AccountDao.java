@@ -42,7 +42,7 @@ public class AccountDao {
 
     public Account selectByEmail(String email) {
         List<Account> results = jdbcTemplate.query(
-            "SELECT * FROM users WHERE email = ?", 
+            "SELECT * FROM user WHERE email = ?", 
             accountRowMapper, email);
 
         return results.isEmpty() ? null : results.get(0);
@@ -54,7 +54,7 @@ public class AccountDao {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement pstmt = con.prepareStatement(
-                    "INSERT INTO users(email, password, name, regis_date, lastvisit_date " + 
+                    "INSERT INTO user(email, password, name, regis_date, lastvisit_date) " + 
                     "values (?, ?, ?, ?, ?)",
                     new String[] {"id"}
                 );

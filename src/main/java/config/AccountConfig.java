@@ -14,7 +14,7 @@ public class AccountConfig {
     public DataSource dataSource() {
         DataSource ds = new DataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost/spring5fs?characterEncoding=utf8&useSSL=false");  // SSL 설정 변경
+        ds.setUrl("jdbc:mysql://localhost/rddb?characterEncoding=utf8&useSSL=false");  // SSL 설정 변경
         ds.setUsername("rduser");
         ds.setPassword("rduserpw");
         ds.setInitialSize(5);
