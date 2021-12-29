@@ -30,8 +30,8 @@ public class AccountDao {
             public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Account account =  new Account(
                     rs.getString("email"),
-                    rs.getString("password"),
                     rs.getString("name"),
+                    rs.getString("password"),
                     rs.getTimestamp("regis_date").toLocalDateTime(),
                     rs.getTimestamp("lastvisit_date").toLocalDateTime()
                 );
@@ -54,13 +54,13 @@ public class AccountDao {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement pstmt = con.prepareStatement(
-                    "INSERT INTO user(email, password, name, regis_date, lastvisit_date) " + 
+                    "INSERT INTO user(email, name, password, regis_date, lastvisit_date) " + 
                     "values (?, ?, ?, ?, ?)",
                     new String[] {"id"}
                 );
                 pstmt.setString(1, account.getEmail());
-                pstmt.setString(2, account.getPassword());
-                pstmt.setString(3, account.getName());
+                pstmt.setString(2, account.getName());
+                pstmt.setString(3, account.getPassword());
                 pstmt.setTimestamp(4, Timestamp.valueOf(account.getRegis_date()));
                 pstmt.setTimestamp(5, Timestamp.valueOf(account.getLastvisit_date()));
                 return pstmt;

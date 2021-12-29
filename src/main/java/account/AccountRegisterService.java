@@ -15,7 +15,7 @@ public class AccountRegisterService {
         if(account != null) {
             throw new DuplicateAccountException("dup email" + req.getEmail());
         }
-        Account newAccount = new Account(req.getEmail(), req.getPassword(), req.getName(), LocalDateTime.now(), LocalDateTime.now());
+        Account newAccount = new Account(req.getEmail(), req.getName(), req.getPassword(), LocalDateTime.now(), LocalDateTime.now());
         accountDao.insert(newAccount);
         return newAccount.getId();
     }

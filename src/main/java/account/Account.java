@@ -10,7 +10,7 @@ public class Account {
     private LocalDateTime regis_date;
     private LocalDateTime lastvisit_date;
 
-    public Account(String email, String password, String name, LocalDateTime regis_date, LocalDateTime lastvisit_date) {
+    public Account(String email, String name, String password, LocalDateTime regis_date, LocalDateTime lastvisit_date) {
         this.email = email;
         this.password = password;
         this.name = name;

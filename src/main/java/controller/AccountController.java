@@ -1,6 +1,7 @@
 package controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,8 @@ public class AccountController {
     }
 
     @PostMapping("/account/register2")
-    public String register2() {
+    public String register2(Model model) {
+        model.addAttribute("AccountregisterRequest", new AccountRegisterRequest());
         return "account/register2";
     }
 
