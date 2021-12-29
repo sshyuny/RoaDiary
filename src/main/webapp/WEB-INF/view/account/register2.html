@@ -25,22 +25,22 @@
     -->
 
     <p>
-      <form action="registered.html" modelAttribute="AccountRegisterRequest" method="post">
+      <form action="registered" method="post">
         <label>
           이메일:<br>
-          <input type="email" path="email">
+          <input type="email" name="email" id="email">
         </label>
         <label>
           이름:<br>
-          <input type="text" path="name">
+          <input type="text" name="name" id="name">
         </label>
         <label>
           비밀번호:<br>
-          <input type="password" path="password">
+          <input type="password" name="password" id="password">
         </label>
         <label>
           비밀번호 확인:<br>
-          <input type="password" path="confirmPassword">
+          <input type="password" name="confirmPassword" id="confirmPassword">
         </label>
         <input type="submit">
       </form>
