@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import account.AccountDao;
-import account.AccountRegisterService;
+import account.AccountService;
 
 @Configuration
 public class AccountConfig {
@@ -28,8 +28,8 @@ public class AccountConfig {
     }
 
     @Bean
-    public AccountRegisterService accountRegisterService() {
-        return new AccountRegisterService(accountDao());
+    public AccountService accountService() {
+        return new AccountService(accountDao());
     }
 
 }

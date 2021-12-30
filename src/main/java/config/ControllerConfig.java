@@ -4,19 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import account.AccountRegisterService;
+import account.AccountService;
 import controller.AccountController;
 
 @Configuration
 public class ControllerConfig {
     
     @Autowired
-    private AccountRegisterService accountRegisterService;
+    private AccountService accountService;
 
     @Bean
     public AccountController accountThings() {
         AccountController controller = new AccountController();
-        controller.setAccountRegisterService(accountRegisterService);
+        controller.setAccountService(accountService);
         return controller;
     }
 }

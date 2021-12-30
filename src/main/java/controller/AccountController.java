@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.AccountRegisterRequest;
-import account.AccountRegisterService;
+import account.AccountService;
 import account.DuplicateAccountException;
 
 @Controller
 public class AccountController {
 
-    private AccountRegisterService accountRegisterService;
+    private AccountService accountService;
 
-    public void setAccountRegisterService(AccountRegisterService accountRegisterService) {
-        this.accountRegisterService = accountRegisterService;
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     // 테스트 
@@ -39,7 +39,7 @@ public class AccountController {
     @PostMapping("/account/registered")
     public String accountRegister(AccountRegisterRequest regReq) {
         try {
-            accountRegisterService.regist(regReq);
+            accountService.regist(regReq);
             return "account/registered";
         } catch (DuplicateAccountException ex) {
             return "main";
