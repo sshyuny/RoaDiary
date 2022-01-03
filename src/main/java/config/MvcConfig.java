@@ -23,7 +23,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public ViewResolver viewResolver() {
         InternalResourceViewResolver vr = new InternalResourceViewResolver();
         vr.setPrefix("/WEB-INF/view/");
-        vr.setSuffix(".html");
+        vr.setSuffix(".jsp");
         return vr;
     }
 }

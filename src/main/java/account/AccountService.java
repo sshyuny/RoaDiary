@@ -10,6 +10,7 @@ public class AccountService {
         this.accountDao = accountDao;
     }
 
+    //===== 회원 가입 =====//
     public Long regist(AccountRegisterRequest req) {
         Account account = accountDao.selectByEmail(req.getEmail());
         if(account != null) {
@@ -19,4 +20,13 @@ public class AccountService {
         accountDao.insert(newAccount);
         return newAccount.getId();
     }
+/*
+    //===== LoginInfo 객체 생성(로그인 시 정보 확인) =====//
+    public LoginInfo authenticate(String email, String password) {
+        Account account = accountDao.selectByEmail(email);
+        if (account == null) {
+            throw new WrongIdPasswordException();
+        }
+        if ()
+    }*/
 }
