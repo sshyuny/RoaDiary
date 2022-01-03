@@ -1,5 +1,7 @@
 package controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +33,11 @@ public class AccountController {
     }
 
     @PostMapping("/account/register2")
-    public String register2(Model model) {
+    public String register2(HttpServletRequest request, Model model) {
+        String agreeParam = request.getParameter("agree");
+        if(agreeParam == null || !agreeParam.equals("true")) {
+            return "account/register1";
+        }
         model.addAttribute("AccountregisterRequest", new AccountRegisterRequest());
         return "account/register2";
     }

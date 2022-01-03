@@ -7,10 +7,10 @@
   <body>
     <h1>개인정보 동의</h1>
     <p>
-      <form action="register1" method="post">
+      <form action="register2" method="post">
       <p id="onlyChecked"></p>
         제출하신 이메일과 RoaDiary에 적은 기록들을 보관 및 서비스 개선을 위한 사용에 동의하시나요?
-        <input type="checkbox" id="agree" checked />동의함.
+        <input type="checkbox" id="agree" name="agree" value="true" />동의함.
         <input type="submit" onclick="checkif()">
       </form>
     </p>
