@@ -9,23 +9,37 @@
     <p>
       <form action="registered" method="post">
         <label>
-          이메일:<br>
-          <input type="email" name="email" id="email">
+          이메일:
+          <input type="email" name="email" id="email" />
+          <br>
         </label>
         <label>
-          이름:<br>
-          <input type="text" name="name" id="name">
+          이름:
+          <input type="text" name="name" id="name" />
+          <br>
         </label>
         <label>
-          비밀번호:<br>
-          <input type="password" name="password" id="password">
+          비밀번호:
+          <input type="password" name="password" id="password" />
+          <br>
         </label>
         <label>
-          비밀번호 확인:<br>
-          <input type="password" name="confirmPassword" id="confirmPassword">
+          비밀번호 확인:
+          <input type="password" name="confirmPassword" id="confirmPassword" />
+          <br>
         </label>
-        <input type="submit">
+        <input type="submit" onclick="checkIfEq()">
       </form>
+
+    <script type="text/javascript">
+      function checkIfEq() {
+        var pw = document.getElementById('password');
+        var cfPw = document.getElementById('confirmPassword');
+        if(pw != cfPw) {
+          alert("비밀번호가 일치하지 않습니다.");
+        }
+      }
+    </script>
       
     </p>
   </body>
