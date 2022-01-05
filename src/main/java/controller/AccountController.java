@@ -1,10 +1,13 @@
 package controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,17 +41,27 @@ public class AccountController {
         if(agreeParam == null || !agreeParam.equals("true")) {
             return "account/register1";
         }
-        model.addAttribute("AccountregisterRequest", new AccountRegisterRequest());
+        model.addAttribute("accountRegisterRequest", new AccountRegisterRequest());
         return "account/register2";
     }
 
     @PostMapping("/account/registered")
-    public String accountRegister(AccountRegisterRequest regReq) {
+    public String accountRegister(AccountRegisterRequest accountRegisterRequest, Errors errors, Model model) {
+        AccountRegisterRequestValidator newAccRegReqVal = new AccountRegisterRequestValidator();
+        newAccRegReqVal.validate(accountRegisterRequest, errors);
+        model.addAttribute("AccountRegisterRequest", newAccRegReqVal);
+        //new AccountRegisterRequestValidator().validate(accountRegisterRequest, errors);
+        //model.addAttribute("AccountRegisterRequest", new AccountRegisterRequest());
+        //@ModelAttribute("accountRegisterRequest") @Valid AccountRegisterRequest accountRegisterRequest
+        if(errors.hasErrors()) {
+            return "account/register2";
+        }
         try {
-            accountService.regist(regReq);
+            accountService.regist(accountRegisterRequest);
             return "account/registered";
         } catch (DuplicateAccountException ex) {
-            return "main";
+            errors.rejectValue("email", "duplicate");
+            return "account/register2";
         }
     }
     

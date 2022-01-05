@@ -35,7 +35,7 @@ public class AccountDao {
                     rs.getTimestamp("regis_date").toLocalDateTime(),
                     rs.getTimestamp("lastvisit_date").toLocalDateTime()
                 );
-                account.setId(rs.getLong("id"));
+                account.setId(rs.getLong("user_id"));
                 return account;
             }
         };
