@@ -2,6 +2,10 @@ package account;
 
 import java.time.LocalDateTime;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import controller.AccountRegisterRequest;
+
 public class AccountService {
     
     private AccountDao accountDao;
@@ -35,5 +39,17 @@ public class AccountService {
             account.getEmail(), 
             account.getName()
             );
+    }
+
+    //===== 비밀번호 변경 =====//
+    @Transactional
+    public void changeAccount(String email, String oldPwd, String newPwd) {
+        Account account = accountDao.selectByEmail(email);
+        if(account == null)
+            throw new AccountNotFoundException();
+
+        account.changePassword(oldPwd, newPwd);
+
+        accountDao.update(account);
     }
 }

@@ -1,4 +1,4 @@
-package account;
+package controller;
 
 // 회원가입 할 때, 사용하는 커맨드 객체
 public class AccountRegisterRequest {

@@ -1,7 +1,6 @@
 account\AccountService.class
 account\LoginInfo.class
 account\Account.class
-account\AccountRegisterRequest.class
 account\AccountDao.class
 controller\AccountRegisterRequestValidator.class
 account\AccountDao$1.class

@@ -3,6 +3,8 @@ package config;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import account.AccountDao;
 import account.AccountService;
@@ -20,6 +22,13 @@ public class AccountConfig {
         ds.setInitialSize(5);
         ds.setMaxActive(10);
         return ds;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        DataSourceTransactionManager tm= new DataSourceTransactionManager();
+        tm.setDataSource(dataSource());
+        return tm;
     }
 
     @Bean

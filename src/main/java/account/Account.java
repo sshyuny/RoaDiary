@@ -67,4 +67,12 @@ public class Account {
         return this.password.equals(password);
     }
 
+    //===== 비밀번호 변경 =====//
+    public void changePassword(String oldPwd, String newPwd) {
+        if(!password.equals(oldPwd)){
+            throw new WrongIdPasswordException();
+        }
+        this.password = newPwd;
+    }
+
 }

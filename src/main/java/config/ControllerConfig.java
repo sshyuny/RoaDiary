@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import account.AccountService;
 import controller.AccountController;
+//import controller.LoginController;
 
 @Configuration
 public class ControllerConfig {
@@ -19,4 +20,11 @@ public class ControllerConfig {
         controller.setAccountService(accountService);
         return controller;
     }
+
+    /*@Bean
+    public LoginController loginController() {
+        LoginController controller = new LoginController();
+        controller.setAccountService(accountService);
+        return controller;
+    }*/
 }

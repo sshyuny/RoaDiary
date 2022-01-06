@@ -70,4 +70,9 @@ public class AccountDao {
         Number keyValue = keyHolder.getKey();
         account.setId(keyValue.longValue());
     }
+
+    public void update(Account account) {
+        jdbcTemplate.update("UPDATE user SET name=?, password=? WHERE email=?", 
+            account.getName(), account.getPassword(), account.getEmail());
+    }
 }
