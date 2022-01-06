@@ -20,13 +20,20 @@ public class AccountService {
         accountDao.insert(newAccount);
         return newAccount.getId();
     }
-/*
-    //===== LoginInfo 객체 생성(로그인 시 정보 확인) =====//
+
+    //===== LoginInfo 객체 생성(로그인 시 정보 확인 로그인 세션 생성 위한) =====//
     public LoginInfo authenticate(String email, String password) {
         Account account = accountDao.selectByEmail(email);
         if (account == null) {
             throw new WrongIdPasswordException();
         }
-        if ()
-    }*/
+        if (!account.matchPassword(password)) {
+            throw new WrongIdPasswordException();
+        }
+        return new LoginInfo(
+            account.getId(), 
+            account.getEmail(), 
+            account.getName()
+            );
+    }
 }

@@ -1,5 +1,6 @@
 package account;
 
+// 로그인 정보 세션에 보관할 때 사용
 public class LoginInfo {
     
     private Long id;
