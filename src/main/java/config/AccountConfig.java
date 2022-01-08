@@ -8,6 +8,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import account.AccountDao;
 import account.AccountService;
+import account.LoginInfo;
+import records.RecordsDao;
+import records.RecordsService;
 
 @Configuration
 public class AccountConfig {
@@ -31,6 +34,7 @@ public class AccountConfig {
         return tm;
     }
 
+    //==== account
     @Bean
     public AccountDao accountDao() {
         return new AccountDao(dataSource());
@@ -39,6 +43,17 @@ public class AccountConfig {
     @Bean
     public AccountService accountService() {
         return new AccountService(accountDao());
+    }
+
+    //===== Records
+    @Bean
+    public RecordsDao recordsDao() {
+        return new RecordsDao(dataSource());
+    }
+
+    @Bean
+    public RecordsService recordsService() {
+        return new RecordsService(recordsDao());
     }
 
 }

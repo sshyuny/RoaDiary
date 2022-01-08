@@ -10,9 +10,9 @@ public class ThingsTb {
     private String content;
     private Long category_id;
 
-    public ThingsTb(Long things_id, Long user_id, LocalDateTime time, String content, Long category_id) {
-        this.things_id = things_id;
-        this.user_id = user_id;
+    public ThingsTb(LocalDateTime time, String content, Long category_id) {
+        //this.things_id = things_id;
+        //this.user_id = user_id;
         this.time = time;
         this.content = content;
         this.category_id = category_id;

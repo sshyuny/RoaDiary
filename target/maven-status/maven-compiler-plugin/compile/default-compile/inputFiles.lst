@@ -4,6 +4,8 @@ C:\MyProject\RoaDiary\src\main\java\controller\AccountRegisterRequest.java
 C:\MyProject\RoaDiary\src\main\java\config\ControllerConfig.java
 C:\MyProject\RoaDiary\src\main\java\account\DuplicateAccountException.java
 C:\MyProject\RoaDiary\src\main\java\controller\LoginCommand.java
+C:\MyProject\RoaDiary\src\main\java\controller\ThingsCommand.java
+C:\MyProject\RoaDiary\src\main\java\records\RecordsDao.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountDao.java
 C:\MyProject\RoaDiary\src\main\java\account\WrongIdPasswordException.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountNotFoundException.java
@@ -13,5 +15,8 @@ C:\MyProject\RoaDiary\src\main\java\account\AccountService.java
 C:\MyProject\RoaDiary\src\main\java\config\AccountConfig.java
 C:\MyProject\RoaDiary\src\main\java\account\LoginInfo.java
 C:\MyProject\RoaDiary\src\main\java\controller\AccountController.java
+C:\MyProject\RoaDiary\src\main\java\records\ThingsTb.java
+C:\MyProject\RoaDiary\src\main\java\controller\RecordsController.java
 C:\MyProject\RoaDiary\src\main\java\controller\AccountRegisterRequestValidator.java
+C:\MyProject\RoaDiary\src\main\java\records\RecordsService.java
 C:\MyProject\RoaDiary\src\main\java\controller\LoginCommandValidator.java

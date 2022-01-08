@@ -2,11 +2,11 @@ account\AccountService.class
 account\LoginInfo.class
 account\Account.class
 account\AccountDao.class
+account\AccountDao$2.class
+controller\AccountController.class
+config\MvcConfig.class
 controller\AccountRegisterRequestValidator.class
 account\AccountDao$1.class
 account\DuplicateAccountException.class
-account\AccountDao$2.class
 config\ControllerConfig.class
 config\AccountConfig.class
-controller\AccountController.class
-config\MvcConfig.class

@@ -13,6 +13,5 @@
         <a href="../">홈페이지로 돌아가기</a>
     </p>
     <br>
-    <input type="submit" value="제출하기">
   </body>
 </html>
