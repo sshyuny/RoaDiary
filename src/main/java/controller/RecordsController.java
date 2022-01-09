@@ -25,6 +25,12 @@ public class RecordsController {
         return "records/recordsMain";
     }
 
+    /**
+     * 
+     * @param thingsCommand
+     * @param session
+     * @return
+     */
     @PostMapping("/records")
     public String recordsRecording(ThingsCommand thingsCommand, HttpSession session) {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");

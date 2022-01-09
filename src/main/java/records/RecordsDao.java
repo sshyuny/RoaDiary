@@ -30,7 +30,7 @@ public class RecordsDao {
         }*/
 
     public void insert(final ThingsTb thingsTb) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        //KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -47,7 +47,7 @@ public class RecordsDao {
             }
         };
         jdbcTemplate.update(pre);
-        Number keyValue = keyHolder.getKey();
-        thingsTb.setThings_id(keyValue.longValue());
+        //Number keyValue = keyHolder.getKey();
+        //thingsTb.setThings_id(keyValue.longValue());
     }
 }

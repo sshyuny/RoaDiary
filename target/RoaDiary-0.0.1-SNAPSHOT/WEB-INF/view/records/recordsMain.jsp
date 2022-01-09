@@ -8,7 +8,7 @@
   <body>
     <h1>오늘의 기록</h1>
     <p>
-      <form:form modelAttribute="thingsCommand">
+      <form:form action="records" modelAttribute="thingsCommand">
         <label>
           시간:
           <form:input path="time"/>

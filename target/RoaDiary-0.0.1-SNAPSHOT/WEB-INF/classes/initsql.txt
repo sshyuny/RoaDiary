@@ -40,3 +40,6 @@ CREATE TABLE rddb.things_tag(
     FOREIGN KEY(things_id) REFERENCES rddb.things(things_id),
     FOREIGN KEY(tag_id) REFERENCES rddb.tag(tag_id)
 ) engine=InnoDB character set=utf8;
+
+*** category 테이블에 미리 값 넣어두기
+INSERT INTO category(name) VALUES ("What I did"), ("What I ate"), ("About health");
