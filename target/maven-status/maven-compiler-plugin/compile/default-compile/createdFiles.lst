@@ -5,7 +5,6 @@ account\AccountDao.class
 account\AccountDao$2.class
 controller\AccountController.class
 config\MvcConfig.class
-controller\AccountRegisterRequestValidator.class
 account\AccountDao$1.class
 account\DuplicateAccountException.class
 config\ControllerConfig.class

@@ -10,8 +10,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 public class RecordsDao {
     
@@ -30,7 +28,6 @@ public class RecordsDao {
         }*/
 
     public void insert(final ThingsTb thingsTb) {
-        //KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -47,7 +44,5 @@ public class RecordsDao {
             }
         };
         jdbcTemplate.update(pre);
-        //Number keyValue = keyHolder.getKey();
-        //thingsTb.setThings_id(keyValue.longValue());
     }
 }

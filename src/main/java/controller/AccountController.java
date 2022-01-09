@@ -45,22 +45,22 @@ public class AccountController {
         if(agreeParam == null || !agreeParam.equals("true")) {
             return "account/register1";
         }
-        model.addAttribute("accountRegisterRequest", new AccountRegisterRequest());
+        model.addAttribute("registerReqDto", new RegisterReqDto());
         return "account/register2";
     }
 
     @PostMapping("/account/registered")
-    public String accountRegister(AccountRegisterRequest accountRegisterRequest, Errors errors) {
+    public String accountRegister(RegisterReqDto registerReqDto, Errors errors) {
         //AccountRegisterRequestValidator newAccRegReqVal = new AccountRegisterRequestValidator();
         //newAccRegReqVal.validate(accountRegisterRequest, errors);
         //model.addAttribute("AccountRegisterRequest", newAccRegReqVal);
-        new AccountRegisterRequestValidator().validate(accountRegisterRequest, errors);
+        new RegisterReqDtoValidator().validate(registerReqDto, errors);
 
         if(errors.hasErrors()) {
             return "account/register2";
         }
         try {
-            accountService.regist(accountRegisterRequest);
+            accountService.regist(registerReqDto);
             return "account/registered";
         } catch (DuplicateAccountException ex) {
             errors.rejectValue("email", "duplicate");
@@ -70,20 +70,20 @@ public class AccountController {
 
     //===== 로그인하기 =====//
     @GetMapping("/account/login")
-    public String loginForm(LoginCommand loginCommand) {
+    public String loginForm(LoginReqDto loginReqDto) {
         return "account/loginForm";
     }
 
     @PostMapping("/account/login")
-    public String loginSubmit(LoginCommand loginCommand, Errors errors, HttpSession session) {
-        new LoginCommandValidator().validate(loginCommand, errors);
+    public String loginSubmit(LoginReqDto loginReqDto, Errors errors, HttpSession session) {
+        new LoginReqDtoValidator().validate(loginReqDto, errors);
         if(errors.hasErrors()) {
             return "account/loginForm";
         }
         try{
             LoginInfo loginInfo = accountService.authenticate(
-                loginCommand.getEmail(), 
-                loginCommand.getPassword()
+                loginReqDto.getEmail(), 
+                loginReqDto.getPassword()
                 );
 
             session.setAttribute("loginInfo", loginInfo);
@@ -105,15 +105,15 @@ public class AccountController {
     //===== 비밀번호 변경하기 =====//
     @GetMapping("/account/change")
     public String changeForm(
-        @ModelAttribute("command") ChangeAccountCommand changeCmd) {
+        @ModelAttribute("command") ChangeAccountReqDto changeReqDto) {
         return "account/changeForm";
     }
     @PostMapping("/account/change")
     public String changeSubmit(
-            @ModelAttribute("command") ChangeAccountCommand changeCmd,
+            @ModelAttribute("command") ChangeAccountReqDto changeReqDto,
             Errors errors,
             HttpSession session) {
-        new ChangeAccountCommandValidator().validate(changeCmd, errors);
+        new ChangeAccountReqDtoValidator().validate(changeReqDto, errors);
 
         if(errors.hasErrors()) {
             return "account/changeForm";
@@ -122,8 +122,8 @@ public class AccountController {
         try {
             accountService.changeAccount(
                     loginInfo.getEmail(),
-                    changeCmd.getCurrentPassword(),
-                    changeCmd.getNewPassword()
+                    changeReqDto.getCurrentPassword(),
+                    changeReqDto.getNewPassword()
                 );
             return "account/changeCompleted";
         } catch(WrongIdPasswordException e) {

@@ -21,21 +21,21 @@ public class RecordsController {
 
     //===== 홈페이지 =====//
     @GetMapping("/records")
-    public String recordsMain(ThingsCommand thingsCommand) {
+    public String recordsMain(ThingsReqDto thingsReqDto) {
         return "records/recordsMain";
     }
 
     /**
      * 
-     * @param thingsCommand
+     * @param thingsReqDto
      * @param session
      * @return
      */
     @PostMapping("/records")
-    public String recordsRecording(ThingsCommand thingsCommand, HttpSession session) {
+    public String recordsRecording(ThingsReqDto thingsReqDto, HttpSession session) {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
-        recordsService.recordThings(thingsCommand, loginId);
+        recordsService.recordThings(thingsReqDto, loginId);
         return "records/recordsMain";
     }
     

@@ -9,7 +9,7 @@
   <body>
     <h1>To Register Account</h1>
     <p>
-      <form:form action="registered" modelAttribute="accountRegisterRequest">
+      <form:form action="registered" modelAttribute="registerReqDto">
         <label>
           이메일:
           <form:input path="email" />

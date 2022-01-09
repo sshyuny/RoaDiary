@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import controller.AccountRegisterRequest;
+import controller.RegisterReqDto;
 
 public class AccountService {
     
@@ -15,7 +15,7 @@ public class AccountService {
     }
 
     //===== 회원 가입 =====//
-    public Long regist(AccountRegisterRequest req) {
+    public Long regist(RegisterReqDto req) {
         Account account = accountDao.selectByEmail(req.getEmail());
         if(account != null) {
             throw new DuplicateAccountException("dup email" + req.getEmail());

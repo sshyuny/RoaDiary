@@ -1,6 +1,6 @@
 package records;
 
-import controller.ThingsCommand;
+import controller.ThingsReqDto;
 
 public class RecordsService {
     
@@ -11,8 +11,8 @@ public class RecordsService {
     }
 
     //===== Things 테이블에 내용 입력 =====//
-    public void recordThings(ThingsCommand thingsCommand, Long loginId) {
-        ThingsTb thingsTb = new ThingsTb(thingsCommand.getTime(), thingsCommand.getContent(), thingsCommand.getCategory());
+    public void recordThings(ThingsReqDto thingsReqDto, Long loginId) {
+        ThingsTb thingsTb = new ThingsTb(thingsReqDto.getTime(), thingsReqDto.getContent(), thingsReqDto.getCategory());
         thingsTb.setUser_id(loginId);
         recordsDao.insert(thingsTb);
     }

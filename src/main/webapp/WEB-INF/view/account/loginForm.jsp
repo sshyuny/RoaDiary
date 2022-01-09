@@ -6,7 +6,7 @@
     <title>로그인 하기</title>
   <head>
   <body>
-    <form:form modelAttribute="loginCommand">
+    <form:form modelAttribute="loginReqDto">
     <form:errors />
     <p>
       <label>이메일:
