@@ -5,10 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import account.AccountService;
-import controller.AccountController;
-import controller.RecordsController;
-//import controller.LoginController;
+import account.controller.AccountController;
 import records.RecordsService;
+import records.controller.RecordsController;
 
 @Configuration
 public class ControllerConfig {
@@ -31,11 +30,5 @@ public class ControllerConfig {
         controller.setRecordsController(recordsService);
         return controller;
     }
-
-    /*@Bean
-    public LoginController loginController() {
-        LoginController controller = new LoginController();
-        controller.setAccountService(accountService);
-        return controller;
-    }*/
+    
 }

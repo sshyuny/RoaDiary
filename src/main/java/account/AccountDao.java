@@ -15,6 +15,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import domain.UserTb;
+
 public class AccountDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -23,11 +25,11 @@ public class AccountDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private RowMapper<Account> accountRowMapper = 
-        new RowMapper<Account>() {
+    private RowMapper<UserTb> accountRowMapper = 
+        new RowMapper<UserTb>() {
             @Override
-            public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Account account =  new Account(
+            public UserTb mapRow(ResultSet rs, int rowNum) throws SQLException {
+                UserTb account =  new UserTb(
                     rs.getString("email"),
                     rs.getString("name"),
                     rs.getString("password"),
@@ -39,15 +41,15 @@ public class AccountDao {
             }
         };
 
-    public Account selectByEmail(String email) {
-        List<Account> results = jdbcTemplate.query(
+    public UserTb selectByEmail(String email) {
+        List<UserTb> results = jdbcTemplate.query(
             "SELECT * FROM user WHERE email = ?", 
             accountRowMapper, email);
 
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public void insert(final Account account) {
+    public void insert(final UserTb account) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
@@ -60,8 +62,8 @@ public class AccountDao {
                 pstmt.setString(1, account.getEmail());
                 pstmt.setString(2, account.getName());
                 pstmt.setString(3, account.getPassword());
-                pstmt.setTimestamp(4, Timestamp.valueOf(account.getRegis_date()));
-                pstmt.setTimestamp(5, Timestamp.valueOf(account.getLastvisit_date()));
+                pstmt.setTimestamp(4, Timestamp.valueOf(account.getRegisDate()));
+                pstmt.setTimestamp(5, Timestamp.valueOf(account.getLastvisitDate()));
                 return pstmt;
             }
         };
@@ -70,7 +72,7 @@ public class AccountDao {
         account.setId(keyValue.longValue());
     }
 
-    public void update(Account account) {
+    public void update(UserTb account) {
         jdbcTemplate.update("UPDATE user SET name=?, password=? WHERE email=?", 
             account.getName(), account.getPassword(), account.getEmail());
     }

@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 
+import domain.ThingsTb;
+
 public class RecordsDao {
     
     private JdbcTemplate jdbcTemplate;
@@ -36,10 +38,10 @@ public class RecordsDao {
                     "VALUES (?, ?, ?, ?)",
                     new String[] {"things_id"}
                 );
-                pstmt.setLong(1, thingsTb.getUser_id());
+                pstmt.setLong(1, thingsTb.getUserId());
                 pstmt.setTimestamp(2, Timestamp.valueOf(thingsTb.getTime()));
                 pstmt.setString(3, thingsTb.getContent());
-                pstmt.setLong(4, thingsTb.getCategory_id());
+                pstmt.setLong(4, thingsTb.getCategoryId());
                 return pstmt;
             }
         };

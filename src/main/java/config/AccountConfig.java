@@ -8,7 +8,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import account.AccountDao;
 import account.AccountService;
-import account.LoginInfo;
 import records.RecordsDao;
 import records.RecordsService;
 

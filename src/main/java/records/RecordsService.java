@@ -1,6 +1,7 @@
 package records;
 
-import controller.ThingsReqDto;
+import domain.ThingsTb;
+import records.dto.ThingsReqDto;
 
 public class RecordsService {
     
@@ -10,10 +11,18 @@ public class RecordsService {
         this.recordsDao = recordsDao;
     }
 
-    //===== Things 테이블에 내용 입력 =====//
-    public void recordThings(ThingsReqDto thingsReqDto, Long loginId) {
+    /**
+     * Things 테이블에 내용 입력
+     * @param thingsReqDto
+     * @param loginId
+     */
+    public void insertThings(ThingsReqDto thingsReqDto, Long loginId) {
+        // Thingstb 객체 생성
         ThingsTb thingsTb = new ThingsTb(thingsReqDto.getTime(), thingsReqDto.getContent(), thingsReqDto.getCategory());
-        thingsTb.setUser_id(loginId);
+        thingsTb.setUserId(loginId);
+        
+        // [DB]
+        // recordsDao를 통해 DB에 insert
         recordsDao.insert(thingsTb);
     }
 
