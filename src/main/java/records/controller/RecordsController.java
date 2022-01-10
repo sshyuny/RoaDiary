@@ -49,8 +49,13 @@ public class RecordsController {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
+
         // things 테이블에 기록
-        recordsService.insertThings(thingsReqDto, loginId);
+        Long key = recordsService.insertThings(thingsReqDto, loginId);
+
+        // tag 테이블과 things_tag 테이블에 기록
+        recordsService.insertTags(thingsReqDto, key);
+        
         //
         return "records/recordsMain";
     }

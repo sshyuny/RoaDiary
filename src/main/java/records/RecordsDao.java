@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -14,6 +13,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import domain.ThingsTb;
 
@@ -40,7 +41,8 @@ public class RecordsDao {
             }
         };
 
-    public void insert(final ThingsTb thingsTb) {
+    public Long insert(final ThingsTb thingsTb) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -56,7 +58,12 @@ public class RecordsDao {
                 return pstmt;
             }
         };
-        jdbcTemplate.update(pre);
+        jdbcTemplate.update(pre, keyHolder);
+        Number keyValue = keyHolder.getKey();
+        thingsTb.setThingsId(keyValue.longValue());
+        // tag 테이블을 위해 키 return함
+        Long keyValue2 = keyValue.longValue();
+        return keyValue2;
     }
 
     public List<ThingsTb> selectByDate(LocalDate date, Long userId) {
@@ -67,4 +74,5 @@ public class RecordsDao {
         );
         return results;
     }
+
 }

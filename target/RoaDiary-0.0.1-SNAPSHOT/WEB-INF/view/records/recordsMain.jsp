@@ -27,6 +27,14 @@
           <input type="radio" name="category" path="category" value="3" />건강
           <br>
         </label>
+        <label>
+          태그:
+          <form:input path="tag1"/>
+          <form:input path="tag2"/>
+          <form:input path="tag3"/>
+          <form:input path="tag4"/>
+          <br>
+        </label>
         <input type="submit" value="제출하기">
       </form:form>
     </p>

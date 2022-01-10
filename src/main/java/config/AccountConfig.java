@@ -10,6 +10,8 @@ import account.AccountDao;
 import account.AccountService;
 import records.RecordsDao;
 import records.RecordsService;
+import records.TagDao;
+import records.ThingsTagDao;
 
 @Configuration
 public class AccountConfig {
@@ -51,8 +53,18 @@ public class AccountConfig {
     }
 
     @Bean
+    public TagDao tagDao() {
+        return new TagDao((dataSource()));
+    }
+
+    @Bean
+    public ThingsTagDao thingsTagDao() {
+        return new ThingsTagDao(dataSource());
+    }
+
+    @Bean
     public RecordsService recordsService() {
-        return new RecordsService(recordsDao());
+        return new RecordsService(recordsDao(), tagDao(), thingsTagDao());
     }
 
 }
