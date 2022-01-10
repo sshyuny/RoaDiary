@@ -1,5 +1,6 @@
 <%@page contentType="text/html; charset=utf-8" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html>
   <head>
@@ -28,7 +29,21 @@
         </label>
         <input type="submit" value="제출하기">
       </form:form>
-      
     </p>
+
+    <c:if test="${!empty thingsTbs}">
+    <table>
+      <tr>
+        <th>시간</th><th>내용</th>
+      </tr>
+      <c:forEach var="thing" items="${thingsTbs}">
+      <tr>
+        <td>${thing.time}</td>
+        <td>${thing.content}</td>
+      </tr>
+      </c:forEach>
+    </table>
+    </c:if>
+
   </body>
 </html>

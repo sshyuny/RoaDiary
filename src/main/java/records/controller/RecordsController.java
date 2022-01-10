@@ -1,12 +1,16 @@
 package records.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import account.LoginInfo;
+import domain.ThingsTb;
 import records.RecordsService;
 import records.dto.ThingsReqDto;
 
@@ -23,7 +27,14 @@ public class RecordsController {
     // 홈페이지
     //===== ===== ===== =====//
     @GetMapping("/records")
-    public String recordsMain(ThingsReqDto thingsReqDto) {
+    public String recordsMain(ThingsReqDto thingsReqDto, HttpSession session, Model model) {
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+        // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
+        List<ThingsTb> thingsTbs = recordsService.selectThings(loginId);
+        model.addAttribute("thingsTbs", thingsTbs);
+        // 
         return "records/recordsMain";
     }
 
@@ -40,6 +51,7 @@ public class RecordsController {
         Long loginId = loginInfo.getId();
         // things 테이블에 기록
         recordsService.insertThings(thingsReqDto, loginId);
+        //
         return "records/recordsMain";
     }
     
