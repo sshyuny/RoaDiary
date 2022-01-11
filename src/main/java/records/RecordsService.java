@@ -1,6 +1,7 @@
 package records;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import domain.TagTb;
@@ -36,13 +37,22 @@ public class RecordsService {
         return key;
     }
 
-    public List<ThingsTb> selectThings(Long loginId) {
+    public List<ThingsTb> selectThingsToday(Long loginId) {
         // 현재 시간 가져오기
-        LocalDate localDate = LocalDate.now();
+        LocalDate date = LocalDate.now();
 
         // [DB]
         // recordsDao를 통해 DB에서 select
-        return recordsDao.selectByDate(localDate, loginId);
+        return recordsDao.selectByDate(date, loginId);
+    }
+    public List<ThingsTb> selectThingsSomeday(String stringDate, Long loginId) {
+        // date String에서 Localdate로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. dd.");
+        LocalDate date = LocalDate.parse(stringDate, formatter);
+
+        // [DB]
+        // recordsDao를 통해 DB에서 select
+        return recordsDao.selectByDate(date, loginId);
     }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {

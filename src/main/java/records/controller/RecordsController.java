@@ -2,6 +2,7 @@ package records.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,7 @@ public class RecordsController {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
         // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
-        List<ThingsTb> thingsTbs = recordsService.selectThings(loginId);
+        List<ThingsTb> thingsTbs = recordsService.selectThingsToday(loginId);
         model.addAttribute("thingsTbs", thingsTbs);
         // 
         return "records/recordsMain";
@@ -57,6 +58,20 @@ public class RecordsController {
         recordsService.insertTags(thingsReqDto, key);
         
         //
+        return "records/recordsMain";
+    }
+    @PostMapping("/recordsShow")
+    public String recordsShowing(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        // 요청된 날(?????) 가져오기
+        String stringDate = request.getParameter("someday");
+        // 요청된 날(?????)에 기록된 ThingsTb 행들, DB에서 가져옴
+        List<ThingsTb> thingsTbs = recordsService.selectThingsSomeday(stringDate, loginId);
+        model.addAttribute("thingsTbs", thingsTbs);
+        // 
         return "records/recordsMain";
     }
     

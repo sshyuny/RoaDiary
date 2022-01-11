@@ -39,6 +39,49 @@
       </form:form>
     </p>
 
+    <p>
+    <form action="recordsShow" method="post" id="frm">
+      <input type="hidden" id="someday" name="someday" value=""/>
+      <input type="button" id="minusDate" onclick="minusDate()" />어제
+      <input type="button" id="todayDate" onclick="todayDate()" />오늘
+      <input type="button" id="plusDate" onclick="plusDate()" />내일
+      <input type="date" id="selectDate" onclick="selectDate()"/>
+
+      <script type="text/javascript">
+        window.onload = function() {
+          var date = new Date().toLocaleDateString();
+          document.getElementById('todayDate').onclick = function() {
+            document.getElementById('someday').value = date;
+            // alert(date); // yyyy.MM.dd. 형식으로 반환됨
+            document.getElementById('frm').submit();
+          }
+        }
+
+        /*function minusDate() {
+          date.setDate(date.getDate()-1);
+          document.getElementById('someday').value=date;
+          //document.uesrinput.action="recordsShow";
+        }
+        function todayDate() {
+          date.setDate(Date());
+          document.getElementById('someday').value=new Date();
+          document.todayDate.action="recordsShow";
+        }
+        function plusDate() {
+          date.setDate(date.getDate()+1);
+          document.getElementById('someday').value=date;
+          //document.uesrinput.action="recordsShow";
+        }
+        function selectDate() {
+          date=docment.getElementById('selectDate').value;
+          document.getElementById('someday').value=date;
+          //document.uesrinput.action="recordsShow";
+        }*/
+    </script>
+    </form>
+    </p>
+    
+
     <c:if test="${!empty thingsTbs}">
     <table>
       <tr>
