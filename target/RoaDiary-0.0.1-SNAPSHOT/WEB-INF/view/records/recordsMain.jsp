@@ -48,11 +48,42 @@
       <input type="date" id="selectDate" onclick="selectDate()"/>
 
       <script type="text/javascript">
+
+        function fromDatetoString(yD, mD, dD) {
+          var dateS;
+          yearString = yD.toString();
+          if(mD <= 9) {
+            monthString = "0" + mD.toString();
+          } else {
+            monthString = mD.toString();
+          }
+          dayString = dD.toString();
+          var dateS = yearString + "-" + monthString + "-" + dayString;
+          return dateS;
+        }
+
+        var a=0;
         window.onload = function() {
-          var date = new Date().toLocaleDateString();
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth()+1;
+          var day = date.getDate();
+          
           document.getElementById('todayDate').onclick = function() {
-            document.getElementById('someday').value = date;
-            // alert(date); // yyyy.MM.dd. 형식으로 반환됨
+            alert("check");
+            var dateString = fromDatetoString(year, month, day);
+            document.getElementById('someday').value = dateString;
+            document.getElementById('frm').submit();
+          }
+
+          document.getElementById('minusDate').onclick = function() {
+            a -= 1;
+            var newDate = new Date(year, month-1, day+a);
+            var yearMinus = newDate.getFullYear();
+            var monthMinus = newDate.getMonth()+1;
+            var dayMinus = newDate.getDate();
+            var dateString = fromDatetoString(yearMinus, monthMinus, dayMinus);
+            document.getElementById('someday').value = dateString;
             document.getElementById('frm').submit();
           }
         }

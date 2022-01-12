@@ -47,7 +47,7 @@ public class RecordsService {
     }
     public List<ThingsTb> selectThingsSomeday(String stringDate, Long loginId) {
         // date String에서 Localdate로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. dd.");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(stringDate, formatter);
 
         // [DB]
