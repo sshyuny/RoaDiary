@@ -42,10 +42,11 @@
     <p>
     <form method="post" id="frm">
       <input type="hidden" id="someday" name="someday" value=""/>
-      <input type="button" id="minusDate" />이전날
-      <input type="button" id="plusDate" />다음날
-      <input type="button" id="todayDate" />오늘
+      <input type="button" id="minusDate" value="이전날" />
+      <input type="button" id="plusDate" value="다음날" />
+      <input type="button" id="todayDate" value="오늘" />
       <input type="date" id="selectDate" />
+      <input type="button" id="selectDateBt" value="제출"/>
 
       <script type="text/javascript">
 
@@ -97,6 +98,7 @@
           var year = date.getFullYear();
           var month = date.getMonth()+1;
           var day = date.getDate();
+          document.getElementById('selectDate').value = fromDatetoString(year, month, day);
           
           document.getElementById('todayDate').onclick = function() {
             var dateString = fromDatetoString(year, month, day);
@@ -131,6 +133,14 @@
             document.getElementById('frm').action=newUrl;
             document.getElementById('frm').submit();
           }
+
+          document.getElementById('selectDateBt').onclick = function() {
+            var dateString = document.getElementById('selectDate').value;
+            document.getElementById('someday').value = dateString;
+            document.getElementById('frm').action="recordsShow?p=0&m=0";
+            document.getElementById('frm').submit();
+          }
+
         }
 
     </script>
