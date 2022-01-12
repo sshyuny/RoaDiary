@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.LoginInfo;
 import domain.ThingsTb;
@@ -60,7 +61,7 @@ public class RecordsController {
         //
         return "records/recordsMain";
     }
-    @PostMapping("/recordsShow")
+    @RequestMapping("/recordsShow")
     public String recordsShowing(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");

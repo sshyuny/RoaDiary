@@ -40,12 +40,12 @@
     </p>
 
     <p>
-    <form action="recordsShow" method="post" id="frm">
+    <form method="post" id="frm">
       <input type="hidden" id="someday" name="someday" value=""/>
-      <input type="button" id="minusDate" onclick="minusDate()" />어제
-      <input type="button" id="todayDate" onclick="todayDate()" />오늘
-      <input type="button" id="plusDate" onclick="plusDate()" />내일
-      <input type="date" id="selectDate" onclick="selectDate()"/>
+      <input type="button" id="minusDate" />이전날
+      <input type="button" id="plusDate" />다음날
+      <input type="button" id="todayDate" />오늘
+      <input type="date" id="selectDate" />
 
       <script type="text/javascript">
 
@@ -57,12 +57,41 @@
           } else {
             monthString = mD.toString();
           }
-          dayString = dD.toString();
+          if(dD <= 9) {
+            dayString = "0" + dD.toString();
+          } else {
+            dayString = dD.toString();
+          }
           var dateS = yearString + "-" + monthString + "-" + dayString;
           return dateS;
         }
 
-        var a=0;
+        function plusDateUrl() {
+          var url = new URL(location).searchParams;
+          var pParam = Number(url.get("p"));
+          var mParam = Number(url.get("m"));
+          pParam += 1;
+          newUrl = "recordsShow?p=" + pParam + "&m=" + mParam;
+          return newUrl;
+        }
+        function minusDateUrl() {
+          var url = new URL(location).searchParams;
+          var pParam = Number(url.get("p"));
+          var mParam = Number(url.get("m"));
+          mParam += 1;
+          newUrl = "recordsShow?p=" + pParam + "&m=" + mParam;
+          return newUrl;
+        }
+
+        function setNewValue(newDate) {
+          //
+          var yearMinus = newDate.getFullYear();
+          var monthMinus = newDate.getMonth()+1;
+          var dayMinus = newDate.getDate();
+          var dateString = fromDatetoString(yearMinus, monthMinus, dayMinus);
+          document.getElementById('someday').value = dateString;
+        }
+
         window.onload = function() {
           var date = new Date();
           var year = date.getFullYear();
@@ -70,44 +99,40 @@
           var day = date.getDate();
           
           document.getElementById('todayDate').onclick = function() {
-            alert("check");
             var dateString = fromDatetoString(year, month, day);
             document.getElementById('someday').value = dateString;
+            document.getElementById('frm').action="recordsShow?p=0&m=0";
             document.getElementById('frm').submit();
+            //location.href="./recordsShow?p=0m=0";
           }
 
           document.getElementById('minusDate').onclick = function() {
-            a -= 1;
-            var newDate = new Date(year, month-1, day+a);
-            var yearMinus = newDate.getFullYear();
-            var monthMinus = newDate.getMonth()+1;
-            var dayMinus = newDate.getDate();
-            var dateString = fromDatetoString(yearMinus, monthMinus, dayMinus);
-            document.getElementById('someday').value = dateString;
+            var url = new URL(location).searchParams;
+            var pmParam = Number(url.get("p")) - Number(url.get("m"));
+
+            var newDate = new Date(year, month-1, day+pmParam-1);
+            setNewValue(newDate);
+            
+
+            var newUrl = minusDateUrl();
+            document.getElementById('frm').action=newUrl;
+            document.getElementById('frm').submit();
+          }
+
+          document.getElementById('plusDate').onclick = function() {
+            var url = new URL(location).searchParams;
+            var pmParam = Number(url.get("p")) - Number(url.get("m"));
+
+            var newDate = new Date(year, month-1, day+pmParam+1);
+            setNewValue(newDate);
+            
+
+            var newUrl = plusDateUrl();
+            document.getElementById('frm').action=newUrl;
             document.getElementById('frm').submit();
           }
         }
 
-        /*function minusDate() {
-          date.setDate(date.getDate()-1);
-          document.getElementById('someday').value=date;
-          //document.uesrinput.action="recordsShow";
-        }
-        function todayDate() {
-          date.setDate(Date());
-          document.getElementById('someday').value=new Date();
-          document.todayDate.action="recordsShow";
-        }
-        function plusDate() {
-          date.setDate(date.getDate()+1);
-          document.getElementById('someday').value=date;
-          //document.uesrinput.action="recordsShow";
-        }
-        function selectDate() {
-          date=docment.getElementById('selectDate').value;
-          document.getElementById('someday').value=date;
-          //document.uesrinput.action="recordsShow";
-        }*/
     </script>
     </form>
     </p>
