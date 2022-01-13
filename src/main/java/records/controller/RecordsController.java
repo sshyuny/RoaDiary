@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.LoginInfo;
+import domain.JoinWithThingsAndTagTb;
 import domain.ThingsTb;
 import records.RecordsService;
 import records.dto.ThingsReqDto;
@@ -34,8 +35,8 @@ public class RecordsController {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
         // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
-        List<ThingsTb> thingsTbs = recordsService.selectThingsToday(loginId);
-        model.addAttribute("thingsTbs", thingsTbs);
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsToday(loginId);
+        model.addAttribute("joinTagTbs", joinTagTbs);
         // 
         return "records/recordsMain";
     }
@@ -70,8 +71,8 @@ public class RecordsController {
         // 요청된 날(?????) 가져오기
         String stringDate = request.getParameter("someday");
         // 요청된 날(?????)에 기록된 ThingsTb 행들, DB에서 가져옴
-        List<ThingsTb> thingsTbs = recordsService.selectThingsSomeday(stringDate, loginId);
-        model.addAttribute("thingsTbs", thingsTbs);
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);
+        model.addAttribute("joinTagTbs", joinTagTbs);
         // 
         return "records/recordsMain";
     }

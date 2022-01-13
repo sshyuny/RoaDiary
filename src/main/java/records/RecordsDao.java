@@ -66,13 +66,13 @@ public class RecordsDao {
         return keyValue2;
     }
 
-    public List<ThingsTb> selectByDate(LocalDate date, Long userId) {
+    /*public List<ThingsTb> selectByDate(LocalDate date, Long userId) {
         List<ThingsTb> results = jdbcTemplate.query(
             "SELECT * FROM things WHERE user_id=? AND DATE(time)=?",
             thingsRowMapper,
             userId, date
         );
         return results;
-    }
+    }*/
 
 }

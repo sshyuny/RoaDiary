@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import domain.JoinWithThingsAndTagTb;
 import domain.TagTb;
 import domain.ThingsTagTb;
 import domain.ThingsTb;
@@ -14,11 +15,13 @@ public class RecordsService {
     private RecordsDao recordsDao;
     private TagDao tagDao;
     private ThingsTagDao thingsTagDao;
+    private JoinDao joinDao;
 
-    public RecordsService(RecordsDao recordsDao, TagDao tagDao, ThingsTagDao thingsTagDao) {
+    public RecordsService(RecordsDao recordsDao, TagDao tagDao, ThingsTagDao thingsTagDao, JoinDao joinDao) {
         this.recordsDao = recordsDao;
         this.tagDao = tagDao;
         this.thingsTagDao = thingsTagDao;
+        this.joinDao = joinDao;
     }
 
     /**
@@ -37,22 +40,22 @@ public class RecordsService {
         return key;
     }
 
-    public List<ThingsTb> selectThingsToday(Long loginId) {
+    public List<JoinWithThingsAndTagTb> selectThingsToday(Long loginId) {
         // 현재 시간 가져오기
         LocalDate date = LocalDate.now();
 
         // [DB]
         // recordsDao를 통해 DB에서 select
-        return recordsDao.selectByDate(date, loginId);
+        return joinDao.selectByDate(date, loginId);
     }
-    public List<ThingsTb> selectThingsSomeday(String stringDate, Long loginId) {
+    public List<JoinWithThingsAndTagTb> selectThingsSomeday(String stringDate, Long loginId) {
         // date String에서 Localdate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(stringDate, formatter);
 
         // [DB]
         // recordsDao를 통해 DB에서 select
-        return recordsDao.selectByDate(date, loginId);
+        return joinDao.selectByDate(date, loginId);
     }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {

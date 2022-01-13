@@ -148,15 +148,16 @@
     </p>
     
 
-    <c:if test="${!empty thingsTbs}">
+    <c:if test="${!empty joinTagTbs}">
     <table>
       <tr>
-        <th>시간</th><th>내용</th>
+        <th>시간</th><th>내용</th><th>태그</th>
       </tr>
-      <c:forEach var="thing" items="${thingsTbs}">
+      <c:forEach var="joinTagTbs" items="${joinTagTbs}">
       <tr>
-        <td>${thing.time}</td>
-        <td>${thing.content}</td>
+        <td>${joinTagTbs.time}</td>
+        <td>${joinTagTbs.content}</td>
+        <td>${joinTagTbs.name}</td>
       </tr>
       </c:forEach>
     </table>

@@ -8,6 +8,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import account.AccountDao;
 import account.AccountService;
+import records.JoinDao;
 import records.RecordsDao;
 import records.RecordsService;
 import records.TagDao;
@@ -63,8 +64,13 @@ public class AccountConfig {
     }
 
     @Bean
+    public JoinDao joinDao() {
+        return new JoinDao(dataSource());
+    }
+
+    @Bean
     public RecordsService recordsService() {
-        return new RecordsService(recordsDao(), tagDao(), thingsTagDao());
+        return new RecordsService(recordsDao(), tagDao(), thingsTagDao(), joinDao());
     }
 
 }
