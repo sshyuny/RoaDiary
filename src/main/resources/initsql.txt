@@ -43,3 +43,10 @@ CREATE TABLE rddb.things_tag(
 
 *** category 테이블에 미리 값 넣어두기
 INSERT INTO category(name) VALUES ("What I did"), ("What I ate"), ("About health");
+
+*** things 테이블 tag 테이블과 left join
+SELECT * FROM things
+LEFT JOIN things_tag
+    ON things.things_id = things_tag.things_id
+LEFT JOIN tag
+    ON things_tag.tag_id = tag.tag_id;
