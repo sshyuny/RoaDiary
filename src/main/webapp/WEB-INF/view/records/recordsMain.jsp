@@ -1,6 +1,7 @@
 <%@page contentType="text/html; charset=utf-8" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!doctype html>
 <html>
   <head>
@@ -153,11 +154,11 @@
       <tr>
         <th>시간</th><th>내용</th><th>태그</th>
       </tr>
-      <c:forEach var="joinTagTbs" items="${joinTagTbs}">
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
       <tr>
-        <td>${joinTagTbs.time}</td>
-        <td>${joinTagTbs.content}</td>
-        <td>${joinTagTbs.name}</td>
+        <td><c:out value="${joinTagTbs[i].time}"/></td>
+        <td><c:out value="${joinTagTbs[i].content}"/></td>
+        <td><c:out value="${joinTagTbs[i].name}"/></td>
       </tr>
       </c:forEach>
     </table>
