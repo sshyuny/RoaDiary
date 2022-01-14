@@ -154,12 +154,20 @@
       <tr>
         <th>시간</th><th>내용</th><th>태그</th>
       </tr>
-      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+      
       <tr>
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
         <td><c:out value="${joinTagTbs[i].time}"/></td>
         <td><c:out value="${joinTagTbs[i].content}"/></td>
-        <td><c:out value="${joinTagTbs[i].name}"/></td>
-      </tr>
+        <c:choose>
+          <c:when test="${joinTagTbs[i].thingsId1 == joinTagTbs[i+1].thingsId1}">
+            <td><c:out value="${joinTagTbs[i].name}"/></td>
+          </c:when>
+          <c:otherwise>
+            <td><c:out value="${joinTagTbs[i].name}"/></td>
+        </tr>
+          </c:otherwise>
+        </c:choose>
       </c:forEach>
     </table>
     </c:if>
