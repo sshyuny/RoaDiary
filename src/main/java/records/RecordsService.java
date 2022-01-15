@@ -2,6 +2,7 @@ package records;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import domain.JoinWithThingsAndTagTb;
@@ -55,7 +56,20 @@ public class RecordsService {
 
         // [DB]
         // recordsDao를 통해 DB에서 select
-        return joinDao.selectByDate(date, loginId);
+        List<JoinWithThingsAndTagTb> joinTbList =  joinDao.selectByDate(date, loginId);
+        List<JoinWithThingsAndTagTb> newjoinTbList = new ArrayList<>();
+        JoinWithThingsAndTagTb newjoinTb;
+        for(int i = 0; i < joinTbList.size() ; i++) {
+            Long thingsIdA = joinTbList.get(i).getThingsId1();
+            Long thingsIdB = joinTbList.get(i+1).getThingsId1();
+            if(thingsIdA != thingsIdB) {
+                newjoinTbList.add(joinTbList.get(i));
+                if( i!=0 && thingsIdA==)
+            } else {
+                String a = joinTbList.get(i).getName();
+
+            }
+        }
     }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {
