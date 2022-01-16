@@ -45,8 +45,9 @@ CREATE TABLE rddb.things_tag(
 INSERT INTO category(name) VALUES ("What I did"), ("What I ate"), ("About health");
 
 *** things 테이블 tag 테이블과 left join
-SELECT * FROM things
+SELECT things.things_id, user_id, time, content, category_id, tag.tag_id, name FROM things
 LEFT JOIN things_tag
     ON things.things_id = things_tag.things_id
 LEFT JOIN tag
     ON things_tag.tag_id = tag.tag_id;
+ORDER BY time ASC, things_id ASC

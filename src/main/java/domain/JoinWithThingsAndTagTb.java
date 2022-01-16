@@ -4,33 +4,29 @@ import java.time.LocalDateTime;
 
 public class JoinWithThingsAndTagTb {
     
-    private Long thingsId1;
+    private Long thingsId;
     private Long userId;
     private LocalDateTime time;
     private String content;
     private Long categoryId;
-    private Long thingsId2;
-    private int tagId1;
-    private int tagId2;
+    private int tagId;
     private String name;
 
     public JoinWithThingsAndTagTb(Long thingsId, Long userId, LocalDateTime time, String content, Long categoryId, int tagId, String name) {
-        this.thingsId1 = thingsId;
+        this.thingsId = thingsId;
         this.userId = userId;
         this.time = time;
         this.content = content;
         this.categoryId = categoryId;
-        this.thingsId2 = thingsId;
-        this.tagId1 = tagId;
-        this.tagId2 = tagId;
+        this.tagId = tagId;
         this.name = name;
     }
 
-    public Long getThingsId1() {
-        return thingsId1;
+    public Long getThingsId() {
+        return thingsId;
     }
-    public void setThings1(Long thingsId1) {
-        this.thingsId1 = thingsId1;
+    public void setThingsId(Long thingsId) {
+        this.thingsId = thingsId;
     }
 
     public Long getUserId() {
@@ -61,25 +57,11 @@ public class JoinWithThingsAndTagTb {
         this.categoryId = categoryId;
     }
 
-    public Long getThingsId2() {
-        return thingsId2;
+    public int getTagId() {
+        return tagId;
     }
-    public void setThingsId2(Long thingsId2) {
-        this.thingsId2 = thingsId2;
-    }
-
-    public int getTagId1() {
-        return tagId1;
-    }
-    public void setTagId1(int tagId1) {
-        this.tagId1 = tagId1;
-    }
-
-    public int getTagId2() {
-        return tagId2;
-    }
-    public void setTagId2(int tagId2) {
-        this.tagId2 = tagId2;
+    public void setTagId(int tagId) {
+        this.tagId = tagId;
     }
 
     public String getName() {

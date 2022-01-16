@@ -41,12 +41,12 @@
     </p>
 
     <p>
+    <input type="button" id="minusDate" value="이전날" />
+    <input type="button" id="plusDate" value="다음날" />
+    <input type="button" id="todayDate" value="오늘" /> 
+    <input type="date" id="selectDate" />
     <form method="post" id="frm">
       <input type="hidden" id="someday" name="someday" value=""/>
-      <input type="button" id="minusDate" value="이전날" />
-      <input type="button" id="plusDate" value="다음날" />
-      <input type="button" id="todayDate" value="오늘" />
-      <input type="date" id="selectDate" />
       <input type="button" id="selectDateBt" value="제출"/>
 
       <script type="text/javascript">
@@ -160,7 +160,7 @@
         <td><c:out value="${joinTagTbs[i].time}"/></td>
         <td><c:out value="${joinTagTbs[i].content}"/></td>
         <c:choose>
-          <c:when test="${joinTagTbs[i].thingsId1 == joinTagTbs[i+1].thingsId1}">
+          <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
             <td><c:out value="${joinTagTbs[i].name}"/></td>
           </c:when>
           <c:otherwise>

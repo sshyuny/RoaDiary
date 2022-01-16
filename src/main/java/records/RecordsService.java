@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.StringUtils;
+
 import domain.JoinWithThingsAndTagTb;
 import domain.TagTb;
 import domain.ThingsTagTb;
@@ -57,19 +59,32 @@ public class RecordsService {
         // [DB]
         // recordsDao를 통해 DB에서 select
         List<JoinWithThingsAndTagTb> joinTbList =  joinDao.selectByDate(date, loginId);
-        List<JoinWithThingsAndTagTb> newjoinTbList = new ArrayList<>();
-        JoinWithThingsAndTagTb newjoinTb;
-        for(int i = 0; i < joinTbList.size() ; i++) {
-            Long thingsIdA = joinTbList.get(i).getThingsId1();
-            Long thingsIdB = joinTbList.get(i+1).getThingsId1();
-            if(thingsIdA != thingsIdB) {
-                newjoinTbList.add(joinTbList.get(i));
-                if( i!=0 && thingsIdA==)
-            } else {
-                String a = joinTbList.get(i).getName();
-
+        List<JoinWithThingsAndTagTb> newJoinTbList = new ArrayList<>();
+        if(joinTbList.size() > 0) {
+            newJoinTbList.add(joinTbList.get(0));           // 첫 행 넣어둠
+            for(int i = 1; i < joinTbList.size() ; i++) {   // 첫 행 넣어두었기 때문에, i는 1부터 시작함
+                JoinWithThingsAndTagTb firstRow = joinTbList.get(i-1);
+                JoinWithThingsAndTagTb secondRow = joinTbList.get(i);
+                if(!firstRow.getThingsId().equals(secondRow.getThingsId())) {  // 수정
+                    newJoinTbList.add(secondRow);
+                } else {
+                    int lastIdxOfnewJoinList = newJoinTbList.size() - 1;
+                    JoinWithThingsAndTagTb lastRowOfNewList = newJoinTbList.get(lastIdxOfnewJoinList);
+                    String tagNameNewList = lastRowOfNewList.getName();
+                    String tagNameList = "#" + secondRow.getName();
+                    String newTagName =tagNameNewList +  tagNameList;
+                    lastRowOfNewList.setName(newTagName);
+                }
             }
         }
+        for(JoinWithThingsAndTagTb rowTb : newJoinTbList) {
+            String rowTbTagName = rowTb.getName();
+            if(StringUtils.hasText(rowTbTagName)) {
+                rowTb.setName("#" + rowTbTagName);
+            }
+            
+        }
+        return newJoinTbList;
     }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {
@@ -84,7 +99,7 @@ public class RecordsService {
         // 여러 tag들 각각 수행
         for(String oneTagContent : tagContent) {
             // tag에 무언가 적혀있다면,
-            if(! oneTagContent.isBlank() ) {
+            if(StringUtils.hasText(oneTagContent) ) {
 
                 // 이미 저장된 tag인지 확인
                 TagTb beTagTb = tagDao.selectByName(oneTagContent);

@@ -39,10 +39,11 @@ public class JoinDao {
 
     public List<JoinWithThingsAndTagTb> selectByDate(LocalDate date, Long userId) {
         List<JoinWithThingsAndTagTb> results = jdbcTemplate.query(
-            "SELECT * FROM things " + 
+            "SELECT things.things_id, user_id, time, content, category_id, tag.tag_id, name FROM things " + 
             "LEFT JOIN things_tag ON things.things_id = things_tag.things_id " + 
             "LEFT JOIN tag ON things_tag.tag_id = tag.tag_id " + 
-            "WHERE user_id=? AND DATE(time)=?",
+            "WHERE user_id=? AND DATE(time)=? " + 
+            "ORDER BY time ASC, things_id ASC", // 태그 여러개 붙이는 기능 때문에(RecordsService) things_id 정렬 필요합니다.
             joinRowMapper,
             userId, date
         );

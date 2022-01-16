@@ -160,7 +160,7 @@
         <td><c:out value="${joinTagTbs[i].time}"/></td>
         <td><c:out value="${joinTagTbs[i].content}"/></td>
         <c:choose>
-          <c:when test="${joinTagTbs[i].thingsId1 == joinTagTbs[i+1].thingsId1}">
+          <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
             <td><c:out value="${joinTagTbs[i].name}"/></td>
           </c:when>
           <c:otherwise>
