@@ -70,6 +70,7 @@ public class RecordsController {
 
         // 요청된 날(?????) 가져오기
         String stringDate = request.getParameter("someday");
+        model.addAttribute("stringDate", stringDate);
         // 요청된 날(?????)에 기록된 ThingsTb 행들, DB에서 가져옴
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);

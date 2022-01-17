@@ -1,6 +1,8 @@
 
-function fromDatetoString(yD, mD, dD) {
-    var dateS;
+function fromDatetoString(date) {
+    var yD = date.getFullYear();
+    var mD = date.getMonth()+1;
+    var dD = date.getDate();
     yearString = yD.toString();
     if(mD <= 9) {
         monthString = "0" + mD.toString();
@@ -14,80 +16,62 @@ function fromDatetoString(yD, mD, dD) {
     }
     var dateS = yearString + "-" + monthString + "-" + dayString;
     return dateS;
+}
+
+function returnPlusDate() {
+    var dateString = initialDate();
+    var tempDate = new Date(dateString);
+    tempDate.setDate(tempDate.getDate() + 1);
+    var resultDate = fromDatetoString(tempDate);
+    document.getElementById('someday').value = resultDate;
+    document.getElementById('getSomeday').value = resultDate;
+    document.getElementById('frm').submit();
+}
+function returnMinusDate() {
+    var dateString = initialDate();
+    var tempDate = new Date(dateString);
+    tempDate.setDate(tempDate.getDate() - 1);
+    var resultDate = fromDatetoString(tempDate);
+    document.getElementById('someday').value = resultDate;
+    document.getElementById('getSomeday').value = resultDate;
+    document.getElementById('frm').submit();
+}
+function returnTodayDate() {
+    var tempDate = new Date();
+    var resultDate = fromDatetoString(tempDate);
+    document.getElementById('someday').value = resultDate;
+    document.getElementById('getSomeday').value = resultDate;
+    document.getElementById('frm').submit();
+}
+
+function initialDate() {
+    
+
+    if ( document.getElementById('someday') == null ) {
+        var todayDte = new Date();
+        var dateString = fromDatetoString(todayDte);
+    } else {
+        var modelDateString = document.getElementById('someday').value;
+        var modelDate = new Date(modelDateString);
+        var dateString = fromDatetoString(modelDate);
     }
 
-    function plusDateUrl() {
-    var url = new URL(location).searchParams;
-    var pParam = Number(url.get("p"));
-    var mParam = Number(url.get("m"));
-    pParam += 1;
-    newUrl = "recordsShow?p=" + pParam + "&m=" + mParam;
-    return newUrl;
-    }
-    function minusDateUrl() {
-    var url = new URL(location).searchParams;
-    var pParam = Number(url.get("p"));
-    var mParam = Number(url.get("m"));
-    mParam += 1;
-    newUrl = "recordsShow?p=" + pParam + "&m=" + mParam;
-    return newUrl;
-    }
+    return dateString
+}
 
-    function setNewValue(newDate) {
-    //
-    var yearMinus = newDate.getFullYear();
-    var monthMinus = newDate.getMonth()+1;
-    var dayMinus = newDate.getDate();
-    var dateString = fromDatetoString(yearMinus, monthMinus, dayMinus);
-    document.getElementById('someday').value = dateString;
+/*
+window.onload = function() {
+    document.getElementById('minusDate').onclick = returnMinusDate(dateString);
+    document.getElementById('plusDate').onclick = returnPlusDate(dateString);
+    document.getElementById('todayDate').onclick = returnTodayDate();
+
+    //document.getElementById('selectDate').value = dateString;
+
+    document.getElementById('selectDateBt').onclick = function() {
+        var dateString = document.getElementById('selectDate').value;
+        document.getElementById('someday').value = dateString;
+        document.getElementById('frm').action="recordsShow?p=0&m=0";
+        document.getElementById('frm').submit();
     }
 
-    window.onload = function() {
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = date.getMonth()+1;
-        var day = date.getDate();
-        document.getElementById('selectDate').value = fromDatetoString(year, month, day);
-        
-        document.getElementById('todayDate').onclick = function() {
-            var dateString = fromDatetoString(year, month, day);
-            document.getElementById('someday').value = dateString;
-            document.getElementById('frm').action="recordsShow?p=0&m=0";
-            document.getElementById('frm').submit();
-            //location.href="./recordsShow?p=0m=0";
-        }
-
-        document.getElementById('minusDate').onclick = function() {
-            var url = new URL(location).searchParams;
-            var pmParam = Number(url.get("p")) - Number(url.get("m"));
-
-            var newDate = new Date(year, month-1, day+pmParam-1);
-            setNewValue(newDate);
-            
-
-            var newUrl = minusDateUrl();
-            document.getElementById('frm').action=newUrl;
-            document.getElementById('frm').submit();
-        }
-
-        document.getElementById('plusDate').onclick = function() {
-            var url = new URL(location).searchParams;
-            var pmParam = Number(url.get("p")) - Number(url.get("m"));
-
-            var newDate = new Date(year, month-1, day+pmParam+1);
-            setNewValue(newDate);
-            
-
-            var newUrl = plusDateUrl();
-            document.getElementById('frm').action=newUrl;
-            document.getElementById('frm').submit();
-        }
-
-        document.getElementById('selectDateBt').onclick = function() {
-            var dateString = document.getElementById('selectDate').value;
-            document.getElementById('someday').value = dateString;
-            document.getElementById('frm').action="recordsShow?p=0&m=0";
-            document.getElementById('frm').submit();
-        }
-
-    }
+}*/
