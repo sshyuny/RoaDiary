@@ -76,7 +76,6 @@ public class RecordsController {
             LocalDate localDate = LocalDate.now();
             stringDate = localDate.toString();
         }
-        System.out.println(stringDate);
         model.addAttribute("stringDate", stringDate);
         // 요청된 날(?????)에 기록된 ThingsTb 행들, DB에서 가져옴
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);

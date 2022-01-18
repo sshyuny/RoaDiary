@@ -6,7 +6,7 @@
 <html>
   <head>
     <title>기록</title>
-    <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
+    
   </head>
   <body>
     <h1>오늘의 기록</h1>
@@ -41,19 +41,25 @@
       </form:form>
     </p>
 
+      
     <p>
     <form method="post" id="frm"  action="recordsShow">
-    <input type="button" id="minusDate" value="이전날" onclick="returnMinusDate()"/>
-    <input type="button" id="plusDate" value="다음날"  onclick="returnPlusDate()"/>
-    <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
-    <input type="date" id="selectDate" />
     
-      <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
-      <input type="hidden" id="getSomeday" name="getSomeday" value=""/>
-      <input type="button" id="selectDateBt" value="제출"/>
 
+      <input type="button" id="minusDate" value="이전날" onclick="returnMinusDate()"/>
+      <input type="button" id="plusDate" value="다음날"  onclick="returnPlusDate()"/>
+      <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
+      <input type="date" id="selectDate" />
+
+      <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+
+    
+      
+      <input type="button" id="selectDateBt" value="제출"/>
+      
       
     </form>
+    <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
     </p>
     
 
