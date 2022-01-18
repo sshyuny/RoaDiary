@@ -48,8 +48,8 @@
     <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
     <input type="date" id="selectDate" />
     
-      <input type="hidden" id="someday" name="someday" value=""/>
-      <input type="hidden" id="getSomeday" name="getSomeday" value="${stringDate}"/>
+      <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+      <input type="hidden" id="getSomeday" name="getSomeday" value=""/>
       <input type="button" id="selectDateBt" value="제출"/>
 
       

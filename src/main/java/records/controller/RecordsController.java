@@ -1,5 +1,7 @@
 package records.controller;
 
+import java.io.Console;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +72,11 @@ public class RecordsController {
 
         // 요청된 날(?????) 가져오기
         String stringDate = request.getParameter("someday");
+        if (stringDate.isBlank()) {
+            LocalDate localDate = LocalDate.now();
+            stringDate = localDate.toString();
+        }
+        System.out.println(stringDate);
         model.addAttribute("stringDate", stringDate);
         // 요청된 날(?????)에 기록된 ThingsTb 행들, DB에서 가져옴
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);
