@@ -68,7 +68,7 @@
       
       <tr>
       <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-        <td value="${joinTagTbs[i].thingsId}" id="${joinTagTbs[i].thingsId}" onclick="changeTime()"><c:out value="${joinTagTbs[i].time}"/></td>
+        <td value="" onclick="changeTime()"><c:out value="${joinTagTbs[i].time}"/></td>
         <td value="${joinTagTbs[i].thingsId}" onclick="changeContent()"><c:out value="${joinTagTbs[i].content}"/></td>
         <c:choose>
           <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
@@ -82,6 +82,7 @@
       </c:forEach>
     </table>
     </c:if>
+    <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>
 
   </body>
 </html>
