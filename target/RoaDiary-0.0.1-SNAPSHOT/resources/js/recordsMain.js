@@ -24,8 +24,6 @@ function returnPlusDate() {
     var resultDate = fromDatetoString(tempDate);
 
     document.getElementById('someday').value = resultDate;
-    //document.getElementById('getSomeday').value = resultDate;
-    //alert(document.getElementById('getSomeday').value);
     document.getElementById('frm').submit();
 }
 function returnMinusDate() {
@@ -34,14 +32,12 @@ function returnMinusDate() {
     tempDate.setDate(tempDate.getDate() - 1);
     var resultDate = fromDatetoString(tempDate);
     document.getElementById('someday').value = resultDate;
-    //document.getElementById('getSomeday').value = resultDate;
     document.getElementById('frm').submit();
 }
 function returnTodayDate() {
     var tempDate = new Date();
     var resultDate = fromDatetoString(tempDate);
     document.getElementById('someday').value = resultDate;
-    //document.getElementById('getSomeday').value = resultDate;
     document.getElementById('frm').submit();
 }
 
@@ -57,4 +53,9 @@ function initialDate() {
     }
 
     return dateString
+}
+
+// 테이블 부분
+function changeTime() {
+    alert(this.id);
 }
