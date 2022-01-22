@@ -54,8 +54,3 @@ function initialDate() {
 
     return dateString
 }
-
-// 테이블 부분
-function changeTime() {
-    alert(this.id);
-}
