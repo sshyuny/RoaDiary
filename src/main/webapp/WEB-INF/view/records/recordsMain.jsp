@@ -72,10 +72,10 @@
         <td value="${joinTagTbs[i].thingsId}" onclick="changeContent()"><c:out value="${joinTagTbs[i].content}"/></td>
         <c:choose>
           <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
-            <td><c:out value="${joinTagTbs[i].name}"/></td>
+            <td value="${joinTagTbs[i].thingsId}" onclick="changeName()"><c:out value="${joinTagTbs[i].name}"/></td>
           </c:when>
           <c:otherwise>
-            <td><c:out value="${joinTagTbs[i].name}"/></td>
+            <td value="${joinTagTbs[i].thingsId}" onclick="changeName()"><c:out value="${joinTagTbs[i].name}"/></td>
         </tr>
           </c:otherwise>
         </c:choose>
