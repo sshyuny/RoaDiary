@@ -54,5 +54,3 @@ function initialDate() {
 
     return dateString
 }
-
-// 수정하기
