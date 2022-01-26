@@ -68,7 +68,7 @@
       
       <tr>
       <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-        <td value="${joinTagTbs[i].thingsId}" onclick="changeTime()"><c:out value="${joinTagTbs[i].time}"/></td>
+        <td><input type="button" value="${joinTagTbs[i].time}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"></td>
         <td value="${joinTagTbs[i].thingsId}" onclick="changeContent()"><c:out value="${joinTagTbs[i].content}"/></td>
         <c:choose>
           <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
