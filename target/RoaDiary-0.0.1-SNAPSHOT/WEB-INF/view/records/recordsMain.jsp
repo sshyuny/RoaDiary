@@ -1,64 +1,88 @@
-<%@page contentType="text/html; charset=utf-8" %>
+<%@page contentType="text/html; charset=utf-8"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!doctype html>
 <html>
   <head>
+    <!-- bootstrap -->
+    <link href="<c:url value='/resources/lib/bootstrap/bootstrap.min.css'/>" rel="stylesheet">
+    <script src="<c:url value='/resources/lib/bootstrap/bootstrap.min.js'/>"></script>
     <title>기록</title>
-    
   </head>
+
   <body>
     <h1>오늘의 기록</h1>
-    <p>
+    <div class="container">
       <form:form action="records" modelAttribute="thingsReqDto">
-        <label>
-          시간:
+
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+          시간
+        </div>
+        <div class="col col-lg-2">
+          내용
+        </div>
+        <div class="col col-lg-2">
+          카테고리
+        </div>
+        <div class="col col-lg-2">
+          태그
+        </div>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+          <!-- 시간 -->
           <form:input path="time"/>
-          <br>
-        </label>
-        <label>
-          내용:
+        </div>
+        <div class="col col-lg-2">
+          <!-- 내용 -->
           <form:input path="content" />
-          <br>
-        </label>
-        <label>
-          카테고리:
+        </div>
+        <div class="col col-lg-2">
+          <!-- 카테고리 -->
           <input type="radio" name="category" path="category" value="1" checked />한 일
           <input type="radio" name="category" path="category" value="2" />먹은 거
           <input type="radio" name="category" path="category" value="3" />건강
-          <br>
-        </label>
-        <label>
-          태그:
+        </div>
+        <div class="col col-lg-2">
+          <!-- 태그 -->
           <form:input path="tag1"/>
           <form:input path="tag2"/>
           <form:input path="tag3"/>
           <form:input path="tag4"/>
-          <br>
-        </label>
-        <input type="submit" value="제출하기">
+        </div>
+        <div class="col col-lg-8">
+          <input type="submit" value="제출하기">
+        </div>
+      </div>
       </form:form>
-    </p>
+    </div>
 
-      
-    <p>
     <form method="post" id="frm"  action="recordsShow">
-
-      <input type="button" id="minusDate" value="이전날" onclick="returnMinusDate()"/>
-      <input type="button" id="plusDate" value="다음날"  onclick="returnPlusDate()"/>
-      <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
-      <input type="date" id="selectDate" />
-      <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
-
-
-      <input type="button" id="selectDateBt" value="제출"/>
-      
-      
-    </form>
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-1">
+          <input type="button" id="minusDate" value="이전날" onclick="returnMinusDate()"/>
+        </div>
+        <div class="col col-lg-1">
+          <input type="button" id="plusDate" value="다음날"  onclick="returnPlusDate()"/>
+        </div>
+        <div class="col col-lg-1">
+          <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
+        </div>
+        <div class="col col-lg-2">
+          <input type="date" id="selectDate" />
+        </div>
+        <div class="col col-lg-1">
+          <input type="button" id="selectDateBt" value="제출"/>
+        </div>
+        <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+      </div>
+    </div>
     <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
-    </p>
-    
+    </form>
 
     <c:if test="${!empty joinTagTbs}">
     <table>
@@ -66,19 +90,13 @@
         <th>시간</th><th>내용</th><th>태그</th>
       </tr>
       
-      <tr>
+      
       <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-        <td><input type="button" value="${joinTagTbs[i].time}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"></td>
-        <td value="${joinTagTbs[i].thingsId}" onclick="changeContent()"><c:out value="${joinTagTbs[i].content}"/></td>
-        <c:choose>
-          <c:when test="${joinTagTbs[i].thingsId == joinTagTbs[i+1].thingsId}">
-            <td value="${joinTagTbs[i].thingsId}" onclick="changeName()"><c:out value="${joinTagTbs[i].name}"/></td>
-          </c:when>
-          <c:otherwise>
-            <td value="${joinTagTbs[i].thingsId}" onclick="changeName()"><c:out value="${joinTagTbs[i].name}"/></td>
-        </tr>
-          </c:otherwise>
-        </c:choose>
+      <tr>
+        <td><input type="button" value="${joinTagTbs[i].time}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
+        <td><input type="button" value="${joinTagTbs[i].content}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
+        <td><input type="button" value="${joinTagTbs[i].name}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
+      </tr>
       </c:forEach>
     </table>
     </c:if>
