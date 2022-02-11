@@ -90,7 +90,6 @@
         <th>시간</th><th>내용</th><th>태그</th>
       </tr>
       
-      
       <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
       <tr>
         <td><input type="button" value="${joinTagTbs[i].time}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
@@ -101,6 +100,39 @@
     </table>
     </c:if>
     <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>
+
+
+    <!-- 수정부분 -->
+    <c:if test="${!empty joinTagTbs}">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          시간
+        </div>
+        <div class="col">
+          내용
+        </div>
+        <div class="col">
+          태그
+        </div>
+      </div>
+      
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+      <div class="row">
+        <div class="col">
+          ${joinTagTbs[i].time}
+        </div>
+        <div class="col">
+          ${joinTagTbs[i].content}
+        </div>
+        <div class="col">
+          ${joinTagTbs[i].name}
+        </div>
+      </div>
+      </c:forEach>
+    </div>
+    </c:if>
+
 
   </body>
 </html>
