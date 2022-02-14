@@ -116,23 +116,35 @@
           태그
         </div>
       </div>
-      
+
+      <form:form action="records" modelAttribute="thingsReqDto">
       <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
       <div class="row">
         <div class="col">
-          ${joinTagTbs[i].time}
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].time}
+          </button>
         </div>
         <div class="col">
-          ${joinTagTbs[i].content}
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].content}
+          </button>
         </div>
         <div class="col">
-          ${joinTagTbs[i].name}
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].name}
+          </button>
+        </div>
+
+        <div class="collapse" id="collapseExample">
+          <form:input path="time"/>
+          <form:input path="content" />
         </div>
       </div>
       </c:forEach>
+      </form:form>
     </div>
     </c:if>
-
 
   </body>
 </html>

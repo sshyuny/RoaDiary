@@ -104,35 +104,47 @@
 
     <!-- 수정부분 -->
     <c:if test="${!empty joinTagTbs}">
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            시간
-          </div>
-          <div class="col">
-            내용
-          </div>
-          <div class="col">
-            태그
-          </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          시간
         </div>
-        
-        <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-        <div class="row">
-          <div class="col">
-            ${joinTagTbs[i].time}
-          </div>
-          <div class="col">
-            ${joinTagTbs[i].content}
-          </div>
-          <div class="col">
-            ${joinTagTbs[i].name}
-          </div>
+        <div class="col">
+          내용
         </div>
-        </c:forEach>
+        <div class="col">
+          태그
+        </div>
       </div>
-    </c:if>
 
+      <form:form action="records" modelAttribute="thingsReqDto">
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].time}
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].content}
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            ${joinTagTbs[i].name}
+          </button>
+        </div>
+
+        <div class="collapse" id="collapseExample">
+          <form:input path="time"/>
+          <form:input path="content" />
+        </div>
+      </div>
+      </c:forEach>
+      </form:form>
+    </div>
+    </c:if>
 
   </body>
 </html>
