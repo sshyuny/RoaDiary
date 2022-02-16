@@ -43,10 +43,10 @@ public class RecordsService {
         return key;
     }
 
-    public void updateTime(Long loginId, Long thingsId) {
+    public void updateThingsTime(ThingsReqDto thingsReqDto, Long thingsId) {
         // [DB]
         // recordsDao를 통해 DB update
-        thingsDao.updateTime(loginId, thingsId);
+        thingsDao.updateTime(thingsReqDto.getTime(), thingsId);
     }
 
     public List<JoinWithThingsAndTagTb> selectThingsToday(Long loginId) {

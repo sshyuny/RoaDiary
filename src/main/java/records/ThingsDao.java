@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.sql.DataSource;
 
@@ -62,7 +63,7 @@ public class ThingsDao {
         return keyValue2;
     }
 
-    public void updateTime(Long loginId, Long thingsId) {
+    public void updateTime(LocalDateTime time, Long thingsId) {
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -71,10 +72,8 @@ public class ThingsDao {
                     "SET time = ? " + 
                     "WHERE things_id = ?"
                 );
-                pstmt.setLong(1, thingsTb.getUserId());
-                pstmt.setTimestamp(1, Timestamp.valueOf(thingsTb.getTime()));
-                pstmt.setString(3, thingsTb.getContent());
-                pstmt.setLong(4, thingsTb.getCategoryId());
+                pstmt.setTimestamp(1, Timestamp.valueOf(time));
+                pstmt.setLong(2, thingsId);
                 return pstmt;
             }
         };

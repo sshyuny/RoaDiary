@@ -117,19 +117,27 @@
                 ${joinTagTbs[i].name}
               </button>
             </div>
+            <div class="col">
+              <%-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".collapse" aria-expanded="false" aria-controls="collapseTime${i} collapseContent${i} collapseName${i} collapseSubmit${i}">
+                전체 수정
+              </button> --%>
+              <input type="submit" value="수정제출">
+            </div>
           </div>
 
           <div class="row">
              <!--   <input type="hidden" id="thingsId${i}" name="thingsId${i}" value="${joinTagTbs[i].thingsId}"/> -->
-            <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>  <!-- hidden value로 되는지 확인 후 주석 지우기-->
+            <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>
             <div class="col">
-              <div class="collapse" id="collapseTime${i}" value="${joinTagTbs[i].thingsId}">
+              <div class="collapse" id="collapseTime${i}">
                 <form:input path="time"/>
+                <%-- <input type="submit" value="제출하기"> --%>
               </div>
             </div>
             <div class="col">
               <div class="collapse" id="collapseContent${i}">
                 <form:input path="content" />
+                <%-- <input type="submit" value="제출하기"> --%>
               </div>
             </div>
             <div class="col">
@@ -138,6 +146,12 @@
                 <form:input path="tag2"/>
                 <form:input path="tag3"/>
                 <form:input path="tag4"/>
+                <%-- <input type="submit" value="제출하기"> --%>
+              </div>
+            </div>
+            <div class="col">
+              <div class="collapse" id="collapseSubmit${i}">
+                <input type="submit" value="제출하기">
               </div>
             </div>
           </div>
