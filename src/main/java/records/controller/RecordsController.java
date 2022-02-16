@@ -83,5 +83,24 @@ public class RecordsController {
         // 
         return "records/recordsMain";
     }
+    @PostMapping("/recordsChange")  // 수정중!!!
+    public String recordsChange(HttpServletRequest request, HttpSession session) {
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        // thingsId 가져오기
+        String thingsIdStr = request.getParameter("thingsId");
+        Long thingsId = Long.valueOf(thingsIdStr);
+
+        // things 테이블 update
+        recordsService.updateTime(loginId, thingsId);
+
+        // tag 테이블과 things_tag 테이블 update
+        //recordsService.updateTags(thingsReqDto, thingsId);
+        
+        //
+        return "records/recordsMain";
+    }
     
 }

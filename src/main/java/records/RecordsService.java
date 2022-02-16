@@ -15,13 +15,13 @@ import records.dto.ThingsReqDto;
 
 public class RecordsService {
     
-    private RecordsDao recordsDao;
+    private ThingsDao thingsDao;
     private TagDao tagDao;
     private ThingsTagDao thingsTagDao;
     private JoinDao joinDao;
 
-    public RecordsService(RecordsDao recordsDao, TagDao tagDao, ThingsTagDao thingsTagDao, JoinDao joinDao) {
-        this.recordsDao = recordsDao;
+    public RecordsService(ThingsDao thingsDao, TagDao tagDao, ThingsTagDao thingsTagDao, JoinDao joinDao) {
+        this.thingsDao = thingsDao;
         this.tagDao = tagDao;
         this.thingsTagDao = thingsTagDao;
         this.joinDao = joinDao;
@@ -39,8 +39,14 @@ public class RecordsService {
         
         // [DB]
         // recordsDao를 통해 DB에 insert
-        Long key = recordsDao.insert(thingsTb);
+        Long key = thingsDao.insert(thingsTb);
         return key;
+    }
+
+    public void updateTime(Long loginId, Long thingsId) {
+        // [DB]
+        // recordsDao를 통해 DB update
+        thingsDao.updateTime(loginId, thingsId);
     }
 
     public List<JoinWithThingsAndTagTb> selectThingsToday(Long loginId) {

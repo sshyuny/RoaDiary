@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class ThingsReqDto {
     
+    private Long thingsId;
     @DateTimeFormat(pattern = "yyyyMMddHHmm")
     private LocalDateTime time;
     private String content;
@@ -14,6 +15,13 @@ public class ThingsReqDto {
     private String tag2;
     private String tag3;
     private String tag4;
+
+    public Long getThingsId(){
+        return thingsId;
+    }
+    public void setThingsId(Long thingsId){
+        this.thingsId = thingsId;
+    }
 
     public LocalDateTime getTime() {
         return time;

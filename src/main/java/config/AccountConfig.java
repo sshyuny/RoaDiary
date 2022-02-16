@@ -9,7 +9,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import account.AccountDao;
 import account.AccountService;
 import records.JoinDao;
-import records.RecordsDao;
+import records.ThingsDao;
 import records.RecordsService;
 import records.TagDao;
 import records.ThingsTagDao;
@@ -49,8 +49,8 @@ public class AccountConfig {
 
     //===== Records
     @Bean
-    public RecordsDao recordsDao() {
-        return new RecordsDao(dataSource());
+    public ThingsDao thingsDao() {
+        return new ThingsDao(dataSource());
     }
 
     @Bean
@@ -70,7 +70,7 @@ public class AccountConfig {
 
     @Bean
     public RecordsService recordsService() {
-        return new RecordsService(recordsDao(), tagDao(), thingsTagDao(), joinDao());
+        return new RecordsService(thingsDao(), tagDao(), thingsTagDao(), joinDao());
     }
 
 }

@@ -99,7 +99,7 @@
         </div>
       </div>
 
-      <form:form action="records" modelAttribute="thingsReqDto">
+      <form:form action="recordsChange" modelAttribute="thingsReqDto">
         <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
           <div class="row">
             <div class="col">
@@ -120,8 +120,10 @@
           </div>
 
           <div class="row">
+             <!--   <input type="hidden" id="thingsId${i}" name="thingsId${i}" value="${joinTagTbs[i].thingsId}"/> -->
+            <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>  <!-- hidden value로 되는지 확인 후 주석 지우기-->
             <div class="col">
-              <div class="collapse" id="collapseTime${i}">
+              <div class="collapse" id="collapseTime${i}" value="${joinTagTbs[i].thingsId}">
                 <form:input path="time"/>
               </div>
             </div>

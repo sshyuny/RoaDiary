@@ -84,24 +84,6 @@
     <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
     </form>
 
-    <c:if test="${!empty joinTagTbs}">
-    <table>
-      <tr>
-        <th>시간</th><th>내용</th><th>태그</th>
-      </tr>
-      
-      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-      <tr>
-        <td><input type="button" value="${joinTagTbs[i].time}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
-        <td><input type="button" value="${joinTagTbs[i].content}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
-        <td><input type="button" value="${joinTagTbs[i].name}" class="${joinTagTbs[i].thingsId}" onclick="changeTime(this.className)"/></td>
-      </tr>
-      </c:forEach>
-    </table>
-    </c:if>
-    <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>
-
-
     <!-- 수정부분 -->
     <c:if test="${!empty joinTagTbs}">
     <div class="container">
@@ -117,34 +99,54 @@
         </div>
       </div>
 
-      <form:form action="records" modelAttribute="thingsReqDto">
-      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
-      <div class="row">
-        <div class="col">
-          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            ${joinTagTbs[i].time}
-          </button>
-        </div>
-        <div class="col">
-          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            ${joinTagTbs[i].content}
-          </button>
-        </div>
-        <div class="col">
-          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            ${joinTagTbs[i].name}
-          </button>
-        </div>
+      <form:form action="recordsChange" modelAttribute="thingsReqDto">
+        <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i}" aria-expanded="false" aria-controls="collapseTime${i}">
+                ${joinTagTbs[i].time}
+              </button>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i}" aria-expanded="false" aria-controls="collapseContent${i}">
+                ${joinTagTbs[i].content}
+              </button>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i}" aria-expanded="false" aria-controls="collapseName${i}">
+                ${joinTagTbs[i].name}
+              </button>
+            </div>
+          </div>
 
-        <div class="collapse" id="collapseExample">
-          <form:input path="time"/>
-          <form:input path="content" />
-        </div>
-      </div>
-      </c:forEach>
+          <div class="row">
+             <!--   <input type="hidden" id="thingsId${i}" name="thingsId${i}" value="${joinTagTbs[i].thingsId}"/> -->
+            <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>  <!-- hidden value로 되는지 확인 후 주석 지우기-->
+            <div class="col">
+              <div class="collapse" id="collapseTime${i}" value="${joinTagTbs[i].thingsId}">
+                <form:input path="time"/>
+              </div>
+            </div>
+            <div class="col">
+              <div class="collapse" id="collapseContent${i}">
+                <form:input path="content" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="collapse" id="collapseName${i}">
+                <form:input path="tag1"/>
+                <form:input path="tag2"/>
+                <form:input path="tag3"/>
+                <form:input path="tag4"/>
+              </div>
+            </div>
+          </div>
+          
+        </c:forEach>
       </form:form>
     </div>
     </c:if>
+    <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>
 
   </body>
 </html>
