@@ -35,4 +35,11 @@ public class ThingsTagDao {
         jdbcTemplate.update(pre);
     }
 
+    public void delete(Long thingsId) {
+        jdbcTemplate.update(
+            "DELETE FROM things_tag WHERE things_id = ?",
+            thingsId
+        );
+    }
+
 }

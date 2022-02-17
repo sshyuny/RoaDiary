@@ -142,4 +142,8 @@ public class RecordsService {
         
     }
 
+    public void updateThingsTag(ThingsReqDto thingsReqDto, Long thingsId) {
+        thingsTagDao.delete(thingsId);
+    }
+
 }

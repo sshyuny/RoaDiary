@@ -99,8 +99,9 @@
         </div>
       </div>
 
-      <form:form action="recordsChange" modelAttribute="thingsReqDto">
-        <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+      
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+        <form:form action="recordsChange" modelAttribute="thingsReqDto">
           <div class="row">
             <div class="col">
               <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i}" aria-expanded="false" aria-controls="collapseTime${i}">
@@ -155,9 +156,9 @@
               </div>
             </div>
           </div>
-          
-        </c:forEach>
-      </form:form>
+        </form:form>
+      </c:forEach>
+      
     </div>
     </c:if>
     <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>

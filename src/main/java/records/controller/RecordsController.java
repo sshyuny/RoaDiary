@@ -94,7 +94,15 @@ public class RecordsController {
         Long thingsId = Long.valueOf(thingsIdStr);
 
         // things 테이블 update
-        recordsService.updateThingsTime(thingsReqDto, thingsId);
+        if (thingsReqDto.getTime() != null) {
+            recordsService.updateThingsTime(thingsReqDto, thingsId);
+        }
+        if ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
+            ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank())) {
+            recordsService.updateThingsTag(thingsReqDto, thingsId);
+            recordsService.insertTags(thingsReqDto, thingsId);
+        }
+        
 
         // tag 테이블과 things_tag 테이블 update
         //recordsService.updateTags(thingsReqDto, thingsId);
