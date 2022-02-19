@@ -83,7 +83,8 @@ public class RecordsController {
         // 
         return "records/recordsMain";
     }
-    @PostMapping("/recordsChange")  // 수정중!!!
+    // 내용 변경할 때
+    @PostMapping("/recordsChange")
     public String recordsChange(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         //LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
@@ -93,19 +94,20 @@ public class RecordsController {
         String thingsIdStr = request.getParameter("thingsId");
         Long thingsId = Long.valueOf(thingsIdStr);
 
-        // things 테이블 update
+        // time 변경: things 테이블 update
         if (thingsReqDto.getTime() != null) {
             recordsService.updateThingsTime(thingsReqDto, thingsId);
         }
+        // 태그 변경: things 테이블 update
         if ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
             ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank())) {
-            recordsService.updateThingsTag(thingsReqDto, thingsId);
+            recordsService.deleteThingsTag(thingsReqDto, thingsId);
             recordsService.insertTags(thingsReqDto, thingsId);
         }
-        
-
-        // tag 테이블과 things_tag 테이블 update
-        //recordsService.updateTags(thingsReqDto, thingsId);
+        // content 변경: things 테이블 update
+        if (thingsReqDto.getContent() != null) {
+            recordsService.updateThingsContent(thingsReqDto, thingsId);
+        }
         
         //
         return "records/recordsMain";

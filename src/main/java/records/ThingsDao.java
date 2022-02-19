@@ -63,6 +63,7 @@ public class ThingsDao {
         return keyValue2;
     }
 
+    // time 변경
     public void updateTime(LocalDateTime time, Long thingsId) {
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
@@ -78,6 +79,16 @@ public class ThingsDao {
             }
         };
         jdbcTemplate.update(pre);
+    }
+
+    // content 변경
+    public void updateContent(String content, Long thingsId) {
+        jdbcTemplate.update(
+            "UPDATE things " + 
+            "SET content = ? " + 
+            "WHERE things_id = ?",
+            content, thingsId
+        );
     }
 
 }

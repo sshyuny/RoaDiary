@@ -48,6 +48,11 @@ public class RecordsService {
         // recordsDao를 통해 DB update
         thingsDao.updateTime(thingsReqDto.getTime(), thingsId);
     }
+    public void updateThingsContent(ThingsReqDto thingsReqDto, Long thingsId) {
+        // [DB]
+        // recordsDao를 통해 DB update
+        thingsDao.updateContent(thingsReqDto.getContent(), thingsId);
+    }
 
     public List<JoinWithThingsAndTagTb> selectThingsToday(Long loginId) {
         // 현재 시간 가져오기
@@ -142,7 +147,7 @@ public class RecordsService {
         
     }
 
-    public void updateThingsTag(ThingsReqDto thingsReqDto, Long thingsId) {
+    public void deleteThingsTag(ThingsReqDto thingsReqDto, Long thingsId) {
         thingsTagDao.delete(thingsId);
     }
 

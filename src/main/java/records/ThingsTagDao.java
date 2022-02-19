@@ -35,6 +35,7 @@ public class ThingsTagDao {
         jdbcTemplate.update(pre);
     }
 
+    // 태그 변경 시, 기존 tag_id 기록된 부분 삭제
     public void delete(Long thingsId) {
         jdbcTemplate.update(
             "DELETE FROM things_tag WHERE things_id = ?",
