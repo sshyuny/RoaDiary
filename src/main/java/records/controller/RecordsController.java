@@ -105,7 +105,7 @@ public class RecordsController {
             recordsService.insertTags(thingsReqDto, thingsId);
         }
         // content 변경: things 테이블 update
-        if (thingsReqDto.getContent() != null) {
+        if (!thingsReqDto.getContent().isBlank()) {
             recordsService.updateThingsContent(thingsReqDto, thingsId);
         }
         

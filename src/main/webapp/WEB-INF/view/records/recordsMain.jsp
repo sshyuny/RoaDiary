@@ -100,7 +100,7 @@
       </div>
 
       
-      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)}">
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
         <form:form action="recordsChange" modelAttribute="thingsReqDto">
           <div class="row">
             <div class="col">

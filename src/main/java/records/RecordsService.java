@@ -84,16 +84,17 @@ public class RecordsService {
                     String tagNameNewList = lastRowOfNewList.getName();
                     String tagNameList = "#" + secondRow.getName();
                     String newTagName =tagNameNewList +  tagNameList;
-                    lastRowOfNewList.setName(newTagName);
+                    // lastRowOfNewList.setName(newTagName); //[?] 왜 아래 코드 대신, 이거만 써도 잘 작동되는지 물어보기
+                    newJoinTbList.get(lastIdxOfnewJoinList).setName(newTagName);
                 }
             }
         }
+        // 태그 있는 경우, 앞에 "#" 붙이기
         for(JoinWithThingsAndTagTb rowTb : newJoinTbList) {
             String rowTbTagName = rowTb.getName();
             if(StringUtils.hasText(rowTbTagName)) {
                 rowTb.setName("#" + rowTbTagName);
             }
-            
         }
         return newJoinTbList;
     }
