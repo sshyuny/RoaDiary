@@ -11,22 +11,24 @@
     <title>기록</title>
   </head>
 
-  <body>
-    <h1>오늘의 기록</h1>
+  <body style="background-color:black;">
+    <figure class="text-center">
+      <h1 style="color:white;">오늘의 기록</h1>
+    </figure>
     <div class="container">
       <form:form action="records" modelAttribute="thingsReqDto">
 
       <div class="row justify-content-md-center">
-        <div class="col col-lg-2">
+        <div class="col col-lg-2" style="color:white;">
           시간
         </div>
-        <div class="col col-lg-2">
+        <div class="col col-lg-2" style="color:white;">
           내용
         </div>
-        <div class="col col-lg-2">
+        <div class="col col-lg-2" style="color:white;">
           카테고리
         </div>
-        <div class="col col-lg-2">
+        <div class="col col-lg-2" style="color:white;">
           태그
         </div>
       </div>
@@ -53,7 +55,7 @@
           <form:input path="tag3"/>
           <form:input path="tag4"/>
         </div>
-        <div class="col col-lg-8">
+        <div class="col col-lg-1">
           <input type="submit" value="제출하기">
         </div>
       </div>
@@ -64,13 +66,13 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col col-lg-1">
-          <input type="button" id="minusDate" value="이전날" onclick="returnMinusDate()"/>
+          <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
         </div>
         <div class="col col-lg-1">
-          <input type="button" id="plusDate" value="다음날"  onclick="returnPlusDate()"/>
+          <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
         </div>
         <div class="col col-lg-1">
-          <input type="button" id="todayDate" value="오늘"  onclick="returnTodayDate()"/> 
+          <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>
         </div>
         <div class="col col-lg-2">
           <input type="date" id="selectDate" />
@@ -87,72 +89,60 @@
     <!-- 수정부분 -->
     <c:if test="${!empty joinTagTbs}">
     <div class="container">
-      <div class="row">
-        <div class="col">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
           시간
         </div>
-        <div class="col">
+        <div class="col col-lg-2">
           내용
         </div>
-        <div class="col">
+        <div class="col col-lg-2">
           태그
         </div>
       </div>
 
       
-      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)-1}">
+      <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
         <form:form action="recordsChange" modelAttribute="thingsReqDto">
-          <div class="row">
-            <div class="col">
+          <div class="row justify-content-md-center">
+            <div class="col col-lg-2">
               <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i}" aria-expanded="false" aria-controls="collapseTime${i}">
                 ${joinTagTbs[i].time}
               </button>
             </div>
-            <div class="col">
+            <div class="col col-lg-2">
               <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i}" aria-expanded="false" aria-controls="collapseContent${i}">
                 ${joinTagTbs[i].content}
               </button>
             </div>
-            <div class="col">
+            <div class="col col-lg-2">
               <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i}" aria-expanded="false" aria-controls="collapseName${i}">
                 ${joinTagTbs[i].name}
               </button>
             </div>
-            <div class="col">
-              <%-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".collapse" aria-expanded="false" aria-controls="collapseTime${i} collapseContent${i} collapseName${i} collapseSubmit${i}">
-                전체 수정
-              </button> --%>
-              <input type="submit" value="수정제출">
+            <div class="col col-lg-1">
+              <button type="submit" class="btn btn-dark">수정 제출</button>
             </div>
           </div>
 
-          <div class="row">
-             <!--   <input type="hidden" id="thingsId${i}" name="thingsId${i}" value="${joinTagTbs[i].thingsId}"/> -->
+          <div class="row justify-content-md-center">
             <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>
-            <div class="col">
+            <div class="col col-lg-2">
               <div class="collapse" id="collapseTime${i}">
                 <form:input path="time"/>
-                <%-- <input type="submit" value="제출하기"> --%>
               </div>
             </div>
-            <div class="col">
+            <div class="col col-lg-2">
               <div class="collapse" id="collapseContent${i}">
                 <form:input path="content" />
-                <%-- <input type="submit" value="제출하기"> --%>
               </div>
             </div>
-            <div class="col">
+            <div class="col col-lg-2">
               <div class="collapse" id="collapseName${i}">
                 <form:input path="tag1"/>
                 <form:input path="tag2"/>
                 <form:input path="tag3"/>
                 <form:input path="tag4"/>
-                <%-- <input type="submit" value="제출하기"> --%>
-              </div>
-            </div>
-            <div class="col">
-              <div class="collapse" id="collapseSubmit${i}">
-                <input type="submit" value="제출하기">
               </div>
             </div>
           </div>
