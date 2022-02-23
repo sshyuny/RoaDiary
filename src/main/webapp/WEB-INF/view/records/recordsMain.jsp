@@ -22,12 +22,16 @@
         <div class="col-2" style="color:white;">
           <form:form action="records" modelAttribute="thingsReqDto">
             <div class="row">
+              날짜
+              <input name="date" type="text" class="form-control"/>
+            </div>
+            <div class="row">
               시간
-              <form:input path="time"/>
+              <input name="time" type="text" class="form-control"/>
             </div>
             <div class="row">
               내용
-              <form:input path="content" />
+              <input name="content" type="text" class="form-control"/>
             </div>
             <div class="row">
               카테고리
@@ -37,10 +41,10 @@
             </div>
             <div class="row">
               태그
-              <form:input path="tag1"/>
-              <form:input path="tag2"/>
-              <form:input path="tag3"/>
-              <form:input path="tag4"/>
+              <input name="tag1" type="text" class="form-control"/>
+              <input name="tag2" type="text" class="form-control"/>
+              <input name="tag3" type="text" class="form-control"/>
+              <input name="tag4" type="text" class="form-control"/>
             </div>
             <div class="row">
               <input type="submit" value="제출하기">
@@ -115,20 +119,21 @@
                     <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>
                     <div class="col col-lg-2">
                       <div class="collapse" id="collapseTime${i}">
-                        <form:input path="time"/>
+                        <input name="date" type="text" class="form-control"/>
+                        <input name="time" type="text" class="form-control"/>
                       </div>
                     </div>
                     <div class="col col-lg-2">
                       <div class="collapse" id="collapseContent${i}">
-                        <form:input path="content" />
+                        <input name="content" type="text" class="form-control"/>
                       </div>
                     </div>
                     <div class="col col-lg-2">
                       <div class="collapse" id="collapseName${i}">
-                        <form:input path="tag1"/>
-                        <form:input path="tag2"/>
-                        <form:input path="tag3"/>
-                        <form:input path="tag4"/>
+                        <input name="tag1" type="text" class="form-control"/>
+                        <input name="tag2" type="text" class="form-control"/>
+                        <input name="tag3" type="text" class="form-control"/>
+                        <input name="tag4" type="text" class="form-control"/>
                       </div>
                     </div>
                   </div>

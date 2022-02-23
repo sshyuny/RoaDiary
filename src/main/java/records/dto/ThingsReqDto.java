@@ -1,14 +1,20 @@
 package records.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ThingsReqDto {
     
     private Long thingsId;
-    @DateTimeFormat(pattern = "yyyyMMddHHmm")
-    private LocalDateTime time;
+    
+    private LocalDateTime dateTime;
+    @DateTimeFormat(pattern = "HHmm")
+    private LocalTime time;
+    @DateTimeFormat(pattern = "yyyyMMdd")
+    private LocalDate date;
     private String content;
     private Long category;
     private String tag1;
@@ -23,12 +29,31 @@ public class ThingsReqDto {
         this.thingsId = thingsId;
     }
 
-    public LocalDateTime getTime() {
+    public LocalTime getTime() {
         return time;
     }
-    public void setTime(LocalDateTime time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+    public void setDateTime(LocalTime time, LocalDate date) {
+        this.dateTime = LocalDateTime.of(date, time);
+    }
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+    public LocalDateTime makeDateTime(LocalTime time, LocalDate date) {
+        this.dateTime = LocalDateTime.of(date, time);
+        return dateTime;
+    }
+    
+    
 
     public String getContent() {
         return content;

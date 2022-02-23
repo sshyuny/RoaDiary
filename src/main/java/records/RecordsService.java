@@ -34,7 +34,7 @@ public class RecordsService {
      */
     public Long insertThings(ThingsReqDto thingsReqDto, Long loginId) {
         // ThingsTb 객체 생성
-        ThingsTb thingsTb = new ThingsTb(thingsReqDto.getTime(), thingsReqDto.getContent(), thingsReqDto.getCategory());
+        ThingsTb thingsTb = new ThingsTb(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsReqDto.getContent(), thingsReqDto.getCategory());
         thingsTb.setUserId(loginId);
         
         // [DB]
@@ -46,7 +46,7 @@ public class RecordsService {
     public void updateThingsTime(ThingsReqDto thingsReqDto, Long thingsId) {
         // [DB]
         // recordsDao를 통해 DB update
-        thingsDao.updateTime(thingsReqDto.getTime(), thingsId);
+        thingsDao.updateTime(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsId);
     }
     public void updateThingsContent(ThingsReqDto thingsReqDto, Long thingsId) {
         // [DB]
