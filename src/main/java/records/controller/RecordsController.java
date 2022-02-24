@@ -2,6 +2,9 @@ package records.controller;
 
 import java.io.Console;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +42,9 @@ public class RecordsController {
         // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsToday(loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);
+        // '오늘' 단어 전하기
+        // model.addAttribute("stringDate", LocalDate.now().getYear() + "-" + LocalDate.now().getMonth() + "-" + LocalDate.now().getDayOfMonth());
+        model.addAttribute("stringDate", "오늘");
         // 
         return "records/recordsMain";
     }
@@ -72,15 +78,27 @@ public class RecordsController {
 
         // 요청된 날 가져오기
         String stringDate = request.getParameter("someday");
-        if (stringDate.isBlank()) {
-            LocalDate localDate = LocalDate.now();
-            stringDate = localDate.toString();
-        }
         model.addAttribute("stringDate", stringDate);
         // 요청된 날에 기록된 ThingsTb 행들, DB에서 가져옴
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);
-        // 
+
+        // 오늘, 어제 등에 해당할 경우, 날짜를 숫자가 아닌 글로 보여주기 위함
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Period period = Period.between(LocalDate.now(), LocalDate.parse(stringDate, formatter));
+        if (period.getDays() == 0) {
+            model.addAttribute("stringDate", "오늘");
+        } else if (period.getDays() == -1) {
+            model.addAttribute("stringDate", "어제");
+        } else if (period.getDays() == -2) {
+            model.addAttribute("stringDate", "그제");
+        } else if (period.getDays() == 1) {
+            model.addAttribute("stringDate", "내일");
+        } else if (period.getDays() == 2) {
+            model.addAttribute("stringDate", "모레");
+        }
+
+        // return
         return "records/recordsMain";
     }
     // 내용 변경할 때

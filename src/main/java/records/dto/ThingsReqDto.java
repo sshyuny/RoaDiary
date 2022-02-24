@@ -42,12 +42,13 @@ public class ThingsReqDto {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-    public void setDateTime(LocalTime time, LocalDate date) {
-        this.dateTime = LocalDateTime.of(date, time);
-    }
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
+    // 이 부분 지우는거 확인하고 정상작동하면 지우기!!!!
+    // public void setDateTime(LocalTime time, LocalDate date) {
+    //     this.dateTime = LocalDateTime.of(date, time);
+    // }
+    // public LocalDateTime getDateTime() {
+    //     return dateTime;
+    // }
     public LocalDateTime makeDateTime(LocalTime time, LocalDate date) {
         this.dateTime = LocalDateTime.of(date, time);
         return dateTime;

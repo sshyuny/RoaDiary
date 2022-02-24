@@ -1,6 +1,7 @@
 package records;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,14 @@ public class RecordsService {
      * @param loginId
      */
     public Long insertThings(ThingsReqDto thingsReqDto, Long loginId) {
+        // 시간 부분 공백으로 두고 전송했을 때, 지금 시간으로 저장되게 함
+        if (thingsReqDto.getTime() == null) {
+            thingsReqDto.setTime(LocalTime.now());
+        }
+        // 날짜 부분 공백으로 두고 전송했을 때, 오늘 날짜로 저장되게 함
+        if (thingsReqDto.getDate() == null) {
+            thingsReqDto.setDate(LocalDate.now());
+        }
         // ThingsTb 객체 생성
         ThingsTb thingsTb = new ThingsTb(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsReqDto.getContent(), thingsReqDto.getCategory());
         thingsTb.setUserId(loginId);

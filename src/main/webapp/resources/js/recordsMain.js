@@ -44,13 +44,31 @@ function returnTodayDate() {
 function initialDate() {
 
     var modelDateString = document.getElementById('someday').value;
-    if (modelDateString == "") {
+    // 서버 RecordsController.recordsShowing에서 someday value를 "오늘", "어제" 등으로 수정했을 경우,
+    // 아래와 같이 따로 날짜 수정 해주어야 예외 피할 수 있음
+    if (modelDateString == "" || modelDateString == "오늘") {
         var todayDate = new Date();
         var dateString = fromDatetoString(todayDate);
-    } else {
+    } else if (modelDateString == "어제") {
+        var modelDate = new Date();
+        modelDate.setDate(modelDate.getDate() - 1);
+        var dateString = fromDatetoString(modelDate);
+    } else if (modelDateString == "그제") {
+        var modelDate = new Date();
+        modelDate.setDate(modelDate.getDate() - 2);
+        var dateString = fromDatetoString(modelDate);
+    } else if (modelDateString == "내일") {
+        var modelDate = new Date();
+        modelDate.setDate(modelDate.getDate() + 1);
+        var dateString = fromDatetoString(modelDate);
+    } else if (modelDateString == "모레") {
+        var modelDate = new Date();
+        modelDate.setDate(modelDate.getDate() + 2);
+        var dateString = fromDatetoString(modelDate);
+    } else {  // 위에 해당되지 않는 경우, value 값 그대로 가져와서 사용함
         var modelDate = new Date(modelDateString);
         var dateString = fromDatetoString(modelDate);
-    }
+    } 
 
     return dateString
 }

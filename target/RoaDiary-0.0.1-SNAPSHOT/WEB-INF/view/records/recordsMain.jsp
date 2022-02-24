@@ -13,7 +13,8 @@
 
   <body style="background-color:black;">
     <figure class="text-center">
-      <h1 style="color:white;">오늘의 기록</h1>
+      <h1 style="color:white;">RoaDiary</h1>
+      <h2 style="color:white;">${stringDate}의 기록</h2>
     </figure>
 
     <div class="container">
