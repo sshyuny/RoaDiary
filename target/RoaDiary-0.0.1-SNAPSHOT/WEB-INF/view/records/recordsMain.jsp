@@ -92,53 +92,67 @@
                   태그
                 </div>
               </div>
-              
-              <c:forEach var="i" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
-                <form:form action="recordsChange" modelAttribute="thingsReqDto">
-                  <div class="row justify-content-md-center">
-                    <div class="col col-lg-2">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i}" aria-expanded="false" aria-controls="collapseTime${i}">
-                        ${joinTagTbs[i].time}
-                      </button>
-                    </div>
-                    <div class="col col-lg-2">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i}" aria-expanded="false" aria-controls="collapseContent${i}">
-                        ${joinTagTbs[i].content}
-                      </button>
-                    </div>
-                    <div class="col col-lg-2">
-                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i}" aria-expanded="false" aria-controls="collapseName${i}">
-                        ${joinTagTbs[i].name}
-                      </button>
-                    </div>
-                    <div class="col col-lg-1">
-                      <button type="submit" class="btn btn-dark">수정 제출</button>
-                    </div>
-                  </div>
 
-                  <div class="row justify-content-md-center">
-                    <form:hidden path="thingsId" value="${joinTagTbs[i].thingsId}"/>
-                    <div class="col col-lg-2">
-                      <div class="collapse" id="collapseTime${i}">
-                        <input name="date" type="text" class="form-control"/>
-                        <input name="time" type="text" class="form-control"/>
+              <%-- show --%>
+              <c:forEach var="i" begin="0" end="23">
+                <div class="row">
+
+                <div class="col col-lg-2">
+                  ${i}시
+                </div>
+                
+
+                <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
+                  <c:if test="${joinTagTbs[i2].hour == i}">
+                    <form:form action="recordsChange" modelAttribute="thingsReqDto">
+                      <div class="row justify-content-md-center">
+                        <div class="col col-lg-2">
+                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i2}" aria-expanded="false" aria-controls="collapseTime${i2}">
+                            ${joinTagTbs[i2].time}
+                          </button>
+                        </div>
+
+                        <div class="col col-lg-2">
+                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
+                            ${joinTagTbs[i2].content}
+                          </button>
+                        </div>
+                        <div class="col col-lg-2">
+                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
+                            ${joinTagTbs[i2].name}
+                          </button>
+                        </div>
+                        <div class="col col-lg-1">
+                          <button type="submit" class="btn btn-dark">수정 제출</button>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col col-lg-2">
-                      <div class="collapse" id="collapseContent${i}">
-                        <input name="content" type="text" class="form-control"/>
+
+                      <div class="row justify-content-md-center">
+                        <form:hidden path="thingsId" value="${joinTagTbs[i2].thingsId}"/>
+                        <div class="col col-lg-2">
+                          <div class="collapse" id="collapseTime${i2}">
+                            <input name="date" type="text" class="form-control"/>
+                            <input name="time" type="text" class="form-control"/>
+                          </div>
+                        </div>
+                        <div class="col col-lg-2">
+                          <div class="collapse" id="collapseContent${i2}">
+                            <input name="content" type="text" class="form-control"/>
+                          </div>
+                        </div>
+                        <div class="col col-lg-2">
+                          <div class="collapse" id="collapseName${i2}">
+                            <input name="tag1" type="text" class="form-control"/>
+                            <input name="tag2" type="text" class="form-control"/>
+                            <input name="tag3" type="text" class="form-control"/>
+                            <input name="tag4" type="text" class="form-control"/>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col col-lg-2">
-                      <div class="collapse" id="collapseName${i}">
-                        <input name="tag1" type="text" class="form-control"/>
-                        <input name="tag2" type="text" class="form-control"/>
-                        <input name="tag3" type="text" class="form-control"/>
-                        <input name="tag4" type="text" class="form-control"/>
-                      </div>
-                    </div>
-                  </div>
-                </form:form>
+                    </form:form>
+                  </c:if>
+                </c:forEach>
+
               </c:forEach>
               
             </div>
