@@ -20,7 +20,7 @@
     <div class="container">
       <div class="row">
 
-        <div class="col-2" style="color:white;">
+        <div class="col-2" style="color:white;"><!-- 가장 큰, 왼쪽 col -->
           <form:form action="records" modelAttribute="thingsReqDto">
             <div class="row">
               날짜
@@ -51,26 +51,26 @@
               <input type="submit" value="제출하기">
             </div>
           </form:form>
-        </div>
+        </div><!-- 가장 큰, 왼쪽 col -->
 
-        <div class="col" style="color:white;">
+        <div class="col" style="color:white;"><!-- 가장 큰, 오른쪽 col -->
 
           <div class="container">
             <form method="post" id="frm"  action="recordsShow">
               <div class="row justify-content-md-center">
-                <div class="col col-lg-1">
+                <div class="col-auto">
                   <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
                 </div>
-                <div class="col col-lg-1">
+                <div class="col-auto">
                   <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
                 </div>
-                <div class="col col-lg-1">
+                <div class="col-auto">
                   <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>
                 </div>
-                <div class="col col-lg-2">
+                <div class="col col-2">
                   <input type="date" id="selectDate" />
                 </div>
-                <div class="col col-lg-1">
+                <div class="col col-1">
                   <input type="button" id="selectDateBt" value="제출"/>
                 </div>
                 <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
@@ -80,86 +80,113 @@
           <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
 
           <c:if test="${!empty joinTagTbs}">
-            <div class="container">
-              <div class="row justify-content-md-center">
-                <div class="col col-lg-2">
+            <div class="container"><!-- container: 기록들 보여주는 부분 -->
+
+              <div class="row">
+                <div class="col col-1">
                   시간
                 </div>
-                <div class="col col-lg-2">
-                  내용
-                </div>
-                <div class="col col-lg-2">
-                  태그
+                <div class="col">
+                  <div class="row">
+                    <div class="col col-1">
+                      세부
+                    </div>
+                    <div class="col col-2">
+                      한일
+                    </div>
+                    <div class="col col-2">
+                      먹은거
+                    </div>
+                    <div class="col col-2">
+                      건강
+                    </div>
+                    <div class="col col-2">
+                      태그
+                    </div>
+                    <div class="col col-1">
+                      수정
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <%-- show --%>
               <c:forEach var="i" begin="0" end="23">
-                <div class="row">
-
-                <div class="col col-lg-2">
-                  ${i}시
-                </div>
+                <div class="row align-items-center">
                 
-
-                <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
-                  <c:if test="${joinTagTbs[i2].hour == i}">
-                    <form:form action="recordsChange" modelAttribute="thingsReqDto">
-                      <div class="row justify-content-md-center">
-                        <div class="col col-lg-2">
-                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i2}" aria-expanded="false" aria-controls="collapseTime${i2}">
-                            ${joinTagTbs[i2].time}
-                          </button>
-                        </div>
-
-                        <div class="col col-lg-2">
-                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
-                            ${joinTagTbs[i2].content}
-                          </button>
-                        </div>
-                        <div class="col col-lg-2">
-                          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
-                            ${joinTagTbs[i2].name}
-                          </button>
-                        </div>
-                        <div class="col col-lg-1">
-                          <button type="submit" class="btn btn-dark">수정 제출</button>
-                        </div>
-                      </div>
-
-                      <div class="row justify-content-md-center">
-                        <form:hidden path="thingsId" value="${joinTagTbs[i2].thingsId}"/>
-                        <div class="col col-lg-2">
-                          <div class="collapse" id="collapseTime${i2}">
-                            <input name="date" type="text" class="form-control"/>
-                            <input name="time" type="text" class="form-control"/>
+                  <div class="col col-1 bg-success bg-opacity-50 mb-1">
+                    ${i}시
+                  </div>
+                  
+                  <div class="col"><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
+                    <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
+                      <c:if test="${joinTagTbs[i2].hour == i}">
+                        <form:form action="recordsChange" modelAttribute="thingsReqDto">
+                          <div class="row">
+                            <div class="col col-1">
+                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i2}" aria-expanded="false" aria-controls="collapseTime${i2}">
+                                ${joinTagTbs[i2].time}
+                              </button>
+                            </div>
+                            <div class="col col-2">
+                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
+                                ${joinTagTbs[i2].content}
+                              </button>
+                            </div>
+                            <div class="col col-2">
+                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
+                                ${joinTagTbs[i2].content}
+                              </button>
+                            </div>
+                            <div class="col col-2">
+                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
+                                ${joinTagTbs[i2].content}
+                              </button>
+                            </div>
+                            <div class="col col-2">
+                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
+                                ${joinTagTbs[i2].name}
+                              </button>
+                            </div>
+                            <div class="col col-2 mb-3">
+                              <button type="submit" class="btn btn-dark">수정 제출</button>
+                            </div>
                           </div>
-                        </div>
-                        <div class="col col-lg-2">
-                          <div class="collapse" id="collapseContent${i2}">
-                            <input name="content" type="text" class="form-control"/>
-                          </div>
-                        </div>
-                        <div class="col col-lg-2">
-                          <div class="collapse" id="collapseName${i2}">
-                            <input name="tag1" type="text" class="form-control"/>
-                            <input name="tag2" type="text" class="form-control"/>
-                            <input name="tag3" type="text" class="form-control"/>
-                            <input name="tag4" type="text" class="form-control"/>
-                          </div>
-                        </div>
-                      </div>
-                    </form:form>
-                  </c:if>
-                </c:forEach>
 
+                          <div class="row">
+                            <form:hidden path="thingsId" value="${joinTagTbs[i2].thingsId}"/>
+                            <div class="col col-lg-2">
+                              <div class="collapse" id="collapseTime${i2}">
+                                <input name="date" type="text" class="form-control"/>
+                                <input name="time" type="text" class="form-control"/>
+                              </div>
+                            </div>
+                            <div class="col col-lg-2">
+                              <div class="collapse" id="collapseContent${i2}">
+                                <input name="content" type="text" class="form-control"/>
+                              </div>
+                            </div>
+                            <div class="col col-lg-2">
+                              <div class="collapse" id="collapseName${i2}">
+                                <input name="tag1" type="text" class="form-control"/>
+                                <input name="tag2" type="text" class="form-control"/>
+                                <input name="tag3" type="text" class="form-control"/>
+                                <input name="tag4" type="text" class="form-control"/>
+                              </div>
+                            </div>
+                          </div>
+                        </form:form>
+                      </c:if>
+                    </c:forEach>
+                  </div><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
+
+                </div><!-- row: 0~23시까지 각 시간별 row -->
               </c:forEach>
               
-            </div>
+            </div><!-- container: 기록들 보여주는 부분 -->
           </c:if>
           <script src="<c:url value='/resources/js/recordsMainChangeTime.js'/>"></script>
 
-        </div>
+        </div><!-- 가장 큰, 오른쪽 col -->
 
       </div><!-- 첫번째 row -->
     </div> <!-- 첫번째 container -->
