@@ -36,7 +36,7 @@ public class RecordsService {
     public Long insertThings(ThingsReqDto thingsReqDto, Long loginId) {
         // 시간 부분 공백으로 두고 전송했을 때, 지금 시간으로 저장되게 함
         if (thingsReqDto.getTime() == null) {
-            thingsReqDto.setTime(LocalTime.now());
+            thingsReqDto.setTime(LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute()));
         }
         // 날짜 부분 공백으로 두고 전송했을 때, 오늘 날짜로 저장되게 함
         if (thingsReqDto.getDate() == null) {
@@ -55,7 +55,7 @@ public class RecordsService {
     public void updateThingsTime(ThingsReqDto thingsReqDto, Long thingsId) {
         // [DB]
         // recordsDao를 통해 DB update
-        thingsDao.updateTime(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsId);
+        thingsDao.updateTime(thingsReqDto.getTime(), thingsId); // 날짜 변경은 불가능하게 만듦(thingsReqDto.makeDateTime() 삭제)
     }
     public void updateThingsContent(ThingsReqDto thingsReqDto, Long thingsId) {
         // [DB]

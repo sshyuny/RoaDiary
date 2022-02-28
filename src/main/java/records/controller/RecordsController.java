@@ -3,6 +3,7 @@ package records.controller;
 import java.io.Console;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -126,6 +127,27 @@ public class RecordsController {
         if (!thingsReqDto.getContent().isBlank()) {
             recordsService.updateThingsContent(thingsReqDto, thingsId);
         }
+        
+        //
+        return "records/recordsMain";
+    }
+
+    // 빠른 내용 변경
+    @PostMapping("/recordsQuickInsert")
+    public String recordsQuickInsert(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        int eachHour = Integer.valueOf(request.getParameter("eachHour"));
+
+        thingsReqDto.setTime(LocalTime.of(eachHour, 0));
+
+        // things 테이블에 기록
+        Long key = recordsService.insertThings(thingsReqDto, loginId);
+
+        // tag 테이블과 things_tag 테이블에 기록
+        recordsService.insertTags(thingsReqDto, key);
         
         //
         return "records/recordsMain";

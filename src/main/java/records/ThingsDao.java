@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.sql.DataSource;
 
@@ -64,16 +65,16 @@ public class ThingsDao {
     }
 
     // time 변경
-    public void updateTime(LocalDateTime time, Long thingsId) {
+    public void updateTime(LocalTime time, Long thingsId) {
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement pstmt = con.prepareStatement(
                     "UPDATE things " + 
-                    "SET time = ? " + 
+                    "SET time = CONCAT(DATE(time), ' ', ?) " + 
                     "WHERE things_id = ?"
                 );
-                pstmt.setTimestamp(1, Timestamp.valueOf(time));
+                pstmt.setString(1, String.valueOf(time));
                 pstmt.setLong(2, thingsId);
                 return pstmt;
             }
