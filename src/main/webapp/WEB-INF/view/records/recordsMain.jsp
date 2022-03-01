@@ -91,7 +91,7 @@
                   <div class="col col-1">
                     세부
                   </div>
-                  <div class="col col-2">
+                  <div class="col col-2 bg-success bg-opacity-50 mb-1">
                     한일
                   </div>
                   <div class="col col-2">
@@ -113,8 +113,8 @@
             <c:forEach var="i" begin="0" end="23">
               <div class="row"><!-- row: 0~23시까지 각 시간별 row -->
               
-                <div class="col col-1 bg-success bg-opacity-50 mb-1">
-                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#eachHour${i}" aria-controls="eachHour${i}">
+                <div class="col col-1 mb-1">
+                  <button class="btn btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#eachHour${i}" aria-controls="eachHour${i}">
                     ${i}시
                   </button>
                 </div>
@@ -159,7 +159,7 @@
 
                           <div class="col col-2">
                             <c:if test="${joinTagTbs[i2].categoryId == 1}">
-                              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
+                              <button class="btn btn-primary bg-success bg-opacity-50 mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
                                 ${joinTagTbs[i2].content}
                               </button>
                             </c:if>
