@@ -107,6 +107,21 @@ public class RecordsService {
         }
         return newJoinTbList;
     }
+    public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateTo;
+        if (stringDate.isBlank()) {
+            // date String에서 Localdate로 변환
+            dateTo = LocalDate.now();
+        } else {
+            // date String에서 Localdate로 변환
+            dateTo = LocalDate.parse(stringDate, formatter);
+        }
+        LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue()-2, dateTo.getDayOfMonth());
+
+        List<JoinWithThingsAndTagTb> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
+        return joinTbList;
+    }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {
         // 여러 tag들 담는 String 배열 tagContent 생성

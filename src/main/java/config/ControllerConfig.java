@@ -8,6 +8,7 @@ import account.AccountService;
 import account.controller.AccountController;
 import records.RecordsService;
 import records.controller.RecordsController;
+import records.controller.SortingController;
 
 @Configuration
 public class ControllerConfig {
@@ -28,6 +29,13 @@ public class ControllerConfig {
     public RecordsController recordsController() {
         RecordsController controller = new RecordsController();
         controller.setRecordsController(recordsService);
+        return controller;
+    }
+
+    @Bean
+    public SortingController sortingController() {
+        SortingController controller = new SortingController();
+        controller.setSortingController(recordsService);
         return controller;
     }
     

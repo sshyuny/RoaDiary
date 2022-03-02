@@ -1,8 +1,6 @@
 package records.controller;
 
-import java.io.Console;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.LoginInfo;
 import domain.JoinWithThingsAndTagTb;
-import domain.ThingsTb;
 import records.RecordsService;
 import records.dto.ThingsReqDto;
 
