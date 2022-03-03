@@ -18,6 +18,18 @@
       <br>
     </label>
 
+    <button type="button" class="btn btn-dark">${listCategory1[0].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory1[1].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory1[2].tagName}</button>
+    <br>
+    <button type="button" class="btn btn-dark">${listCategory2[0].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory2[1].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory2[2].tagName}</button>
+    <br>
+    <button type="button" class="btn btn-dark">${listCategory3[0].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory3[1].tagName}</button>
+    <button type="button" class="btn btn-dark">${listCategory3[2].tagName}</button>
+
     <div style="width:600px; height:600px;">
       <canvas id="myChart" width="100" height="100"></canvas>
       <script>
@@ -25,7 +37,7 @@
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['${joinTagTbs[0].thingsId}', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: '# of Votes',
                     data: [12, 19, 3, 5, 2, 3],

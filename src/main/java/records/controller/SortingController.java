@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import account.LoginInfo;
 import domain.JoinWithThingsAndTagTb;
+import domain.SortTagFrequency;
 import records.RecordsService;
 
 
@@ -30,6 +31,13 @@ public class SortingController {
 
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);
+
+        List<SortTagFrequency> listCategory1 = recordsService.calculJoinTbs(joinTagTbs, 1);
+        List<SortTagFrequency> listCategory2 = recordsService.calculJoinTbs(joinTagTbs, 2);
+        List<SortTagFrequency> listCategory3 = recordsService.calculJoinTbs(joinTagTbs, 3);
+        model.addAttribute("listCategory1", listCategory1);
+        model.addAttribute("listCategory2", listCategory2);
+        model.addAttribute("listCategory3", listCategory3);
 
         return "records/recordsSorting";
     }

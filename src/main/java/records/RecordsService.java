@@ -4,11 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
 import domain.JoinWithThingsAndTagTb;
+import domain.SortTagFrequency;
 import domain.TagTb;
 import domain.ThingsTagTb;
 import domain.ThingsTb;
@@ -121,6 +128,41 @@ public class RecordsService {
 
         List<JoinWithThingsAndTagTb> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
         return joinTbList;
+    }
+    public List<SortTagFrequency> calculJoinTbs(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
+        Map<String, Integer> map = new HashMap<>();
+
+        for (JoinWithThingsAndTagTb one : joinTagTbs) {
+            String tagName = one.getName();
+            if ((one.getCategoryId() == categoryId) && (tagName != null)) {
+                if (map.get(tagName) == null) {
+                    map.put(tagName, 1);
+                } else {
+                    map.replace(tagName, map.get(tagName) + 1);
+                }
+                
+            }
+        }
+
+        int mapSize = map.size();
+        List<Integer> values = new ArrayList<>(map.values());
+        Integer[] array = new Integer[mapSize];
+        for (int i = 0; i < mapSize; i++) {
+            array[i] = values.get(i);
+        }
+        Arrays.sort(array, Collections.reverseOrder());
+        
+        // 새로 객체 만들어서 태그이름, 사용 횟수, 퍼센트 들어가는 객체 만들기
+        List<SortTagFrequency> list = new ArrayList<>();
+        Set<String> set = map.keySet();
+        for (int i = 0; i < 5; i++) {
+            if (mapSize <= i) break;
+            for (String one : set) {
+                if (map.get(one) == array[i]) list.add(new SortTagFrequency(categoryId, one, array[i]));
+            }
+        }
+
+        return list;
     }
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {
