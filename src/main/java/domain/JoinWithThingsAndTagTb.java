@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -7,7 +8,8 @@ public class JoinWithThingsAndTagTb {
     
     private Long thingsId;
     private Long userId;
-    private LocalTime time;
+    private LocalTime time;  // 원래는 LocalDateTime의 time이지만, 편의를 위해 time과 아래 date로 나눔
+    private LocalDate date;  // (sql테이블에 없는 파라미터)
     private String content;
     private Long categoryId;
     private int tagId;
@@ -18,6 +20,7 @@ public class JoinWithThingsAndTagTb {
         this.thingsId = thingsId;
         this.userId = userId;
         this.time = time.toLocalTime();
+        this.date = time.toLocalDate();  // (sql테이블에 없는 파라미터)
         this.content = content;
         this.categoryId = categoryId;
         this.tagId = tagId;
@@ -25,11 +28,18 @@ public class JoinWithThingsAndTagTb {
         this.hour = time.getHour(); // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
     }
 
+    // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
     public int getHour() {
-        return hour; // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
+        return hour; 
     }
     public void setHour(int hour){
         this.hour = hour;
+    }
+    public LocalDate getDate() {
+        return date; 
+    }
+    public void setDate(LocalDate date){
+        this.date = date;
     }
 
     public Long getThingsId() {

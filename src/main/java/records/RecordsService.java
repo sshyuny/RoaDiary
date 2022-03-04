@@ -1,11 +1,13 @@
 package records;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -114,56 +116,7 @@ public class RecordsService {
         }
         return newJoinTbList;
     }
-    public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate dateTo;
-        if (stringDate.isBlank()) {
-            // date String에서 Localdate로 변환
-            dateTo = LocalDate.now();
-        } else {
-            // date String에서 Localdate로 변환
-            dateTo = LocalDate.parse(stringDate, formatter);
-        }
-        LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue()-2, dateTo.getDayOfMonth());
-
-        List<JoinWithThingsAndTagTb> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
-        return joinTbList;
-    }
-    public List<SortTagFrequency> calculJoinTbs(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
-        Map<String, Integer> map = new HashMap<>();
-
-        for (JoinWithThingsAndTagTb one : joinTagTbs) {
-            String tagName = one.getName();
-            if ((one.getCategoryId() == categoryId) && (tagName != null)) {
-                if (map.get(tagName) == null) {
-                    map.put(tagName, 1);
-                } else {
-                    map.replace(tagName, map.get(tagName) + 1);
-                }
-                
-            }
-        }
-
-        int mapSize = map.size();
-        List<Integer> values = new ArrayList<>(map.values());
-        Integer[] array = new Integer[mapSize];
-        for (int i = 0; i < mapSize; i++) {
-            array[i] = values.get(i);
-        }
-        Arrays.sort(array, Collections.reverseOrder());
-        
-        // 새로 객체 만들어서 태그이름, 사용 횟수, 퍼센트 들어가는 객체 만들기
-        List<SortTagFrequency> list = new ArrayList<>();
-        Set<String> set = map.keySet();
-        for (int i = 0; i < 5; i++) {
-            if (mapSize <= i) break;
-            for (String one : set) {
-                if (map.get(one) == array[i]) list.add(new SortTagFrequency(categoryId, one, array[i]));
-            }
-        }
-
-        return list;
-    }
+    
 
     public void insertTags(ThingsReqDto thingsReqDto, Long thingsId) {
         // 여러 tag들 담는 String 배열 tagContent 생성
@@ -216,6 +169,127 @@ public class RecordsService {
 
     public void deleteThingsTag(ThingsReqDto thingsReqDto, Long thingsId) {
         thingsTagDao.delete(thingsId);
+    }
+
+    // sorting
+    public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateTo;
+        if (stringDate.isBlank()) {
+            // date String에서 Localdate로 변환
+            dateTo = LocalDate.now();
+        } else {
+            // date String에서 Localdate로 변환
+            dateTo = LocalDate.parse(stringDate, formatter);
+        }
+        LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue(), dateTo.getDayOfMonth());
+        int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
+        dateFrom = dateFrom.minusDays(7 * 11 - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다.
+        dateTo = dateTo.plusDays(1); // sql에서 Between을 썼을 때, dateTo 당일이 포함되지 않기 때문에 하루를 더해줍니다.
+
+        List<JoinWithThingsAndTagTb> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
+
+        return joinTbList;
+    }
+    public List<SortTagFrequency> calculJoinTbs(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
+
+        // [Map map 생성]
+        // Key: 각 태그 ; value: 해당 태그의 사용 횟수
+        Map<String, Integer> map = new HashMap<>();
+
+        // [map에 각 값들 넣어주기]
+        for (JoinWithThingsAndTagTb one : joinTagTbs) {
+            String tagName = one.getName();
+            if ((one.getCategoryId() == categoryId) && (tagName != null)) {  // 태그가 null인 경우는 제외시킵니다.
+                if (map.get(tagName) == null) {
+                    map.put(tagName, 1);
+                } else {
+                    map.replace(tagName, map.get(tagName) + 1);
+                }
+                
+            }
+        }
+
+        // [배열 array 생성]
+        // map의 value(태그 반복 횟수)를 넣어 두기 위해
+        int mapSize = map.size();
+        List<Integer> values = new ArrayList<>(map.values());
+        Integer[] array = new Integer[mapSize];
+        for (int i = 0; i < mapSize; i++) {
+            array[i] = values.get(i);
+        }
+        Arrays.sort(array, Collections.reverseOrder());  // 자주 반복되는 태그를 앞에 두기 위해 reverseOrder()을 사용해줍니다.
+        
+        // [List list 생성]
+        // 카테고리(categoryId)와 태그(tagName)와 그 사용 횟수(frequency)를 SortTagFrequency에 넣어 객체 생성
+        // (수정)SortTagFrequency에서 categoryId 필요 없는거 확인하고 이후 지우기
+        List<SortTagFrequency> list = new ArrayList<>();
+        Set<String> set = map.keySet();
+        for (int i = 0; i < 5; i++) {  // 가장 자주 순으로 위에서 5개만 선택합니다.
+            if (mapSize <= i) break;  // 만일 사용된 태그가 5개 이하일 경우, for문을 중간에 종료시킵니다(안 할 경우, IndexOutOfBounceException 발생).
+            for (String one : set) {
+                if (map.get(one) == array[i]) list.add(new SortTagFrequency(categoryId, one, array[i]));
+            }
+        }
+
+        return list;
+    }
+
+    public int[] calculFrequency(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId, String tag) {
+
+        // [List newJoinTagTbs 생성]
+        // 주어진 파라미터 categoryId와 tag와 일치하는 객체(JoinWithThingsAndTagTb)만 선택하여 새 list에 넣기
+        List<JoinWithThingsAndTagTb> newJoinTagTbs = new ArrayList<>();
+        for (JoinWithThingsAndTagTb one : joinTagTbs) {
+            if (one.getName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
+                if ((one.getCategoryId() == categoryId) && (one.getName().equals(tag))) newJoinTagTbs.add(one);
+            }
+        }
+
+        // [배열 results 생성]
+        // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
+        int[] frequencyResults = new int[12];  // 12주 동안
+
+        int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
+        LocalDate fromDate = LocalDate.now().minusDays(7 * 11 - 1 + restDay);  // 시작일을 월요일로 맞추기 위해 restDay를 더해줍니다.
+        int mok = 0;  // 몇 번째 주에 해당하는지 저장
+        int frequency = 0;  // 해당 tag가 몇 번 사용되는지 저장
+
+        // 각 주별로, 해당 tag가 몇 번 사용되는지 계산
+        int listSize = newJoinTagTbs.size();
+        for (int i = 0; i < listSize; i++) {
+            
+            Long betweenDays = ChronoUnit.DAYS.between(fromDate, newJoinTagTbs.get(i).getDate());
+            int tempMok = betweenDays.intValue() / 7;
+
+            // 맨 마지막 요소일 경우, 따로 frequencyResults에 frequency를 넣어줍니다.
+            if (i == listSize - 1) {
+                if (mok == tempMok) {
+                    ++frequency;
+                    frequencyResults[tempMok] = frequency;
+                } else {
+                    frequencyResults[tempMok] = 1;
+                }
+            }
+
+            if (mok == tempMok) {
+                ++frequency;
+            } else {
+                if (i == 0) {
+                    frequency = 1;
+                    mok = tempMok;
+                } else {
+                    frequencyResults[mok] = frequency;
+                    mok = tempMok;
+                    frequency = 1;
+                }
+                
+            }
+
+            
+        }
+
+        return frequencyResults;
     }
 
 }

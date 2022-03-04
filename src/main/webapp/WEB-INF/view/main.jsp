@@ -29,7 +29,10 @@
       <a href="./account/change">비밀번호 변경</a>
     </p>
     <p>
-      <a href="./records?p=0&m=0">기록 서비스 이용하기</a>
+      <a href="./records">기록 서비스 이용하기</a>
+    </p>
+    <p>
+      <a href="./sortingMain">기록 분석 보기</a>
     </p>
     </c:if>
 
