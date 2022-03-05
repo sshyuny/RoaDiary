@@ -1,8 +1,8 @@
 C:\MyProject\RoaDiary\src\main\java\config\ControllerConfig.java
 C:\MyProject\RoaDiary\src\main\java\account\validator\RegisterReqDtoValidator.java
+C:\MyProject\RoaDiary\src\main\java\domain\SortTagTime.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\SortingController.java
 C:\MyProject\RoaDiary\src\main\java\domain\UserTb.java
-C:\MyProject\RoaDiary\src\main\java\domain\SortTagFrequency.java
 C:\MyProject\RoaDiary\src\main\java\config\MvcConfig.java
 C:\MyProject\RoaDiary\src\main\java\records\JoinDao.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountService.java
@@ -25,6 +25,7 @@ C:\MyProject\RoaDiary\src\main\java\config\AccountConfig.java
 C:\MyProject\RoaDiary\src\main\java\domain\ThingsTagTb.java
 C:\MyProject\RoaDiary\src\main\java\account\exception\DuplicateAccountException.java
 C:\MyProject\RoaDiary\src\main\java\account\validator\ChangeAccountReqDtoValidator.java
+C:\MyProject\RoaDiary\src\main\java\domain\SortTagQuantity.java
 C:\MyProject\RoaDiary\src\main\java\domain\TagTb.java
 C:\MyProject\RoaDiary\src\main\java\domain\ThingsTb.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\RecordsController.java

@@ -8,24 +8,26 @@ public class JoinWithThingsAndTagTb {
     
     private Long thingsId;
     private Long userId;
-    private LocalTime time;  // 원래는 LocalDateTime의 time이지만, 편의를 위해 time과 아래 date로 나눔
+    private LocalTime time;  // (sql테이블에 없는 파라미터) 
     private LocalDate date;  // (sql테이블에 없는 파라미터)
+    private LocalDateTime dateTime;  // sql의 time과 동일(편의를 위해 time과 아래 date로 나눔)
     private String content;
     private Long categoryId;
     private int tagId;
     private String name;
-    private int hour; // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
+    private int hour; // (sql테이블에 없는 파라미터) 프론트에서 쉽게 사용하기 위한 변수
 
-    public JoinWithThingsAndTagTb(Long thingsId, Long userId, LocalDateTime time, String content, Long categoryId, int tagId, String name) {
+    public JoinWithThingsAndTagTb(Long thingsId, Long userId, LocalDateTime dateTime, String content, Long categoryId, int tagId, String name) {
         this.thingsId = thingsId;
         this.userId = userId;
-        this.time = time.toLocalTime();
-        this.date = time.toLocalDate();  // (sql테이블에 없는 파라미터)
+        this.time = dateTime.toLocalTime();  // (sql테이블에 없는 파라미터)
+        this.date = dateTime.toLocalDate();  // (sql테이블에 없는 파라미터)
+        this.dateTime = dateTime;
         this.content = content;
         this.categoryId = categoryId;
         this.tagId = tagId;
         this.name = name;
-        this.hour = time.getHour(); // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
+        this.hour = time.getHour(); // (sql테이블에 없는 파라미터) 프론트에서 쉽게 사용하기 위한 변수
     }
 
     // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
@@ -35,11 +37,19 @@ public class JoinWithThingsAndTagTb {
     public void setHour(int hour){
         this.hour = hour;
     }
+    // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
     public LocalDate getDate() {
         return date; 
     }
     public void setDate(LocalDate date){
         this.date = date;
+    }
+    // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
+    public LocalTime getTime() {
+        return time;
+    }
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public Long getThingsId() {
@@ -56,11 +66,11 @@ public class JoinWithThingsAndTagTb {
         this.userId = userId;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getContent() {

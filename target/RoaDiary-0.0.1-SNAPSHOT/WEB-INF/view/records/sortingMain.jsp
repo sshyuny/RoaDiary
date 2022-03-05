@@ -23,11 +23,11 @@
 
     <br>
     <a href="./sorting?category=1&tag=${listCategory1[0].tagName}" class="btn btn-secondary" role="button">${listCategory1[0].tagName}</a>
-    ${listCategory1[0].frequency}회 기록됨
+    ${listCategory1[0].quantity}회 기록됨
     <a href="./sorting?category=1&tag=${listCategory1[1].tagName}" class="btn btn-secondary" role="button">${listCategory1[1].tagName}</a>
-    ${listCategory1[1].frequency}회 기록됨
+    ${listCategory1[1].quantity}회 기록됨
     <a href="./sorting?category=1&tag=${listCategory1[2].tagName}" class="btn btn-secondary" role="button">${listCategory1[2].tagName}</a>
-    ${listCategory1[2].frequency}회 기록됨
+    ${listCategory1[2].quantity}회 기록됨
     <br>
     <a href="./sorting?category=2&tag=${listCategory2[0].tagName}" class="btn btn-dark" role="button">${listCategory2[0].tagName}</a>
     <a href="./sorting?category=2&tag=${listCategory2[1].tagName}" class="btn btn-dark" role="button">${listCategory2[1].tagName}</a>
@@ -36,6 +36,12 @@
     <a href="./sorting?category=3&tag=${listCategory3[0].tagName}" class="btn btn-secondary" role="button">${listCategory3[0].tagName}</a>
     <a href="./sorting?category=3&tag=${listCategory3[1].tagName}" class="btn btn-secondary" role="button">${listCategory3[1].tagName}</a>
     <a href="./sorting?category=3&tag=${listCategory3[2].tagName}" class="btn btn-secondary" role="button">${listCategory3[2].tagName}</a>
+    <br>
+
+    ${listTime[0].tagName}를 ${listTime[0].quantity}시간동안 함
+    ${listTime[1].tagName}를 ${listTime[1].quantity}시간동안 함
+    ${listTime[2].tagName}를 ${listTime[2].quantity}시간동안 함
+    <br>
 
     <div style="width:600px; height:600px;">
       <canvas id="myChart" width="100" height="100"></canvas>

@@ -3,7 +3,6 @@ package records;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -17,7 +16,8 @@ import java.util.Set;
 import org.springframework.util.StringUtils;
 
 import domain.JoinWithThingsAndTagTb;
-import domain.SortTagFrequency;
+import domain.SortTagQuantity;
+import domain.SortTagTime;
 import domain.TagTb;
 import domain.ThingsTagTb;
 import domain.ThingsTb;
@@ -171,27 +171,35 @@ public class RecordsService {
         thingsTagDao.delete(thingsId);
     }
 
-    // sorting
+    // ========== sorting ==========
+
     public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
+
+        // [가쥰 시점 날짜 받기]
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // dateTo 생성 과정 - 1
         LocalDate dateTo;
-        if (stringDate.isBlank()) {
-            // date String에서 Localdate로 변환
+        if (stringDate.isBlank()) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
             dateTo = LocalDate.now();
         } else {
             // date String에서 Localdate로 변환
             dateTo = LocalDate.parse(stringDate, formatter);
         }
+        // dateFrom 생성 과정
         LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue(), dateTo.getDayOfMonth());
         int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
-        dateFrom = dateFrom.minusDays(7 * 11 - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다.
+        dateFrom = dateFrom.minusDays(7 * 11 - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다(총 12주 이내).
+        // dateTo 생성 과정 - 2
         dateTo = dateTo.plusDays(1); // sql에서 Between을 썼을 때, dateTo 당일이 포함되지 않기 때문에 하루를 더해줍니다.
 
+        // [DB]
+        // dateoFrom부터 dateTo까지 사이의 기록들 List로 가져오기
         List<JoinWithThingsAndTagTb> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
 
         return joinTbList;
     }
-    public List<SortTagFrequency> calculJoinTbs(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
+
+    public List<SortTagQuantity> calculJoinTbsByFrequency(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
 
         // [Map map 생성]
         // Key: 각 태그 ; value: 해당 태그의 사용 횟수
@@ -200,7 +208,7 @@ public class RecordsService {
         // [map에 각 값들 넣어주기]
         for (JoinWithThingsAndTagTb one : joinTagTbs) {
             String tagName = one.getName();
-            if ((one.getCategoryId() == categoryId) && (tagName != null)) {  // 태그가 null인 경우는 제외시킵니다.
+            if ((one.getCategoryId() == categoryId) && (tagName != null)) {  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
                 if (map.get(tagName) == null) {
                     map.put(tagName, 1);
                 } else {
@@ -221,14 +229,14 @@ public class RecordsService {
         Arrays.sort(array, Collections.reverseOrder());  // 자주 반복되는 태그를 앞에 두기 위해 reverseOrder()을 사용해줍니다.
         
         // [List list 생성]
-        // 카테고리(categoryId)와 태그(tagName)와 그 사용 횟수(frequency)를 SortTagFrequency에 넣어 객체 생성
-        // (수정)SortTagFrequency에서 categoryId 필요 없는거 확인하고 이후 지우기
-        List<SortTagFrequency> list = new ArrayList<>();
+        // 카테고리(categoryId)와 태그(tagName)와 그 사용 횟수(frequency)를 SortTagQuantity에 넣어 객체 생성
+        // (수정)SortTagQuantity에서 categoryId 필요 없는거 확인하고 이후 지우기
+        List<SortTagQuantity> list = new ArrayList<>();
         Set<String> set = map.keySet();
         for (int i = 0; i < 5; i++) {  // 가장 자주 순으로 위에서 5개만 선택합니다.
             if (mapSize <= i) break;  // 만일 사용된 태그가 5개 이하일 경우, for문을 중간에 종료시킵니다(안 할 경우, IndexOutOfBounceException 발생).
             for (String one : set) {
-                if (map.get(one) == array[i]) list.add(new SortTagFrequency(categoryId, one, array[i]));
+                if (map.get(one) == array[i]) list.add(new SortTagQuantity(categoryId, one, array[i]));
             }
         }
 
@@ -255,12 +263,12 @@ public class RecordsService {
         int mok = 0;  // 몇 번째 주에 해당하는지 저장
         int frequency = 0;  // 해당 tag가 몇 번 사용되는지 저장
 
-        // 각 주별로, 해당 tag가 몇 번 사용되는지 계산
+        // [각 주별로, 해당 tag가 몇 번 사용되는지 계산]
         int listSize = newJoinTagTbs.size();
         for (int i = 0; i < listSize; i++) {
             
             Long betweenDays = ChronoUnit.DAYS.between(fromDate, newJoinTagTbs.get(i).getDate());
-            int tempMok = betweenDays.intValue() / 7;
+            int tempMok = betweenDays.intValue() / 7;  // 현재 객체가, 몇 번째 주인지 저장
 
             // 맨 마지막 요소일 경우, 따로 frequencyResults에 frequency를 넣어줍니다.
             if (i == listSize - 1) {
@@ -272,24 +280,95 @@ public class RecordsService {
                 }
             }
 
-            if (mok == tempMok) {
+            // mok과 tempMok이 일치하는지 여부에 따라(같은 주에 해당되는지 여부에 따라), 
+            // frequency를 조정하고, frequency를 List frequencyResults에 넣어줍니다.
+            if (mok == tempMok) {  // 같은 주에 해당되기 때문에, frequency값을 증가시켜줍니다.
                 ++frequency;
             } else {
-                if (i == 0) {
+                if (i == 0) {  // 첫 번째 객체는 mok, tempMok 값과, frequency 값을 초기화하여, 이후 이를 기준으로 계산될 수 있게 해줍니다.
                     frequency = 1;
                     mok = tempMok;
                 } else {
                     frequencyResults[mok] = frequency;
                     mok = tempMok;
-                    frequency = 1;
+                    frequency = 1;  // 객체가 존재하기 때문에(해당되는 객체 date에서만 돌리는 for문), frequency는 0이 아니라 1이 되어야 합니다.
                 }
-                
             }
-
-            
         }
 
         return frequencyResults;
+    }
+
+    public List<SortTagTime> makeJoinTbsListByTime(List<JoinWithThingsAndTagTb> joinTagTbs) {
+
+        List<SortTagTime> list = new ArrayList<>();
+
+        if (joinTagTbs.size() > 1) {  // joinTagTbs 크기가 2보다 클 때만 계산해줍니다.
+            for (int i = 0; i < joinTagTbs.size() - 1; i++) {
+
+                if (joinTagTbs.get(i).getCategoryId() != 1) continue;  // 카테고리(CategoryId)가 1이 아닐 경우, 제외시킵니다.
+
+                // @@수정: 카테고리(CategoryId)가 1이 아닐 경우, 제외시키는 부분 수정하기
+
+                JoinWithThingsAndTagTb join1 = joinTagTbs.get(i);
+                JoinWithThingsAndTagTb join2 = joinTagTbs.get(i+1);
+
+                LocalDateTime dateTime1 = join1.getDateTime();
+                LocalDateTime dateTime2 = join2.getDateTime();
+
+                long betweenMinutes = ChronoUnit.MINUTES.between(dateTime1, dateTime2);
+
+                if (betweenMinutes < 12 * 60) {  // 두 기록(객체) 사이의 시간이 12시간 이내일 때에만, list에 기입해줍니다.
+                    SortTagTime sortOne = new SortTagTime(join1.getDate(), betweenMinutes, join1.getName());
+                    list.add(sortOne);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public List<SortTagQuantity> calculJoinTbsByTime(List<SortTagTime> sortTagTime) {
+
+        // [List SortTagQuantity 생성]
+        // 각 태그 별 몇 분의 시간을 들였는지 계산
+        Map<String, Long> map = new HashMap<>();
+        for (SortTagTime one : sortTagTime) {
+            String tagName = one.getTagName();
+
+            if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다.
+
+            if (map.containsKey(tagName)) {
+                map.replace(tagName, map.get(tagName) + one.getMinutes());
+            } else {
+                map.put(tagName, one.getMinutes());
+            }
+        }
+
+        // [배열 array 생성] (중복 사용)
+        // map의 value(태그 반복 횟수)를 넣어 두기 위해
+        int mapSize = map.size();
+        List<Long> values = new ArrayList<>(map.values());
+        Long[] array = new Long[mapSize];
+        for (int i = 0; i < mapSize; i++) {
+            array[i] = values.get(i);
+        }
+        Arrays.sort(array, Collections.reverseOrder());  // 자주 반복되는 태그를 앞에 두기 위해 reverseOrder()을 사용해줍니다.
+        
+        // [List list 생성] (중복 사용)
+        // 카테고리(categoryId)와 태그(tagName)와 그 사용 횟수(frequency)를 SortTagQuantity에 넣어 객체 생성
+        // (수정)SortTagQuantity에서 categoryId 필요 없는거 확인하고 이후 지우기
+        List<SortTagQuantity> list = new ArrayList<>();
+        Set<String> set = map.keySet();
+        for (int i = 0; i < 5; i++) {  // 가장 자주 순으로 위에서 5개만 선택합니다.
+            if (mapSize <= i) break;  // 만일 사용된 태그가 5개 이하일 경우, for문을 중간에 종료시킵니다(안 할 경우, IndexOutOfBounceException 발생).
+            for (String one : set) {
+                if (map.get(one) == array[i]) list.add(new SortTagQuantity(1, one, array[i].intValue() / 60));
+            }
+        }
+        
+
+        return list;
     }
 
 }

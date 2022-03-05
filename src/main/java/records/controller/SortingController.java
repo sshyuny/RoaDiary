@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import account.LoginInfo;
 import domain.JoinWithThingsAndTagTb;
-import domain.SortTagFrequency;
+import domain.SortTagQuantity;
+import domain.SortTagTime;
 import records.RecordsService;
 
 
@@ -33,12 +34,16 @@ public class SortingController {
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", loginId);
         // model.addAttribute("joinTagTbs", joinTagTbs);
 
-        List<SortTagFrequency> listCategory1 = recordsService.calculJoinTbs(joinTagTbs, 1);
-        List<SortTagFrequency> listCategory2 = recordsService.calculJoinTbs(joinTagTbs, 2);
-        List<SortTagFrequency> listCategory3 = recordsService.calculJoinTbs(joinTagTbs, 3);
+        List<SortTagQuantity> listCategory1 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 1);
+        List<SortTagQuantity> listCategory2 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 2);
+        List<SortTagQuantity> listCategory3 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 3);
         model.addAttribute("listCategory1", listCategory1);
         model.addAttribute("listCategory2", listCategory2);
         model.addAttribute("listCategory3", listCategory3);
+
+        List<SortTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
+        List<SortTagQuantity> listTime = recordsService.calculJoinTbsByTime(listTimeRaw);
+        model.addAttribute("listTime", listTime);
 
         return "records/sortingMain";
     }
