@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class JoinWithThingsAndTagTb {
+import records.dto.AboutEachRecords;
+
+public class JoinWithThingsAndTagTb extends AboutEachRecords{
     
     private Long thingsId;
     private Long userId;
@@ -14,10 +16,10 @@ public class JoinWithThingsAndTagTb {
     private String content;
     private Long categoryId;
     private int tagId;
-    private String name;
+    private String tagName;
     private int hour; // (sql테이블에 없는 파라미터) 프론트에서 쉽게 사용하기 위한 변수
 
-    public JoinWithThingsAndTagTb(Long thingsId, Long userId, LocalDateTime dateTime, String content, Long categoryId, int tagId, String name) {
+    public JoinWithThingsAndTagTb(Long thingsId, Long userId, LocalDateTime dateTime, String content, Long categoryId, int tagId, String tagName) {
         this.thingsId = thingsId;
         this.userId = userId;
         this.time = dateTime.toLocalTime();  // (sql테이블에 없는 파라미터)
@@ -26,7 +28,7 @@ public class JoinWithThingsAndTagTb {
         this.content = content;
         this.categoryId = categoryId;
         this.tagId = tagId;
-        this.name = name;
+        this.tagName = tagName;
         this.hour = time.getHour(); // (sql테이블에 없는 파라미터) 프론트에서 쉽게 사용하기 위한 변수
     }
 
@@ -38,9 +40,11 @@ public class JoinWithThingsAndTagTb {
         this.hour = hour;
     }
     // 프론트에서 쉽게 사용하기 위한 변수. sql 테이블에 없는 파라미터임.
+    @Override
     public LocalDate getDate() {
         return date; 
     }
+    @Override
     public void setDate(LocalDate date){
         this.date = date;
     }
@@ -94,11 +98,11 @@ public class JoinWithThingsAndTagTb {
         this.tagId = tagId;
     }
 
-    public String getName() {
-        return name;
+    public String getTagName() {
+        return tagName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
 }

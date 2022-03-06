@@ -2,16 +2,22 @@ package domain;
 
 import java.time.LocalDate;
 
-public class SortTagTime {
+import records.dto.AboutEachRecords;
+
+public class SortTagTime extends AboutEachRecords{
     
     private LocalDate date;
-    private long minutes;
+    private Long minutes;
     private String tagName;
+    private int tagId;
+    private long categoryId;
 
-    public SortTagTime(LocalDate date, long minutes, String tagName) {
+    public SortTagTime(LocalDate date, Long minutes, String tagName, int tagId, long categoryId) {
         this.date = date;
         this.minutes = minutes;
         this.tagName = tagName;
+        this.tagId = tagId;
+        this.categoryId = categoryId;
     }
 
     public void setDate(LocalDate date) {
@@ -21,10 +27,10 @@ public class SortTagTime {
         return date;
     }
 
-    public void setMinutes(long minutes) {
+    public void setMinutes(Long minutes) {
         this.minutes = minutes;
     }
-    public long getMinutes() {
+    public Long getMinutes() {
         return minutes;
     }
 
@@ -33,5 +39,19 @@ public class SortTagTime {
     }
     public String getTagName() {
         return tagName;
+    }
+
+    public void setTagId(int tagId) {
+        this.tagId = tagId;
+    }
+    public int getTagId() {
+        return tagId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

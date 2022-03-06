@@ -181,7 +181,7 @@
 
                           <div class="col col-2">
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
-                              ${joinTagTbs[i2].name}
+                              ${joinTagTbs[i2].tagName}
                             </button>
                           </div>
                           <div class="col col-2 mb-3">

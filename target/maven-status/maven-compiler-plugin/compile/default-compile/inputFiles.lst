@@ -3,6 +3,7 @@ C:\MyProject\RoaDiary\src\main\java\account\validator\RegisterReqDtoValidator.ja
 C:\MyProject\RoaDiary\src\main\java\domain\SortTagTime.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\SortingController.java
 C:\MyProject\RoaDiary\src\main\java\domain\UserTb.java
+C:\MyProject\RoaDiary\src\main\java\records\dto\AboutEachRecords.java
 C:\MyProject\RoaDiary\src\main\java\config\MvcConfig.java
 C:\MyProject\RoaDiary\src\main\java\records\JoinDao.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountService.java
@@ -29,3 +30,4 @@ C:\MyProject\RoaDiary\src\main\java\domain\SortTagQuantity.java
 C:\MyProject\RoaDiary\src\main\java\domain\TagTb.java
 C:\MyProject\RoaDiary\src\main\java\domain\ThingsTb.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\RecordsController.java
+C:\MyProject\RoaDiary\src\main\java\records\validator\RecordsUtil.java

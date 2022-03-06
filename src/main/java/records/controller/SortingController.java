@@ -1,5 +1,6 @@
 package records.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import domain.JoinWithThingsAndTagTb;
 import domain.SortTagQuantity;
 import domain.SortTagTime;
 import records.RecordsService;
+import records.validator.RecordsUtil;
 
 
 @Controller
@@ -48,8 +50,8 @@ public class SortingController {
         return "records/sortingMain";
     }
 
-    @GetMapping("/sorting")
-    public String sorting(HttpSession session, Model model, 
+    @GetMapping("/sortingFrequency")
+    public String sortingFrequency(HttpSession session, Model model, 
             @RequestParam(value = "category", required = true) String categoryId, 
             @RequestParam(value = "tag", required = true) String tag) {
         
@@ -61,6 +63,22 @@ public class SortingController {
         int[] arrayFrequency = recordsService.calculFrequency(joinTagTbs, Integer.parseInt(categoryId), tag);
         model.addAttribute("arrayFrequency", arrayFrequency);
         
-        return "records/sorting";
+        return "records/sortingFrequency";
+    }
+
+    @GetMapping("/sortingTime")
+    public String sortingTime(HttpSession session, Model model, 
+            @RequestParam(value = "tag", required = true) String tag) {
+        
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", loginId);
+        List<SortTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
+        int[] arrayTime = recordsService.calculTime(listTimeRaw, tag);
+        model.addAttribute("arrayTime", arrayTime);
+        
+        return "records/sortingTime";
     }
 }
