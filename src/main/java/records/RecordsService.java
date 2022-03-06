@@ -290,16 +290,18 @@ public class RecordsService {
 
     public int[] calculTime(List<SortTagTime> sortTagTimes, String tag) {
 
-        List<SortTagTime> newSortTagTimes = new ArrayList<>();
-        for (SortTagTime one : sortTagTimes) {
-            if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
-                if ((one.getCategoryId() == 1) && (one.getTagName().equals(tag))) newSortTagTimes.add(one);
-            }
-        }
+        // List<SortTagTime> newSortTagTimes = new ArrayList<>();
+        // for (SortTagTime one : sortTagTimes) {
+        //     if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
+        //         newSortTagTimes.add(one);
+        //     }
+        // }
 
         // @@ 수정: 카테고리랑 태그 같은거는 이후에 봐야함 지금 정제해서 데이터 전해주면 안됨
 
-        int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, newSortTagTimes);
+        int tagId = RecordsUtil.findTagIdFromTagName(sortTagTimes, tag);
+
+        int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, sortTagTimes, tagId);
 
         return array;
     }
