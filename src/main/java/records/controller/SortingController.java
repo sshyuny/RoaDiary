@@ -1,6 +1,5 @@
 package records.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import account.LoginInfo;
 import domain.JoinWithThingsAndTagTb;
-import domain.SortTagQuantity;
-import domain.SortTagTime;
 import records.RecordsService;
-import records.validator.RecordsUtil;
+import records.dto.SortTagQuantity;
+import records.dto.StoreTagTime;
 
 
 @Controller
@@ -43,7 +41,7 @@ public class SortingController {
         model.addAttribute("listCategory2", listCategory2);
         model.addAttribute("listCategory3", listCategory3);
 
-        List<SortTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
+        List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
         List<SortTagQuantity> listTime = recordsService.calculJoinTbsByTime(listTimeRaw);
         model.addAttribute("listTime", listTime);
 
@@ -75,7 +73,7 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", loginId);
-        List<SortTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
+        List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
         int[] arrayTime = recordsService.calculTime(listTimeRaw, tag);
         model.addAttribute("arrayTime", arrayTime);
         

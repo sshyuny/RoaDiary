@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +15,11 @@ import java.util.Set;
 import org.springframework.util.StringUtils;
 
 import domain.JoinWithThingsAndTagTb;
-import domain.SortTagQuantity;
-import domain.SortTagTime;
 import domain.TagTb;
 import domain.ThingsTagTb;
 import domain.ThingsTb;
+import records.dto.SortTagQuantity;
+import records.dto.StoreTagTime;
 import records.dto.ThingsReqDto;
 import records.validator.RecordsUtil;
 
@@ -172,11 +171,19 @@ public class RecordsService {
         thingsTagDao.delete(thingsId);
     }
 
-    // ========== sorting ==========
+    // ====================
+    //  sorting
+    // ====================
 
+    /**
+     * 특정 기간에 저장된 기록들 모두 선택해서 반환
+     * @param stringDate  특정 기간의 끝 날짜
+     * @param loginId  계정 아이디
+     * @return  Join객체들 List로 반환
+     */
     public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
 
-        // [가쥰 시점 날짜 받기]
+        // [기준 시점 날짜 받기]
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // dateTo 생성 과정 - 1
         LocalDate dateTo;
@@ -200,18 +207,25 @@ public class RecordsService {
         return joinTbList;
     }
 
+    /**
+     * 각 태그 별로, 총 수행 횟수를 저장하여 반환합니다(태그의 날짜 정보는 들어있지 않습니다).
+     * @param joinTagTbs  기록 객체들 저장돼있는 List
+     * @param categoryId  카테고리(같은 태그 이름이더라도 다른 카테고리면 제외하고 계산하기 위함)
+     * @return  SortTagQuantity 객체(태그, 수행 횟수 또는 시간이 매개 변수) List 반환
+     */
     public List<SortTagQuantity> calculJoinTbsByFrequency(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId) {
 
-        
-
         // [Map map 생성]
-        // Key: 각 태그 ; value: 해당 태그의 사용 횟수
+        // Key: 각 태그 ; value: 해당 태그의 총 사용 횟수
         Map<String, Integer> map = new HashMap<>();
 
         // [map에 각 값들 넣어주기]
         for (int i = 0; i < joinTagTbs.size(); i++) {
             String tagName = joinTagTbs.get(i).getTagName();
-            if ((joinTagTbs.get(i).getCategoryId() == categoryId) && (tagName != null)) {  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
+
+            if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
+
+            if (joinTagTbs.get(i).getCategoryId() == categoryId) {
                 if (map.get(tagName) == null) {
                     map.put(tagName, 1);
                 } else {
@@ -220,61 +234,34 @@ public class RecordsService {
                 
             }
         }
-        List<SortTagQuantity> list = RecordsUtil.makeSortTagQuantities(map, categoryId, 1);
+
+        // map 내용을 SortTagQualtity 객체로 저장해줍니다.
+        Set<String> set = map.keySet();
+        List<SortTagQuantity> list = new ArrayList<>();
+        for (String one : set) {
+            list.add(new SortTagQuantity(categoryId, one, map.get(one)));
+        }
+
+        // 객체를 정렬해줍니다(quantity가 많은 순으로).
+        Collections.sort(list);
         return list;
     }
 
-    public int[] calculFrequency(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId, String tag) {
+    /**
+     * 각 태그 별로, 총 수행 시간을 저장하여 반환합니다(태그의 날짜 정보는 들어있지 않습니다).
+     * @param sortTagTime  태그 기록 객체(태그, 입력된 날짜, 수행 시간이 매개변수)들이 저장된 List
+     * @return  SortTagQuantity 객체(태그, 수행 횟수 또는 시간이 매개 변수) List 반환
+     */
+    public List<SortTagQuantity> calculJoinTbsByTime(List<StoreTagTime> sortTagTime) {
+        // 메서드명과 다르게 JoinTbs를 계산하진 않고, SortTagTime을 계산합니다(calculJoinTbsByFrequency메서드와 메서드명 맞추기 위해).
 
-        // [List newJoinTagTbs 생성]
-        // 주어진 파라미터 categoryId와 tag와 일치하는 객체(JoinWithThingsAndTagTb)만 선택하여 새 list에 넣기
-        List<JoinWithThingsAndTagTb> newJoinTagTbs = new ArrayList<>();
-        for (JoinWithThingsAndTagTb one : joinTagTbs) {
-            if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
-                if ((one.getCategoryId() == categoryId) && (one.getTagName().equals(tag))) newJoinTagTbs.add(one);
-            }
-        }
-
-        int[] array = RecordsUtil.countEachWeek(LocalDate.now(), 12, newJoinTagTbs);
-
-        return array;
-    }
-
-    public List<SortTagTime> makeJoinTbsListByTime(List<JoinWithThingsAndTagTb> joinTagTbs) {
-
-        List<SortTagTime> list = new ArrayList<>();
-
-        if (joinTagTbs.size() > 1) {  // joinTagTbs 크기가 2보다 클 때만 계산해줍니다.
-            for (int i = 0; i < joinTagTbs.size() - 1; i++) {
-
-                JoinWithThingsAndTagTb join1 = joinTagTbs.get(i);
-                JoinWithThingsAndTagTb join2 = joinTagTbs.get(i+1);
-
-                LocalDateTime dateTime1 = join1.getDateTime();
-                LocalDateTime dateTime2 = join2.getDateTime();
-
-                long betweenMinutes = ChronoUnit.MINUTES.between(dateTime1, dateTime2);
-
-                // 두 기록(객체) 사이의 시간이 12시간 이내일 때와 && 카테고리(CategoryId)가 1인 경우만, list에 기입해줍니다.
-                if ((betweenMinutes < 12 * 60) && (join1.getCategoryId() == 1)) {
-                    SortTagTime sortOne = new SortTagTime(join1.getDate(), betweenMinutes, join1.getTagName(), join1.getTagId(), join1.getCategoryId());
-                    list.add(sortOne);
-                }
-            }
-        }
-
-        return list;
-    }
-
-    public List<SortTagQuantity> calculJoinTbsByTime(List<SortTagTime> sortTagTime) {
-
-        // [List SortTagQuantity 생성]
-        // 각 태그 별 총 몇 분의 시간을 들였는지 계산
+        // [Map map 생성]
+        // Key: 각 태그 ; value: 해당 태그의 총 사용 시간
         Map<String, Integer> map = new HashMap<>();
-        for (SortTagTime one : sortTagTime) {
+        for (StoreTagTime one : sortTagTime) {
             String tagName = one.getTagName();
 
-            if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다.
+            if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
 
             if (map.containsKey(tagName)) {
                 map.replace(tagName, map.get(tagName) + one.getMinutes().intValue());
@@ -283,27 +270,114 @@ public class RecordsService {
             }
         }
 
-        List<SortTagQuantity> list = RecordsUtil.makeSortTagQuantities(map, 1, 60);
+        // map 내용을 SortTagQualtity 객체로 저장해줍니다.
+        Set<String> set = map.keySet();
+        List<SortTagQuantity> list = new ArrayList<>();
+        for (String one : set) {
+            list.add(new SortTagQuantity(1, one, map.get(one)));
+        }
+
+        // 객체를 정렬해줍니다(quantity가 많은 순으로).
+        Collections.sort(list);
 
         return list;
     }
 
-    public int[] calculTime(List<SortTagTime> sortTagTimes, String tag) {
+    /**
+     * 각 주마다, 선택된 태그의 총 수행 횟수를 계산합니다.
+     * @param joinTagTbs
+     * @param categoryId
+     * @param tag
+     * @return  매 주의 정보가 들어있는 int[]
+     */
+    public int[] calculFrequency(List<JoinWithThingsAndTagTb> joinTagTbs, int categoryId, String tag) {
 
-        // List<SortTagTime> newSortTagTimes = new ArrayList<>();
-        // for (SortTagTime one : sortTagTimes) {
-        //     if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
-        //         newSortTagTimes.add(one);
-        //     }
-        // }
+        // tagId를 찾습니다.
+        int tagId = RecordsUtil.findTagIdFromTagName(joinTagTbs, tag);
 
-        // @@ 수정: 카테고리랑 태그 같은거는 이후에 봐야함 지금 정제해서 데이터 전해주면 안됨
+        // [List newJoinTagTbs 생성]
+        // 주어진 파라미터 categoryId와 tagId와 일치하는 객체(JoinWithThingsAndTagTb)만 선택하여 새 list에 넣기
+        List<JoinWithThingsAndTagTb> newJoinTagTbs = new ArrayList<>();
+        for (JoinWithThingsAndTagTb one : joinTagTbs) {
+            if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
+                if ((one.getCategoryId() == categoryId) && (one.getTagId() == tagId)) newJoinTagTbs.add(one);
+            }
+        }
 
+        // 각 주마다, 해당 태그를 몇 번씩 했는지 int[]로 반환
+        // 조건에 부합하는 newJoinTagTbs 객체들을 파라미터로 전달
+        int[] array = RecordsUtil.countEachWeekFrequency(LocalDate.now(), 12, newJoinTagTbs);
+
+        return array;
+    }
+
+    /**
+     * 각 주마다, 선택된 태그의 총 수행 시간을 계산합니다.
+     * @param sortTagTimes
+     * @param tag
+     * @return  매 주의 정보가 들어있는 int[]
+     */
+    public int[] calculTime(List<StoreTagTime> sortTagTimes, String tag) {
+
+        // tagId를 찾습니다.
         int tagId = RecordsUtil.findTagIdFromTagName(sortTagTimes, tag);
 
+        // @@ 수정: 카테고리와 태그 일치하는 것 골라서 전달 가능하면 수정하기
+
+        // 각 주마다, 해당 태그를 몇 분씩 했는지 int[]로 반환
+        // 각 태그별 수행 시간이 들어있는 객체 전달
         int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, sortTagTimes, tagId);
 
         return array;
+    }
+
+    /**
+     * 각 태그의 날짜와 날짜별 수행 시간을 객체로 저장하여 반환합니다.
+     * @param joinTagTbs  모든 기록 객체(정해진 기간 동안의)
+     * @return  객체 StoreTagTime들의 List
+     */
+    public List<StoreTagTime> makeJoinTbsListByTime(List<JoinWithThingsAndTagTb> joinTagTbs) {
+
+        // categoryId가 1일 경우에만 시간을 계산하기 위해, 새 List를 만들어줍니다.
+        List<JoinWithThingsAndTagTb> newJoinTagTbs = new ArrayList<>();
+        for (JoinWithThingsAndTagTb one : joinTagTbs) {
+            if (one.getCategoryId() == 1) newJoinTagTbs.add(one);
+        }
+
+        List<StoreTagTime> StoreTagTimeList = new ArrayList<>();
+        List<Integer> tempList = new ArrayList<>();
+
+        if (newJoinTagTbs.size() > 1) {  // newJoinTagTbs 크기가 2보다 클 때만 계산해줍니다.
+            for (int i = 0; i < newJoinTagTbs.size() - 1; i++) {
+
+                JoinWithThingsAndTagTb join1 = newJoinTagTbs.get(i);
+                JoinWithThingsAndTagTb join2 = newJoinTagTbs.get(i+1);
+
+                LocalDateTime dateTime1 = join1.getDateTime();
+                LocalDateTime dateTime2 = join2.getDateTime();
+                long betweenMinutes = ChronoUnit.MINUTES.between(dateTime1, dateTime2);
+
+                long tempThingsId1 = join1.getThingsId();
+                long tempThingsId2 = join2.getThingsId();
+
+                // 하나의 기록에 여러 태그가 기입된 경우, 해당 태그들에 같은 시간을 기입하기 위한 부분입니다.
+                if (tempThingsId1 == tempThingsId2) {
+                    tempList.add(i);
+                } else {
+                    if (betweenMinutes < 12 * 60) {
+                        for (Integer one : tempList) {
+                            StoreTagTime sortOne = new StoreTagTime(newJoinTagTbs.get(one).getDate(), betweenMinutes, newJoinTagTbs.get(one).getTagName(), newJoinTagTbs.get(one).getTagId(), newJoinTagTbs.get(one).getCategoryId());
+                            StoreTagTimeList.add(sortOne);
+                        }
+                        StoreTagTime sortOne = new StoreTagTime(join1.getDate(), betweenMinutes, join1.getTagName(), join1.getTagId(), join1.getCategoryId());
+                        StoreTagTimeList.add(sortOne);
+                    }
+                    tempList.clear();
+                }
+            }
+        }
+
+        return StoreTagTimeList;
     }
 
 }
