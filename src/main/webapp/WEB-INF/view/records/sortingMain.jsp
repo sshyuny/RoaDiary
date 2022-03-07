@@ -12,82 +12,90 @@
     <script src="<c:url value='/resources/lib/bootstrap/bootstrap.min.js'/>"></script>
   </head>
   
-  <body>
-    <label>
-      카테고리:
-      <input type="radio" name="category" path="category" value="1" checked />한 일
-      <input type="radio" name="category" path="category" value="2" />먹은 거
-      <input type="radio" name="category" path="category" value="3" />건강
-      <br>
-    </label>
+  <body style="background-color:black;">
+    <figure class="text-center">
+      <h1 style="color:white;">RoaDiary</h1>
+      <h3 style="color:white;">태그 분석</h3>
+      <p style="color:white;">세 달 동안 기록된 태그를 분석했어요.</p>
+    </figure>
 
-    <br>
-    <a href="./sortingFrequency?category=1&tag=${listCategory1[0].tagName}" class="btn btn-secondary" role="button">${listCategory1[0].tagName}</a>
-    ${listCategory1[0].quantity}회 기록됨
-    <a href="./sortingFrequency?category=1&tag=${listCategory1[1].tagName}" class="btn btn-secondary" role="button">${listCategory1[1].tagName}</a>
-    ${listCategory1[1].quantity}회 기록됨
-    <a href="./sortingFrequency?category=1&tag=${listCategory1[2].tagName}" class="btn btn-secondary" role="button">${listCategory1[2].tagName}</a>
-    ${listCategory1[2].quantity}회 기록됨
-    <br>
-    <a href="./sortingFrequency?category=2&tag=${listCategory2[0].tagName}" class="btn btn-dark" role="button">${listCategory2[0].tagName}</a>
-    <a href="./sortingFrequency?category=2&tag=${listCategory2[1].tagName}" class="btn btn-dark" role="button">${listCategory2[1].tagName}</a>
-    <a href="./sortingFrequency?category=2&tag=${listCategory2[2].tagName}" class="btn btn-dark" role="button">${listCategory2[2].tagName}</a>
-    <br>
-    <a href="./sortingFrequency?category=3&tag=${listCategory3[0].tagName}" class="btn btn-secondary" role="button">${listCategory3[0].tagName}</a>
-    <a href="./sortingFrequency?category=3&tag=${listCategory3[1].tagName}" class="btn btn-secondary" role="button">${listCategory3[1].tagName}</a>
-    <a href="./sortingFrequency?category=3&tag=${listCategory3[2].tagName}" class="btn btn-secondary" role="button">${listCategory3[2].tagName}</a>
-    <br>
+    <!-- container: 횟수 -->
+    <div class="container mt-2 mb-2" style="color:white;">
+      <div class="row align-items-center mb-4">  <!-- 가장 바깥 row[0] -->
+        <!-- col[0]  -->
+        <div class="col col-1">
+          자주 사용한 순
+        </div>
+        <!-- col[1] -->
+        <div class="col">
+          <div class="row justify-content-md-center">
+            <div class="col col-2 mb-2">
+              한 일
+            </div>
+            <div class="col col-1 mb-2">
+            </div>
+            <div class="col col-2 mb-2">
+              먹은 거
+            </div>
+            <div class="col col-1 mb-2">
+            </div>
+            <div class="col col-2 mb-2">
+              건강
+            </div>
+            <div class="col col-1 mb-2">
+            </div>
+          </div>
 
-    <a href="./sortingTime?tag=${listTime[0].tagName}" class="btn btn-secondary" role="button">${listTime[0].tagName}</a>
-    <a href="./sortingTime?tag=${listTime[1].tagName}" class="btn btn-secondary" role="button">${listTime[1].tagName}</a>
-    <a href="./sortingTime?tag=${listTime[2].tagName}" class="btn btn-secondary" role="button">${listTime[2].tagName}</a>
-    ${listTime[0].tagName}를 ${listTime[0].quantity}시간동안 함
-    ${listTime[1].tagName}를 ${listTime[1].quantity}시간동안 함
-    ${listTime[2].tagName}를 ${listTime[2].quantity}시간동안 함
-    <br>
+          <c:forEach var="i" begin="0" end="4">
+            <div class="row justify-content-md-center">
+              <div class="col col-2 mb-2">
+                <a href="./sortingFrequency?category=1&tag=${listCategory1[i].tagName}" class="btn btn-secondary" role="button">${listCategory1[i].tagName}</a>
+              </div>
+              <div class="col col-1 mb-2">
+                ${listCategory1[i].quantity}회
+              </div>
+              <div class="col col-2 mb-2">
+                <a href="./sortingFrequency?category=2&tag=${listCategory2[i].tagName}" class="btn btn-dark" role="button">${listCategory2[i].tagName}</a>
+              </div>
+              <div class="col col-1 mb-2">
+                ${listCategory2[i].quantity}회
+              </div>
+              <div class="col col-2 mb-2">
+                <a href="./sortingFrequency?category=3&tag=${listCategory3[i].tagName}" class="btn btn-secondary" role="button">${listCategory3[i].tagName}</a>
+              </div>
+              <div class="col col-1 mb-2">
+                ${listCategory3[i].quantity}회
+              </div>
+            </div>
+          </c:forEach>
+        </div>
+      </div>  <!-- 가장 바깥 row[0] -->
 
-    <div style="width:600px; height:600px;">
-      <canvas id="myChart" width="100" height="100"></canvas>
-      <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-      </script>
-    </div>
-
-    
+      <div class="row align-items-center">  <!-- 가장 바깥 row[1] -->
+        <!-- col[0]  -->
+        <div class="col col-1">
+          오래 사용한 순
+          <p class="fs-10">(한 일을 대상으로만 집계됩니다.)</p>
+        </div>
+        <!-- col[1] -->
+        <div class="col">
+          <c:forEach var="i" begin="0" end="4">
+            <div class="row justify-content-md-center">
+              <div class="col col-2 mb-2">
+                <a href="./sortingTime?tag=${listTime[i].tagName}" class="btn btn-secondary" role="button">${listTime[i].tagName}</a>
+              </div>
+              <div class="col col-1 mb-2">
+                ${listTime[i].quantity}분
+              </div>
+              <div class="col col-6">
+              </div>
+            </div>
+          </c:forEach>
+        </div>
+      </div>  <!-- 가장 바깥 row[1] -->
+      
+    </div>  
+    <!-- container: 횟수 -->
 
   </body>
 </html>

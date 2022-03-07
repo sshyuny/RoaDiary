@@ -12,31 +12,21 @@
     <script src="<c:url value='/resources/lib/bootstrap/bootstrap.min.js'/>"></script>
   </head>
   
-  <body>
-    <label>
-      카테고리:
-      <input type="radio" name="category" path="category" value="1" checked />한 일
-      <input type="radio" name="category" path="category" value="2" />먹은 거
-      <input type="radio" name="category" path="category" value="3" />건강
-      <br>
-    </label>
+  <body style="background-color:black;">
+    <figure class="text-center">
+      <h1 style="color:white;">RoaDiary</h1>
+      <h3 style="color:white;">태그 시간 분석</h3>
+      <p style="color:white;">12주 동안 "${tag}"의 사용 시간(분)</p>
+    </figure>
 
-    <br>
-    첫 주에 ${arrayTime[0]}분 함
-    둘째 주에 ${arrayTime[1]}분 함
-    <%-- <button type="button" class="btn btn-dark" id="test" value="${arrayFrequency[0]}" onclick="test(this.value)">test</button> --%>
-    <%-- <input type="hidden" id="week1" value="${arrayFrequency[0]}"/> --%>
     <c:forEach var="i" begin="0" end="11">
       <input type="hidden" id="week${i}" value="${arrayTime[i]}"/>
     </c:forEach>
     <br>
 
-    <div style="width:600px; height:600px;">
+    <div style="width:600px; height:600px;" class="mx-auto">
       <canvas id="myChart" width="100" height="100"></canvas>
       <script>
-        // function test(value) {
-        //   alert(value);
-        // }
         
         var week0 = document.getElementById('week0').value;
         var week1 = document.getElementById('week1').value;
@@ -53,19 +43,15 @@
 
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: ['week0', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'week8', 'week9', 'week10', 'week11'],
                 datasets: [{
-                    label: '# of Votes',
+                    label: '수행 시간(분)',
                     data: [week0, week1, week2, week3, week4, week5, week6, week7, week8, week9, week10, week11],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)'
-                    ],
-                    borderWidth: 1
+                    fill: false,
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
                 }]
             },
             options: {

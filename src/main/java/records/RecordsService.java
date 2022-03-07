@@ -178,10 +178,11 @@ public class RecordsService {
     /**
      * 특정 기간에 저장된 기록들 모두 선택해서 반환
      * @param stringDate  특정 기간의 끝 날짜
+     * @param weekNum  특정 기간 주(몇 주동안 저장된 기록들 가져올 지에 대한)
      * @param loginId  계정 아이디
      * @return  Join객체들 List로 반환
      */
-    public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, Long loginId) {
+    public List<JoinWithThingsAndTagTb> selectThingsPeriod(String stringDate, int weekNum, Long loginId) {
 
         // [기준 시점 날짜 받기]
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -196,7 +197,7 @@ public class RecordsService {
         // dateFrom 생성 과정
         LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue(), dateTo.getDayOfMonth());
         int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
-        dateFrom = dateFrom.minusDays(7 * 11 - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다(총 12주 이내).
+        dateFrom = dateFrom.minusDays(7 * (weekNum - 1) - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다(총 12주 이내).
         // dateTo 생성 과정 - 2
         dateTo = dateTo.plusDays(1); // sql에서 Between을 썼을 때, dateTo 당일이 포함되지 않기 때문에 하루를 더해줍니다.
 
@@ -322,11 +323,19 @@ public class RecordsService {
         // tagId를 찾습니다.
         int tagId = RecordsUtil.findTagIdFromTagName(sortTagTimes, tag);
 
-        // @@ 수정: 카테고리와 태그 일치하는 것 골라서 전달 가능하면 수정하기
+        // [List newSortTagTimes 생성]
+        // tagId 일치하는 객체(SortTagTime)만 선택하여 새 list에 넣기
+        // (categoryId는 이미 sortTagTimes를 만들 때(recordsService.makeJoinTbsListByTime) 적용했기 때문에, 여기서는 안해도 됩니다.)
+        List<StoreTagTime> newSortTagTimes = new ArrayList<>();
+        for (StoreTagTime one : sortTagTimes) {
+            if (one.getTagName() == null) continue;  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
+            
+            if (one.getTagId() == tagId) newSortTagTimes.add(one);
+        }
 
         // 각 주마다, 해당 태그를 몇 분씩 했는지 int[]로 반환
         // 각 태그별 수행 시간이 들어있는 객체 전달
-        int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, sortTagTimes, tagId);
+        int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, newSortTagTimes, tagId);
 
         return array;
     }
