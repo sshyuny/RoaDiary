@@ -21,7 +21,6 @@ import domain.ThingsTb;
 import records.dto.SortTagQuantity;
 import records.dto.StoreTagTime;
 import records.dto.ThingsReqDto;
-import records.validator.RecordsUtil;
 
 public class RecordsService {
     
@@ -169,6 +168,19 @@ public class RecordsService {
 
     public void deleteThingsTag(ThingsReqDto thingsReqDto, Long thingsId) {
         thingsTagDao.delete(thingsId);
+    }
+
+    // things테이블에 기록된 한 행 삭제
+    public void deleteThingsOne(Long thingsId) {
+        
+        //[DB]
+        // 외래키 설정이 되어있는 things_tag 테이블 기록 먼저 삭제
+        //(안할시, 오류 a foreign key constraint fails 발생됨)
+        thingsTagDao.delete(thingsId);
+
+        //[DB]
+        // things 테이블 기록 삭제
+        thingsDao.deleteOne(thingsId);
     }
 
     // ====================

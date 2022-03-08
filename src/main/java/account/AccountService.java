@@ -59,7 +59,7 @@ public class AccountService {
             userTb.getId(), 
             userTb.getEmail(), 
             userTb.getName()
-            );
+        );
     }
 
     /**

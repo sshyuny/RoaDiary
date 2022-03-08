@@ -91,4 +91,12 @@ public class ThingsDao {
         );
     }
 
+    // things 하나의 행 삭제
+    public void deleteOne(Long thingsId) {
+        jdbcTemplate.update(
+            "DELETE FROM things WHERE things_id = ?",
+            thingsId
+        );
+    }
+
 }

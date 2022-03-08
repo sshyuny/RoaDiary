@@ -99,54 +99,64 @@ public class RecordsController {
         // return
         return "records/recordsMain";
     }
-    // 내용 변경할 때
+
+    // 기록 변경 또는 삭제할 때
     @PostMapping("/recordsChange")
     public String recordsChange(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
-        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
-        //LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
-        //Long loginId = loginInfo.getId();
 
         // thingsId 가져오기
         String thingsIdStr = request.getParameter("thingsId");
         Long thingsId = Long.valueOf(thingsIdStr);
 
-        // time 변경: things 테이블 update
-        if (thingsReqDto.getTime() != null) {
-            recordsService.updateThingsTime(thingsReqDto, thingsId);
-        }
-        // 태그 변경: things 테이블 update
-        if ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
-            ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank())) {
-            recordsService.deleteThingsTag(thingsReqDto, thingsId);
-            recordsService.insertTags(thingsReqDto, thingsId);
-        }
-        // content 변경: things 테이블 update
-        if (!thingsReqDto.getContent().isBlank()) {
-            recordsService.updateThingsContent(thingsReqDto, thingsId);
+        // 수정 버튼을 눌렀는지, 삭제 버튼을 눌렀는지 알아보려는 부분
+        String save = request.getParameter("save");
+        String delete = request.getParameter("delete");
+
+        // [수정하려는 경우]
+        if (save != null) {
+            // time 변경: things 테이블 update
+            if (thingsReqDto.getTime() != null) {
+                recordsService.updateThingsTime(thingsReqDto, thingsId);
+            }
+            // 태그 변경: things 테이블 update
+            if ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
+                ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank())) {
+                recordsService.deleteThingsTag(thingsReqDto, thingsId);
+                recordsService.insertTags(thingsReqDto, thingsId);
+            }
+            // content 변경: things 테이블 update
+            if (!thingsReqDto.getContent().isBlank()) {
+                recordsService.updateThingsContent(thingsReqDto, thingsId);
+            }
+        // [삭제하려는 경우]
+        } else if (delete != null) {
+            // thingsId에 해당하는 기록 지우기
+            recordsService.deleteThingsOne(thingsId);
         }
         
-        //
         return "records/recordsMain";
     }
 
-    // 빠른 내용 변경
+    // 빠른 내용 추가
     @PostMapping("/recordsQuickInsert")
     public String recordsQuickInsert(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
+        
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
 
+        // 빠른 추가를 하려는, 시간 가져오기
         int eachHour = Integer.valueOf(request.getParameter("eachHour"));
 
+        // 객체(thingsReqDto)에 시간을 저장
         thingsReqDto.setTime(LocalTime.of(eachHour, 0));
 
-        // things 테이블에 기록
+        // things 테이블에 객체(thingsReqDto)를 기록
         Long key = recordsService.insertThings(thingsReqDto, loginId);
 
         // tag 테이블과 things_tag 테이블에 기록
         recordsService.insertTags(thingsReqDto, key);
         
-        //
         return "records/recordsMain";
     }
     

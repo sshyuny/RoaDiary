@@ -118,10 +118,9 @@
                     ${i}시
                   </button>
                 </div>
-                <!-- 빠른내용 변경 -->
+                <!-- 빠른내용 추가 -->
                 <div class="collapse" id="eachHour${i}">
                   <form:form action="recordsQuickInsert" modelAttribute="thingsReqDto">
-                    <form:hidden path="thingsId" value="${joinTagTbs[i2].thingsId}"/>
                     <input type="hidden" id="eachHour" name="eachHour" value="${i}"/>
                     <div class="row">
                       <div class="col col-lg-2">
@@ -143,13 +142,14 @@
                       </div>
                     </div>
                   </form:form>
-                </div><!-- 빠른내용 변경 닫기 -->
+                </div><!-- 빠른내용 추가 닫기 -->
 
                 <c:if test="${!empty joinTagTbs}">
                 <div class="col"><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
                   <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
                     <c:if test="${joinTagTbs[i2].hour == i}">
                       <form:form action="recordsChange" modelAttribute="thingsReqDto">
+                        <input type="hidden" name="thingsId" value="${joinTagTbs[i2].thingsId}"/>
                         <div class="row">
                           <div class="col col-1">
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i2}" aria-expanded="false" aria-controls="collapseTime${i2}">
@@ -178,22 +178,22 @@
                               </button>
                             </c:if>
                           </div>
-
                           <div class="col col-2">
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
                               ${joinTagTbs[i2].tagName}
                             </button>
                           </div>
-                          <div class="col col-2 mb-3">
-                            <button type="submit" class="btn btn-dark">수정 제출</button>
+                          <div class="col col-1 mb-3">
+                            <button type="submit" name="save" id="save" class="btn btn-dark">수정 제출</button>
+                          </div>
+                          <div class="col col-1 mb-3">
+                            <button type="submit" name="delete" id="delete" class="btn btn-dark">삭제</button>
                           </div>
                         </div>
 
                         <div class="row">
-                          <form:hidden path="thingsId" value="${joinTagTbs[i2].thingsId}"/>
                           <div class="col col-lg-1">
                             <div class="collapse" id="collapseTime${i2}">
-                              <%-- <input name="date" type="text" class="form-control"/> --%>
                               <input name="time" type="text" class="form-control" placeholder="시간"/>
                             </div>
                           </div>

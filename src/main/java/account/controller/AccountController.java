@@ -128,6 +128,24 @@ public class AccountController {
             return "account/loginForm";
         }
     }
+    /**
+     * 방문자용 로그인(바로 로그인하여 세션이 생성됩니다.)
+     * @param session
+     * @return
+     */
+    @GetMapping("/loginForVisitor")
+    public String loginSubmitForVisitor(HttpSession session) {
+
+        // 세션 생성
+        LoginInfo loginInfo = accountService.authenticate(
+            "test5@t.com", 
+            "55"
+        );
+        session.setAttribute("loginInfo", loginInfo);
+
+        // 메인 페이지로 바로 이동합니다.
+        return "main";
+    }
 
     //===== ===== ===== =====//
     // 로그아웃하기

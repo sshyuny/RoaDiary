@@ -18,6 +18,10 @@
     <p>
       <a href="./account/login">로그인하기</a>
     </p>
+
+    <p>
+      <a href="./loginForVisitor">둘러보기(방문자용)</a>
+    </p>
     </c:if>
 
     <c:if test="${! empty loginInfo}">

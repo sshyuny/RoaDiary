@@ -19,6 +19,7 @@ C:\MyProject\RoaDiary\src\main\java\account\dto\RegisterReqDto.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\StoreTagTime.java
 C:\MyProject\RoaDiary\src\main\java\records\ThingsTagDao.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\ThingsReqDto.java
+C:\MyProject\RoaDiary\src\main\java\records\RecordsUtil.java
 C:\MyProject\RoaDiary\src\main\java\records\ThingsDao.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountDao.java
 C:\MyProject\RoaDiary\src\main\java\account\dto\ChangeAccountReqDto.java
@@ -30,4 +31,3 @@ C:\MyProject\RoaDiary\src\main\java\account\validator\ChangeAccountReqDtoValidat
 C:\MyProject\RoaDiary\src\main\java\domain\TagTb.java
 C:\MyProject\RoaDiary\src\main\java\domain\ThingsTb.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\RecordsController.java
-C:\MyProject\RoaDiary\src\main\java\records\validator\RecordsUtil.java
