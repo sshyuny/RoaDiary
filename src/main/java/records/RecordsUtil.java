@@ -77,8 +77,7 @@ public class RecordsUtil {
 
         // [배열 results 생성]
         // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
-        int[] frequencyResults = new int[weekNum];  // 몇주 동안
-
+        int[] frequencyResults = new int[weekNum];  // 몇주 동안        
         int restDay = startDate.getDayOfWeek().getValue();  // 요일을 int로 받기
         LocalDate fromDate = startDate.minusDays(7 * (weekNum - 1) - 1 + restDay);  // 시작일을 월요일로 맞추기 위해 restDay를 더해줍니다.
         int mok = 0;  // 몇 번째 주에 해당하는지 저장
@@ -89,7 +88,7 @@ public class RecordsUtil {
         for (int i = 0; i < listSize; i++) {
 
             StoreTagTime one = dataList.get(i);
-
+            
             Long betweenDays = ChronoUnit.DAYS.between(fromDate, one.getDate());
             int tempMok = betweenDays.intValue() / 7;  // 현재 객체가, 몇 번째 주인지 저장
             

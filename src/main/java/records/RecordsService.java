@@ -75,9 +75,36 @@ public class RecordsService {
         // 현재 시간 가져오기
         LocalDate date = LocalDate.now();
 
-        // [DB]
+        // [DB] @@수정 아래 코드와 중복됨. Util로 뺄 것!
         // recordsDao를 통해 DB에서 select
-        return joinDao.selectByDate(date, loginId);
+        List<JoinWithThingsAndTagTb> joinTbList =  joinDao.selectByDate(date, loginId);
+        List<JoinWithThingsAndTagTb> newJoinTbList = new ArrayList<>();
+        if(joinTbList.size() > 0) {
+            newJoinTbList.add(joinTbList.get(0));           // 첫 행 넣어둠
+            for(int i = 1; i < joinTbList.size() ; i++) {   // 첫 행 넣어두었기 때문에, i는 1부터 시작함
+                JoinWithThingsAndTagTb firstRow = joinTbList.get(i-1);
+                JoinWithThingsAndTagTb secondRow = joinTbList.get(i);
+                if(!firstRow.getThingsId().equals(secondRow.getThingsId())) {  // 수정
+                    newJoinTbList.add(secondRow);
+                } else {
+                    int lastIdxOfnewJoinList = newJoinTbList.size() - 1;
+                    JoinWithThingsAndTagTb lastRowOfNewList = newJoinTbList.get(lastIdxOfnewJoinList);
+                    String tagNameNewList = lastRowOfNewList.getTagName();
+                    String tagNameList = "#" + secondRow.getTagName();
+                    String newTagName =tagNameNewList +  tagNameList;
+                    // lastRowOfNewList.setName(newTagName); //[?] 왜 아래 코드 대신, 이거만 써도 잘 작동되는지 물어보기
+                    newJoinTbList.get(lastIdxOfnewJoinList).setTagName(newTagName);
+                }
+            }
+        }
+        // 태그 있는 경우, 앞에 "#" 붙이기
+        for(JoinWithThingsAndTagTb rowTb : newJoinTbList) {
+            String rowTbTagName = rowTb.getTagName();
+            if(StringUtils.hasText(rowTbTagName)) {
+                rowTb.setTagName("#" + rowTbTagName);
+            }
+        }
+        return newJoinTbList;
     }
     public List<JoinWithThingsAndTagTb> selectThingsSomeday(String stringDate, Long loginId) {
         // date String에서 Localdate로 변환
@@ -200,7 +227,8 @@ public class RecordsService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // dateTo 생성 과정 - 1
         LocalDate dateTo;
-        if (stringDate.isBlank()) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
+        if (stringDate.equals("")) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
+                                      //(java.lang.NoSuchMethodError: java.lang.String.isBlank()Z 때문에 isBlank쓰지 않음)
             dateTo = LocalDate.now();
         } else {
             // date String에서 Localdate로 변환

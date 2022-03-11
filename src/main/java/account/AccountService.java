@@ -24,6 +24,7 @@ public class AccountService {
      * @return
      */
     public Long regist(RegisterReqDto req) {
+        
         // 이미 등록된 email인지 확인
         UserTb userTb = accountDao.selectByEmail(req.getEmail());
         if(userTb != null) {

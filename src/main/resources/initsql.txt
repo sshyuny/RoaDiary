@@ -44,6 +44,9 @@ CREATE TABLE rddb.things_tag(
 *** category 테이블에 미리 값 넣어두기
 INSERT INTO category(name) VALUES ("What I did"), ("What I ate"), ("About health");
 
+*** (선택) 방문자 계정(visitor) 미리 값 넣어두기
+INSERT INTO user(email, name, password) VALUES ("visitor@visitor.com", "visitor", "visitorpw");
+
 *** things 테이블 tag 테이블과 left join
 SELECT things.things_id, user_id, time, content, category_id, tag.tag_id, name FROM things
 LEFT JOIN things_tag

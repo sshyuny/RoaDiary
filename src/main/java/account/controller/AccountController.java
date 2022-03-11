@@ -31,17 +31,24 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     // 홈페이지
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     @RequestMapping("/")
     public String main() {
+
+        // LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        // if (loginInfo != null) {
+        //     String loginEmail = loginInfo.getEmail();
+        //     model.addAttribute("loginEmail", loginEmail);
+        // }
+        
         return "main";
     }
 
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     // 계정 생성
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     /**
      * 계정생성 1단계: 약관 동의 페이지 연결
      * @return
@@ -52,8 +59,8 @@ public class AccountController {
     }
     /**
      * 계정생성 2단계
-     * @param request // 약관동의 확인
-     * @param model   // dto
+     * @param request  약관동의 확인
+     * @param model  dto
      * @return
      */
     @PostMapping("/account/register2")
@@ -69,8 +76,8 @@ public class AccountController {
     }
     /**
      * 계정생성 3단계
-     * @param registerReqDto // dto
-     * @param errors         // validator
+     * @param registerReqDto  dto
+     * @param errors  validator
      * @return
      */
     @PostMapping("/account/registered")
@@ -91,18 +98,18 @@ public class AccountController {
         }
     }
 
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     // 로그인하기
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     @GetMapping("/account/login")
     public String loginForm(LoginReqDto loginReqDto) {
         return "account/loginForm";
     }
     /**
      * 
-     * @param loginReqDto  // dto
-     * @param errors       // validator
-     * @param session      // 세션 생성
+     * @param loginReqDto  dto
+     * @param errors  validator
+     * @param session  세션 생성
      * @return
      */
     @PostMapping("/account/login")
@@ -137,9 +144,10 @@ public class AccountController {
     public String loginSubmitForVisitor(HttpSession session) {
 
         // 세션 생성
+        // LoginInfo loginInfo = new LoginInfo();
         LoginInfo loginInfo = accountService.authenticate(
-            "test5@t.com", 
-            "55"
+            "visitor@visitor.com", 
+            "visitorpw"
         );
         session.setAttribute("loginInfo", loginInfo);
 
@@ -147,28 +155,35 @@ public class AccountController {
         return "main";
     }
 
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     // 로그아웃하기
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     @RequestMapping("/account/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
 
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     // 비밀번호 변경하기
-    //===== ===== ===== =====//
+    //===== ===== ===== =====
     @GetMapping("/account/change")
-    public String changeForm(
-        @ModelAttribute("command") ChangeAccountReqDto changeReqDto) {
+    public String changeForm(HttpSession session, Model model, 
+            @ModelAttribute("command") ChangeAccountReqDto changeReqDto) {
+
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        String loginEmail = loginInfo.getEmail();
+        model.addAttribute("loginEmail", loginEmail);
+
+        if (loginEmail.equals("visitor@visitor.com")) return "account/cannotChangePw";
+
         return "account/changeForm";
     }
     /**
-     * 
-     * @param changeReqDto  // dto
-     * @param errors        // validator
-     * @param session       // 이미 등록된 세션 가져오기 위한
+     * 비밀번호 변경을 진행합니다.
+     * @param changeReqDto  dto
+     * @param errors  validator
+     * @param session  이미 등록된 세션 가져오기 위한
      * @return
      */
     @PostMapping("/account/change")
@@ -176,20 +191,25 @@ public class AccountController {
             @ModelAttribute("command") ChangeAccountReqDto changeReqDto,
             Errors errors,
             HttpSession session) {
+
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+
         // validator 설정
         new ChangeAccountReqDtoValidator().validate(changeReqDto, errors);
         if(errors.hasErrors()) {
             return "account/changeForm";
         }
+
         // 이미 등록된 세션으로 LoginInfo 객체 생성
-        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        // LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+
         // 비밀번호 변경 시도
         try {
             accountService.changeAccount(
-                    loginInfo.getEmail(),               // 세션에서 가져옴
-                    changeReqDto.getCurrentPassword(),  // dto에서 가져옴
-                    changeReqDto.getNewPassword()       // dto에서 가져옴
-                );
+                loginInfo.getEmail(),               // 세션에서 가져옴
+                changeReqDto.getCurrentPassword(),  // dto에서 가져옴
+                changeReqDto.getNewPassword()       // dto에서 가져옴
+            );
             // 비밀번호 변경 완료 페이지로
             return "account/changeCompleted";
         } catch(WrongIdPasswordException e) {

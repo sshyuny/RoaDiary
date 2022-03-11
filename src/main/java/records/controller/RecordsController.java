@@ -32,7 +32,7 @@ public class RecordsController {
     //===== ===== ===== =====//
     // 홈페이지
     //===== ===== ===== =====//
-    @GetMapping("/records")
+    @RequestMapping("/records")
     public String recordsMain(ThingsReqDto thingsReqDto, HttpSession session, Model model) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
@@ -41,9 +41,9 @@ public class RecordsController {
         List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsToday(loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);
         // '오늘' 단어 전하기
-        // model.addAttribute("stringDate", LocalDate.now().getYear() + "-" + LocalDate.now().getMonth() + "-" + LocalDate.now().getDayOfMonth());
         model.addAttribute("stringDate", "오늘");
-        // 
+
+        // return
         return "records/recordsMain";
     }
 
