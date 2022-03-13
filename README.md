@@ -23,4 +23,4 @@ RoaDiay는 하루의 행동, 먹은 것, 건강 관련한 사항들을 기록으
 
 # 4. 사이트 둘러보기
 ## 4.1. 로그인
-<img width="{80%}" src="{https://user-images.githubusercontent.com/94966803/158059564-d94a8a3d-06bf-4f54-8361-95b67c40af90.jpg}"/>
+<img width="80%" src="https://user-images.githubusercontent.com/94966803/158059564-d94a8a3d-06bf-4f54-8361-95b67c40af90.jpg"/>
