@@ -38,11 +38,12 @@ RoaDiay는 하루의 행동, 먹은 것, 건강 관련한 사항들을 기록으
 <img width="70%" src="https://user-images.githubusercontent.com/94966803/158060465-77ff12ec-87b3-4b8e-89d6-8daf3deb9e7a.jpg"/> <br>
 왼쪽 '새로운 기록 입력'을 통해 새 기록들을 입력할 수 있습니다. <br>
 오른쪽 부분에서는 시간대별로 입력된 기록들을 확인할 수 있습니다. <br>
+<br>
 오른쪽 부분에 입력된 기록을 눌러 각 내용을 수정하거나 삭제 버튼을 눌러 기록 전체를 삭제할 수 있습니다. <br> 
 <img width="70%" src="https://user-images.githubusercontent.com/94966803/158061878-808ceb5f-efa8-42b6-aab5-0806c76a41f8.jpg"/> <br>
 
 ## 4.4. '기록 분석 보기'
 '기록 분석 보기'로 연결되면 최근 세 달 동안 자주 사용하거나 오랜 시간 시행한 태그를 확인할 수 있습니다. <br>
 <img width="70%" src="https://user-images.githubusercontent.com/94966803/158061408-74b2ccd7-23e0-421f-aa84-64c76de51542.jpg"/> <br>
-또한 태그 버튼을 누르면 해당 태그를 각 주마다 몇 회 사용했는지, 혹은 몇 시간동안 시행했는지가 그래프를 통해 제시됩니다.
+또한 태그 버튼을 누르면 해당 태그를 각 주마다 몇 회 사용했는지, 혹은 몇 시간동안 시행했는지가 그래프를 통해 제시됩니다. <br>
 <img width="70%" src="https://user-images.githubusercontent.com/94966803/158061453-83f6df86-9a1c-41dc-9b71-0282028046ea.jpg"/> <br>
