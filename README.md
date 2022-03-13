@@ -23,18 +23,26 @@ RoaDiay는 하루의 행동, 먹은 것, 건강 관련한 사항들을 기록으
 
 # 4. 사이트 둘러보기
 ## 4.1. 기본 화면과 로그인
-<img width="70%" src="https://user-images.githubusercontent.com/94966803/158059564-d94a8a3d-06bf-4f54-8361-95b67c40af90.jpg"/>
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158059564-d94a8a3d-06bf-4f54-8361-95b67c40af90.jpg"/> <br>
 사이트 기본 화면에서는 회원가입과 로그인 버튼을 눌러 해당 기능을 이용할 수 있습니다. <br>
 둘러보기를 선택하면 회원가입 없이 각 기능들을 체험해볼 수 있습니다.
 
 ## 4.2. 기록 입력
 로그인을 하면 아래 화면이 나타납니다. <br>
-<img width="70%" src="https://user-images.githubusercontent.com/94966803/158060429-5dc83bdb-3c1d-46ad-8343-8e47854743ff.jpg"/>
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158060429-5dc83bdb-3c1d-46ad-8343-8e47854743ff.jpg"/> <br>
 '기록 서비스 이용하기' 버튼을 누르면 새로운 기록을 입력하고, 하루동안 입력된 기록들을 확인하는 서비스로 이동합니다. <br>
 '기록 분석 보기' 버튼을 누르면 입력된 기록들을 분석해주는 서비스로 연결됩니다.
 
 ## 4.3. '기록 서비스 이용하기'
 '기록 서비스 이용하기'로 이동하면 아래 화면이 나타납니다. <br>
-<img width="70%" src="https://user-images.githubusercontent.com/94966803/158060465-77ff12ec-87b3-4b8e-89d6-8daf3deb9e7a.jpg"/>
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158060465-77ff12ec-87b3-4b8e-89d6-8daf3deb9e7a.jpg"/> <br>
 왼쪽 '새로운 기록 입력'을 통해 새 기록들을 입력할 수 있습니다. <br>
-오른쪽 부분에서는 시간대별로 입력된 기록들을 확인할 수 있습니다.
+오른쪽 부분에서는 시간대별로 입력된 기록들을 확인할 수 있습니다. <br>
+오른쪽 부분에 입력된 기록을 눌러 각 내용을 수정하거나 삭제 버튼을 눌러 기록 전체를 삭제할 수 있습니다. <br> 
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158060746-82171351-ca0b-42de-9510-6dcb2dab48a3.jpg"/> <br>
+
+## 4.4. '기록 분석 보기'
+'기록 분석 보기'로 연결되면 최근 세 달 동안 자주 사용하거나 오랜 시간 시행한 태그를 확인할 수 있습니다. <br>
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158061408-74b2ccd7-23e0-421f-aa84-64c76de51542.jpg"/> <br>
+또한 태그 버튼을 누르면 해당 태그를 각 주마다 몇 회 사용했는지, 혹은 몇 시간동안 시행했는지가 그래프를 통해 제시됩니다.
+<img width="70%" src="https://user-images.githubusercontent.com/94966803/158061453-83f6df86-9a1c-41dc-9b71-0282028046ea.jpg"/> <br>
