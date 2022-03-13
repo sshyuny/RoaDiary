@@ -1,5 +1,6 @@
 package records.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -47,6 +48,15 @@ public class SortingController {
         List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
         List<SortTagQuantity> listTime = recordsService.calculJoinTbsByTime(listTimeRaw);
         model.addAttribute("listTime", listTime);
+
+        // [12주의 시작일 계산] (중복 코드)
+        LocalDate dateStandard = LocalDate.now();
+        int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
+        LocalDate dateFrom = dateStandard.minusDays(7 * (12 - 1) - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다(총 12주 이내).
+        String dateStandardStr = String.valueOf(dateStandard.getYear()) + "-" + String.valueOf(dateStandard.getMonthValue()) + "-" + String.valueOf(dateStandard.getDayOfMonth());
+        String dateFromStr = String.valueOf(dateFrom.getYear()) + "-" + String.valueOf(dateFrom.getMonthValue()) + "-" + String.valueOf(dateFrom.getDayOfMonth());
+        model.addAttribute("dateStandardStr", dateStandardStr);
+        model.addAttribute("dateFromStr", dateFromStr);
 
         return "records/sortingMain";
     }

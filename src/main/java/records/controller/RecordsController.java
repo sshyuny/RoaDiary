@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -99,6 +98,46 @@ public class RecordsController {
         // return
         return "records/recordsMain";
     }
+    /**
+     * recordsShowing와 거의 비슷합니다. <input type="date">로 들어온 value를 처리하기 위해 따로 작성한 메서드입니다.
+     * @param thingsReqDto
+     * @param request
+     * @param session
+     * @param model
+     * @return
+     */
+    @PostMapping("/recordsShowingCalander")
+    public String recordsShowingCalander(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        // 요청된 날 가져오기
+        String calanderDayStr = request.getParameter("calanderDay");
+        model.addAttribute("calanderDay", calanderDayStr);
+        model.addAttribute("stringDate", calanderDayStr);  // stringDate에도 넣어줍니다.
+        // 요청된 날에 기록된 ThingsTb 행들, DB에서 가져옴
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(calanderDayStr, loginId);
+        model.addAttribute("joinTagTbs", joinTagTbs);
+
+        // 오늘, 어제 등에 해당할 경우, 날짜를 숫자가 아닌 글로 보여주기 위함
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Period period = Period.between(LocalDate.now(), LocalDate.parse(calanderDayStr, formatter));
+        if (period.getDays() == 0) {
+            model.addAttribute("stringDate", "오늘");
+        } else if (period.getDays() == -1) {
+            model.addAttribute("stringDate", "어제");
+        } else if (period.getDays() == -2) {
+            model.addAttribute("stringDate", "그제");
+        } else if (period.getDays() == 1) {
+            model.addAttribute("stringDate", "내일");
+        } else if (period.getDays() == 2) {
+            model.addAttribute("stringDate", "모레");
+        }
+
+        // return
+        return "records/recordsMain";
+    }
 
     // 기록 변경 또는 삭제할 때
     @PostMapping("/recordsChange")
@@ -119,13 +158,15 @@ public class RecordsController {
                 recordsService.updateThingsTime(thingsReqDto, thingsId);
             }
             // 태그 변경: things 테이블 update
-            if ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
-                ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank())) {
+            // ((!String.valueOf(thingsReqDto.getTag1()).isBlank()) || (!String.valueOf(thingsReqDto.getTag2()).isBlank())
+            // ||(!String.valueOf(thingsReqDto.getTag3()).isBlank()) ||(!String.valueOf(thingsReqDto.getTag4()).isBlank()))
+            if ((String.valueOf(thingsReqDto.getTag1())!="") || (String.valueOf(thingsReqDto.getTag2())!="")
+                ||(String.valueOf(thingsReqDto.getTag3())!="") ||(String.valueOf(thingsReqDto.getTag4())!="")) {
                 recordsService.deleteThingsTag(thingsReqDto, thingsId);
                 recordsService.insertTags(thingsReqDto, thingsId);
             }
             // content 변경: things 테이블 update
-            if (!thingsReqDto.getContent().isBlank()) {
+            if (thingsReqDto.getContent()!="") {
                 recordsService.updateThingsContent(thingsReqDto, thingsId);
             }
         // [삭제하려는 경우]

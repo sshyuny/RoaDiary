@@ -20,7 +20,7 @@ function fromDatetoString(date) {
 function returnPlusDate() {
     var dateString = initialDate();
     var tempDate = new Date(dateString);
-    tempDate.setDate(tempDate.getDate() + 1);
+    tempDate.setDate(tempDate.getDate() + 1);  // @@ 한달 전으로 가면 다시 오늘 나오는 오류 수정할 것
     var resultDate = fromDatetoString(tempDate);
 
     document.getElementById('someday').value = resultDate;
@@ -71,4 +71,23 @@ function initialDate() {
     } 
 
     return dateString
+}
+
+// <input type="date" name="calanderDay" id="calanderDay" />에 아무 값도 들어오지 않을 경우, 서버에서 예외가 발생합니다.
+// 이를 방지하기 위한 함수입니다.
+function  checkCalanderDay() {
+
+    var calanderDay = document.getElementById('calanderDay').value;
+
+    // 길이가 4개 미만일 경우(date값이 선택되지 않은 채로, submit을 눌렀을 경우) 발동되는 if문입니다.
+    if (calanderDay.length < 4) {
+        alert("날짜를 선택해주세요.");
+
+        // 오늘 날짜로 전송
+        var tempDate = new Date();
+        var resultDate = fromDatetoString(tempDate);
+        document.getElementById('calanderDay').value = resultDate;
+    }
+    
+    document.getElementById('calanderFrm').submit();
 }

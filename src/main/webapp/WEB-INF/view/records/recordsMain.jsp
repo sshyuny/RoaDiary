@@ -63,31 +63,30 @@
         </div><!-- 가장 큰, 왼쪽 col -->
 
         <div class="col" style="color:white;"><!-- 가장 큰, 오른쪽 col -->
-
-          <div class="container">
-            <form method="post" id="frm"  action="recordsShow">
-              <div class="row justify-content-md-center">
-                <div class="col-auto">
-                  <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
-                </div>
-                <div class="col-auto">
-                  <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
-                </div>
-                <div class="col-auto mb-2">
-                  <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>
-                </div>
-                <div class="col col-2">
-                  <%-- <input type="date" id="selectDate" /> --%>
-                </div>
-                <div class="col col-1">
-                  <button type="submit" class="btn btn-dark btn-outline-primary">제출</button>
-                </div>
-                <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+          <div class="container"><!-- 이 container 안에는 두 form이 들어있습니다. -->
+            <%-- 이전날, 다음날, 오늘 버튼 제어 form --%>
+            <div class="row justify-content-md-center">
+              <div class="col-3">
               </div>
-            </form>
+              <div class="col-3 mb-2"><!-- 첫번째 form 포함 열 -->
+                <form method="post" id="frm"  action="recordsShow">
+                <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+                  <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
+                  <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
+                  <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>
+                </form>
+              </div>
+              <div class="col-4"><!-- 두번째 form  포함 열 -->
+                <form method="post" onsubmit="return checkCalanderDay();" id="calanderFrm" action="recordsShowingCalander">
+                  <input type="date" name="calanderDay" id="calanderDay" />
+                  <button type="submit" class="btn btn-dark btn-outline-primary">날짜 제출</button>
+                </form>
+              </div>
+              <div class="col-2">
+              </div>
+            </div>
           </div>
           <script src="<c:url value='/resources/js/recordsMain.js'/>"></script>
-
           
           <div class="container"><!-- container: 기록들 보여주는 부분 -->
 
@@ -157,9 +156,9 @@
                         <input name="content" type="text" class="form-control" placeholder="내용"/>
                       </div>
                       <div class="col col-lg-2">
-                        <input type="radio" name="category" path="category" value="1" checked />한 일
-                        <input type="radio" name="category" path="category" value="2" />먹은 거
-                        <input type="radio" name="category" path="category" value="3" />건강
+                        <input type="radio" name="category" path="category" value="1" checked />한 것
+                        <input type="radio" name="category" path="category" value="2" />먹은 것
+                        <input type="radio" name="category" path="category" value="3" />건강 관련
                       </div>
                       <div class="col col-lg-2">
                         <input name="tag1" type="text" class="form-control" placeholder="태그1"/>
@@ -168,7 +167,7 @@
                         <input name="tag4" type="text" class="form-control" placeholder="태그4"/>
                       </div>
                       <div class="col col-lg-2">
-                        <button type="submit" class="btn btn-dark">빠른 기록 제출</button>
+                        <button type="submit" class="btn btn-dark btn-outline-primary">빠른 제출</button>
                       </div>
                     </div>
                   </form:form>
