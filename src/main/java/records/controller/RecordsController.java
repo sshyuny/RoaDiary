@@ -188,9 +188,14 @@ public class RecordsController {
 
         // 빠른 추가를 하려는, 시간 가져오기
         int eachHour = Integer.valueOf(request.getParameter("eachHour"));
+        // 빠른 추가를 하려는, 날짜 가져오기
+        String onlyDateStr = request.getParameter("onlyDate");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate onlyDate = LocalDate.parse(onlyDateStr, formatter);
 
-        // 객체(thingsReqDto)에 시간을 저장
+        // 객체(thingsReqDto)에 시간, 날짜를 저장
         thingsReqDto.setTime(LocalTime.of(eachHour, 0));
+        thingsReqDto.setDate(onlyDate);
 
         // things 테이블에 객체(thingsReqDto)를 기록
         Long key = recordsService.insertThings(thingsReqDto, loginId);

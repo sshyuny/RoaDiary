@@ -91,3 +91,10 @@ function  checkCalanderDay() {
     
     document.getElementById('calanderFrm').submit();
 }
+
+// onlyDate를 위한 함수
+window.onload = function() {
+    alert("check");
+    var dateString = initialDate();
+    document.getElementById('onlyDate').value = dateString;
+}

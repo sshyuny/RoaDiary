@@ -71,6 +71,7 @@
               <div class="col-3 mb-2"><!-- 첫번째 form 포함 열 -->
                 <form method="post" id="frm"  action="recordsShow">
                 <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
+                <input type="hidden" id="onlyDate" name="onlyDate" value="${stringDate}"/>
                   <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
                   <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
                   <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>

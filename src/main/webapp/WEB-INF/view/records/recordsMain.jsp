@@ -149,8 +149,9 @@
                 </div>
                 <!-- 빠른내용 추가 -->
                 <div class="collapse" id="eachHour${i}">
-                  <form:form action="recordsQuickInsert" modelAttribute="thingsReqDto">
+                  <form id="forOnlyDatefrm" onsubmit="return forOnlyDate();" method="post" action="recordsQuickInsert" >
                     <input type="hidden" id="eachHour" name="eachHour" value="${i}"/>
+                    <input type="hidden" id="onlyDate" name="onlyDate"/>
                     <div class="row">
                       <div class="col col-lg-2">
                         <input name="content" type="text" class="form-control" placeholder="내용"/>
@@ -170,7 +171,7 @@
                         <button type="submit" class="btn btn-dark btn-outline-primary">빠른 제출</button>
                       </div>
                     </div>
-                  </form:form>
+                  </form>
                 </div><!-- 빠른내용 추가 닫기 -->
 
                 <c:if test="${!empty joinTagTbs}">
