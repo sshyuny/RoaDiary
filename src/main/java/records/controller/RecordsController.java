@@ -2,7 +2,6 @@ package records.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -11,12 +10,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.LoginInfo;
 import domain.JoinWithThingsAndTagTb;
 import records.RecordsService;
+import records.RecordsUtil;
 import records.dto.ThingsReqDto;
 
 @Controller
@@ -28,10 +29,14 @@ public class RecordsController {
         this.recordsService = recordsService;
     }
 
-    //===== ===== ===== =====//
-    // 홈페이지
-    //===== ===== ===== =====//
-    @RequestMapping("/records")
+    /**
+     * 메인 페이지입니다.
+     * @param thingsReqDto
+     * @param session
+     * @param model
+     * @return
+     */
+    @GetMapping("/records")
     public String recordsMain(ThingsReqDto thingsReqDto, HttpSession session, Model model) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
@@ -41,61 +46,81 @@ public class RecordsController {
         model.addAttribute("joinTagTbs", joinTagTbs);
         // '오늘' 단어 전하기
         model.addAttribute("stringDate", "오늘");
+        // '오늘' LocalDate 전하기
+        model.addAttribute("onlyDate", LocalDate.now());
 
-        // return
         return "records/recordsMain";
     }
 
     /**
-     * things 테이블에 기록
-     * @param thingsReqDto  // dto
-     * @param session       // 이미 등록된 세션 가져오기 위한
+     * things 테이블에 사용자가 보낸 데이터를 기록합니다.
+     * @param thingsReqDto  사용자가 보낸 데이터
+     * @param session
      * @return
      */
     @PostMapping("/records")
-    public String recordsRecording(ThingsReqDto thingsReqDto, HttpSession session) {
+    public String recordsRecording(ThingsReqDto thingsReqDto, HttpSession session, Model model) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
 
+        // [전송된 데이터를 DB에 저장]
         // things 테이블에 기록
         Long key = recordsService.insertThings(thingsReqDto, loginId);
-
         // tag 테이블과 things_tag 테이블에 기록
         recordsService.insertTags(thingsReqDto, key);
+
+        // [클라이언트에 전송할 데이터 처리] 
+        // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.)
+        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        LocalDate requestedDate = thingsReqDto.getDate();
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(requestedDate, loginId);
+        // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
+        String stringDate = RecordsUtil.fromLocalDatetoString(requestedDate);
+
+        // [클라이언트에 변수들 보내기]
+        model.addAttribute("joinTagTbs", joinTagTbs);
+        model.addAttribute("onlyDate", requestedDate);
+        model.addAttribute("stringDate", stringDate);
         
-        //
         return "records/recordsMain";
     }
+
     @RequestMapping("/recordsShow")
     public String recordsShowing(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
 
-        // 요청된 날 가져오기
-        String stringDate = request.getParameter("someday");
-        model.addAttribute("stringDate", stringDate);
-        // 요청된 날에 기록된 ThingsTb 행들, DB에서 가져옴
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(stringDate, loginId);
-        model.addAttribute("joinTagTbs", joinTagTbs);
+        // 어떤 버튼 눌렀는지 확인하기 위한 변수
+        String minusDate = request.getParameter("minusDate");
+        String plusDate = request.getParameter("plusDate");
 
-        // 오늘, 어제 등에 해당할 경우, 날짜를 숫자가 아닌 글로 보여주기 위함
+        // 날짜 변수 가져오기
+        String onlyDateStr = request.getParameter("onlyDate");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        Period period = Period.between(LocalDate.now(), LocalDate.parse(stringDate, formatter));
-        if (period.getDays() == 0) {
-            model.addAttribute("stringDate", "오늘");
-        } else if (period.getDays() == -1) {
-            model.addAttribute("stringDate", "어제");
-        } else if (period.getDays() == -2) {
-            model.addAttribute("stringDate", "그제");
-        } else if (period.getDays() == 1) {
-            model.addAttribute("stringDate", "내일");
-        } else if (period.getDays() == 2) {
-            model.addAttribute("stringDate", "모레");
-        }
+        LocalDate onlyDate = LocalDate.now();  // 기본값으로 오늘을 넣어둡니다.
 
-        // return
+        // 클라이언트가 누른 버튼에 맞춰, 날짜 변경하기
+        if (plusDate != null) {
+            onlyDate = LocalDate.parse(onlyDateStr, formatter);
+            onlyDate = onlyDate.plusDays(1);
+        } else if (minusDate != null) {
+            onlyDate = LocalDate.parse(onlyDateStr, formatter);
+            onlyDate = onlyDate.plusDays(-1);
+        }
+        
+        // [클라이언트에 전송할 데이터 처리] 
+        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
+        // 요청된 날(onlyDate)를 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
+        String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
+
+        // [클라이언트에 변수들 보내기]
+        model.addAttribute("joinTagTbs", joinTagTbs);
+        model.addAttribute("onlyDate", onlyDate);
+        model.addAttribute("stringDate", stringDate);
+
         return "records/recordsMain";
     }
     /**
@@ -112,30 +137,31 @@ public class RecordsController {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
 
+        // [클라이언트가 요청하는 날짜]
         // 요청된 날 가져오기
         String calanderDayStr = request.getParameter("calanderDay");
-        model.addAttribute("calanderDay", calanderDayStr);
-        model.addAttribute("stringDate", calanderDayStr);  // stringDate에도 넣어줍니다.
-        // 요청된 날에 기록된 ThingsTb 행들, DB에서 가져옴
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(calanderDayStr, loginId);
-        model.addAttribute("joinTagTbs", joinTagTbs);
-
-        // 오늘, 어제 등에 해당할 경우, 날짜를 숫자가 아닌 글로 보여주기 위함
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        Period period = Period.between(LocalDate.now(), LocalDate.parse(calanderDayStr, formatter));
-        if (period.getDays() == 0) {
-            model.addAttribute("stringDate", "오늘");
-        } else if (period.getDays() == -1) {
-            model.addAttribute("stringDate", "어제");
-        } else if (period.getDays() == -2) {
-            model.addAttribute("stringDate", "그제");
-        } else if (period.getDays() == 1) {
-            model.addAttribute("stringDate", "내일");
-        } else if (period.getDays() == 2) {
-            model.addAttribute("stringDate", "모레");
+        LocalDate calanderDay;
+        if (calanderDayStr.length() < 4) {
+            // 사용자가, 달력에서 아무것도 선택하지 않고(value=null) submit했을때, 오늘을 넣어 예외(DateTimeParseException)를 피해줍니다.
+            calanderDay = LocalDate.now();
+        } else {
+            // 요청된 날 LocalDate로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            calanderDay = LocalDate.parse(calanderDayStr, formatter);
         }
 
-        // return
+        // [클라이언트에 전송할 데이터 처리] 
+        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(calanderDay, loginId);
+        // 요청된 날을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
+        String stringDate = RecordsUtil.fromLocalDatetoString(calanderDay);
+
+        // [클라이언트에 변수들 보내기]
+        model.addAttribute("calanderDay", calanderDayStr);
+        model.addAttribute("onlyDate", calanderDay);
+        model.addAttribute("joinTagTbs", joinTagTbs);
+        model.addAttribute("stringDate", stringDate);
+
         return "records/recordsMain";
     }
 
@@ -180,12 +206,11 @@ public class RecordsController {
 
     // 빠른 내용 추가
     @PostMapping("/recordsQuickInsert")
-    public String recordsQuickInsert(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
-        
+    public String recordsQuickInsert(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
+        // [클라이언트에서 데이터 가져오기]
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
-
         // 빠른 추가를 하려는, 시간 가져오기
         int eachHour = Integer.valueOf(request.getParameter("eachHour"));
         // 빠른 추가를 하려는, 날짜 가져오기
@@ -193,15 +218,27 @@ public class RecordsController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate onlyDate = LocalDate.parse(onlyDateStr, formatter);
 
+        // [DB에 저장할 객체 만들기]
         // 객체(thingsReqDto)에 시간, 날짜를 저장
         thingsReqDto.setTime(LocalTime.of(eachHour, 0));
         thingsReqDto.setDate(onlyDate);
 
+        // [DB에 기록]
         // things 테이블에 객체(thingsReqDto)를 기록
         Long key = recordsService.insertThings(thingsReqDto, loginId);
-
         // tag 테이블과 things_tag 테이블에 기록
         recordsService.insertTags(thingsReqDto, key);
+
+        // [클라이언트에 전송할 데이터 처리] 
+        // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.)
+        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
+        // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
+        String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
+
+        // [클라이언트에 변수들 보내기]
+        model.addAttribute("joinTagTbs", joinTagTbs);
+        model.addAttribute("onlyDate", onlyDate);
+        model.addAttribute("stringDate", stringDate);
         
         return "records/recordsMain";
     }

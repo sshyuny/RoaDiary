@@ -71,13 +71,14 @@
               <div class="col-3 mb-2"><!-- 첫번째 form 포함 열 -->
                 <form method="post" id="frm"  action="recordsShow">
                 <input type="hidden" id="someday" name="someday" value="${stringDate}"/>
-                  <button type="button" class="btn btn-dark" id="minusDate" onclick="returnMinusDate()">이전날</button>
-                  <button type="button" class="btn btn-dark" id="plusDate" onclick="returnPlusDate()">다음날</button>
-                  <button type="button" class="btn btn-dark" id="todayDate" onclick="returnTodayDate()">오늘</button>
+                <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
+                  <button type="submit" class="btn btn-dark"  name="minusDate" id="minusDate">이전날</button>
+                  <button type="submit" class="btn btn-dark" name="plusDate" id="plusDate" >다음날</button>
+                  <button type="submit" class="btn btn-dark">오늘</button>
                 </form>
               </div>
               <div class="col-4"><!-- 두번째 form  포함 열 -->
-                <form method="post" onsubmit="return checkCalanderDay();" id="calanderFrm" action="recordsShowingCalander">
+                <form method="post" action="recordsShowingCalander" onsubmit="checkCalanderDay()">
                   <input type="date" name="calanderDay" id="calanderDay" />
                   <button type="submit" class="btn btn-dark btn-outline-primary">날짜 제출</button>
                 </form>
@@ -149,14 +150,14 @@
                 </div>
                 <!-- 빠른내용 추가 -->
                 <div class="collapse" id="eachHour${i}">
-                  <form id="forOnlyDatefrm" onsubmit="return forOnlyDate();" method="post" action="recordsQuickInsert" >
+                  <form id="forOnlyDatefrm" method="post" action="recordsQuickInsert" >
+                    <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
                     <input type="hidden" id="eachHour" name="eachHour" value="${i}"/>
-                    <input type="hidden" id="onlyDate" name="onlyDate"/>
                     <div class="row">
                       <div class="col col-lg-2">
                         <input name="content" type="text" class="form-control" placeholder="내용"/>
                       </div>
-                      <div class="col col-lg-2">
+                      <div class="col col-lg-2">  
                         <input type="radio" name="category" path="category" value="1" checked />한 것
                         <input type="radio" name="category" path="category" value="2" />먹은 것
                         <input type="radio" name="category" path="category" value="3" />건강 관련

@@ -9,6 +9,28 @@ import records.dto.StoreTagTime;
 
 public class RecordsUtil {
     
+
+    public static String fromLocalDatetoString(LocalDate date) {
+
+        // 오늘, 어제 등에 해당할 경우, 날짜를 숫자가 아닌 단어로 반환합니다.
+        long betweenDays = ChronoUnit.DAYS.between(LocalDate.now(), date);
+        if (betweenDays == 0) {
+            return "오늘";
+        } else if (betweenDays == -1) {
+            return "어제";
+        } else if (betweenDays == -2) {
+            return "그제";
+        } else if (betweenDays == 1) {
+            return "내일";
+        } else if (betweenDays == 2) {
+            return "모레";
+        }
+
+        // 위 기준에 해당되지 않을 경우, yyyy-MM-dd 형식 String으로 반환합니다.
+        return date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+    }
+
+
     /**
      * 각 주마다, 해당 태그를 몇 번 했는지, 계산하여 반환합니다.
      * @param startDate

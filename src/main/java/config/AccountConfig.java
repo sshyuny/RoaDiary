@@ -26,6 +26,11 @@ public class AccountConfig {
         ds.setPassword("rduserpw");
         ds.setInitialSize(5);
         ds.setMaxActive(10);
+        // 아래는 DataAccessResourceFailureException를 해결하기 위한 설정
+        ds.setValidationQuery("SELECT 1");
+        ds.setTestOnBorrow(false);
+        ds.setTestOnReturn(false);
+        ds.setTestWhileIdle(true);
         return ds;
     }
 

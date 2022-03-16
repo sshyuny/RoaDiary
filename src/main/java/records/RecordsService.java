@@ -106,10 +106,10 @@ public class RecordsService {
         }
         return newJoinTbList;
     }
-    public List<JoinWithThingsAndTagTb> selectThingsSomeday(String stringDate, Long loginId) {
+    public List<JoinWithThingsAndTagTb> selectThingsSomeday(LocalDate date, Long loginId) {
         // date String에서 Localdate로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date = LocalDate.parse(stringDate, formatter);
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // LocalDate date = LocalDate.parse(stringDate, formatter);
 
         // [DB]
         // recordsDao를 통해 DB에서 select
