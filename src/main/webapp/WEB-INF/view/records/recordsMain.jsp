@@ -180,6 +180,7 @@
                   <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
                     <c:if test="${joinTagTbs[i2].hour == i}">
                       <form:form action="recordsChange" modelAttribute="thingsReqDto">
+                        <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
                         <input type="hidden" name="thingsId" value="${joinTagTbs[i2].thingsId}"/>
                         <div class="row">
                           <div class="col col-1">

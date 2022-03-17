@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import domain.JoinWithThingsAndTagTb;
+import records.dto.JoinReqDto;
 
 public class JoinDao {
     
@@ -20,11 +20,11 @@ public class JoinDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private RowMapper<JoinWithThingsAndTagTb> joinRowMapper = 
-        new RowMapper<JoinWithThingsAndTagTb>() {
+    private RowMapper<JoinReqDto> joinRowMapper = 
+        new RowMapper<JoinReqDto>() {
             @Override
-            public JoinWithThingsAndTagTb mapRow(ResultSet rs, int rowNum) throws SQLException {
-                JoinWithThingsAndTagTb joinTb = new JoinWithThingsAndTagTb(
+            public JoinReqDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                JoinReqDto joinTb = new JoinReqDto(
                     rs.getLong("things_id"),
                     rs.getLong("user_id"),
                     rs.getTimestamp("time").toLocalDateTime(),
@@ -37,8 +37,8 @@ public class JoinDao {
             }
         };
 
-    public List<JoinWithThingsAndTagTb> selectByDate(LocalDate date, Long userId) {
-        List<JoinWithThingsAndTagTb> results = jdbcTemplate.query(
+    public List<JoinReqDto> selectByDate(LocalDate date, Long userId) {
+        List<JoinReqDto> results = jdbcTemplate.query(
             "SELECT things.things_id, user_id, time, content, category_id, tag.tag_id, name FROM things " + 
             "LEFT JOIN things_tag ON things.things_id = things_tag.things_id " + 
             "LEFT JOIN tag ON things_tag.tag_id = tag.tag_id " + 
@@ -50,8 +50,8 @@ public class JoinDao {
         return results;
     }
 
-    public List<JoinWithThingsAndTagTb> selectByDatePeriod(LocalDate dateFrom, LocalDate dateTo, Long userId) {
-        List<JoinWithThingsAndTagTb> results = jdbcTemplate.query(
+    public List<JoinReqDto> selectByDatePeriod(LocalDate dateFrom, LocalDate dateTo, Long userId) {
+        List<JoinReqDto> results = jdbcTemplate.query(
             "SELECT things.things_id, user_id, time, content, category_id, tag.tag_id, name FROM things " + 
             "LEFT JOIN things_tag ON things.things_id = things_tag.things_id " + 
             "LEFT JOIN tag ON things_tag.tag_id = tag.tag_id " + 

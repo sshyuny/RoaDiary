@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import account.LoginInfo;
-import domain.JoinWithThingsAndTagTb;
 import records.RecordsService;
+import records.dto.JoinReqDto;
 import records.dto.SortTagQuantity;
 import records.dto.StoreTagTime;
 
@@ -34,7 +34,7 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [12주 동안, 태그와 사용 횟수 객체 List를, 횟수가 높은 순서대로 정렬하여 반환]
         List<SortTagQuantity> listCategory1 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 1);
@@ -71,7 +71,7 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 횟수인 int[] 반환]
         int[] arrayFrequency = recordsService.calculFrequency(joinTagTbs, Integer.parseInt(categoryId), tag);
@@ -91,7 +91,7 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [날짜, 태그, 수행 시간 들어있는 객체들 List로 생성]
         List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);

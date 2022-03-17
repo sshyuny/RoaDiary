@@ -3,7 +3,7 @@ package records.dto;
 import java.time.LocalDate;
 
 // 해당 태그의 수행 시간이 몇 시간인지 저장하는 객체
-public class StoreTagTime extends AboutEachRecords{
+public class StoreTagTime{
     
     private LocalDate date;
     private Long minutes;

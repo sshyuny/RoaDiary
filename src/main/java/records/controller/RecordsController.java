@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.LoginInfo;
-import domain.JoinWithThingsAndTagTb;
 import records.RecordsService;
 import records.RecordsUtil;
+import records.dto.JoinReqDto;
 import records.dto.ThingsReqDto;
 
 @Controller
@@ -42,7 +42,7 @@ public class RecordsController {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
         // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsToday(loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsToday(loginId);
         model.addAttribute("joinTagTbs", joinTagTbs);
         // '오늘' 단어 전하기
         model.addAttribute("stringDate", "오늘");
@@ -74,7 +74,7 @@ public class RecordsController {
         // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.)
         // 요청된 날에 기록된 ThingsTb 행들 가져오기
         LocalDate requestedDate = thingsReqDto.getDate();
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(requestedDate, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsSomeday(requestedDate, loginId);
         // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(requestedDate);
 
@@ -112,7 +112,7 @@ public class RecordsController {
         
         // [클라이언트에 전송할 데이터 처리] 
         // 요청된 날에 기록된 ThingsTb 행들 가져오기
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
         // 요청된 날(onlyDate)를 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
 
@@ -152,7 +152,7 @@ public class RecordsController {
 
         // [클라이언트에 전송할 데이터 처리] 
         // 요청된 날에 기록된 ThingsTb 행들 가져오기
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(calanderDay, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsSomeday(calanderDay, loginId);
         // 요청된 날을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(calanderDay);
 
@@ -167,7 +167,7 @@ public class RecordsController {
 
     // 기록 변경 또는 삭제할 때
     @PostMapping("/recordsChange")
-    public String recordsChange(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session) {
+    public String recordsChange(ThingsReqDto thingsReqDto, HttpServletRequest request, HttpSession session, Model model) {
 
         // thingsId 가져오기
         String thingsIdStr = request.getParameter("thingsId");
@@ -200,6 +200,24 @@ public class RecordsController {
             // thingsId에 해당하는 기록 지우기
             recordsService.deleteThingsOne(thingsId);
         }
+
+        // [클라이언트에 전송할 데이터 처리] 
+        // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.).
+        // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+        // 날짜 변수 가져오기
+        String onlyDateStr = request.getParameter("onlyDate");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate onlyDate = LocalDate.parse(onlyDateStr, formatter);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
+        // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
+        String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
+
+        // [클라이언트에 변수들 보내기]
+        model.addAttribute("joinTagTbs", joinTagTbs);
+        model.addAttribute("onlyDate", onlyDate);
+        model.addAttribute("stringDate", stringDate);
         
         return "records/recordsMain";
     }
@@ -231,7 +249,7 @@ public class RecordsController {
 
         // [클라이언트에 전송할 데이터 처리] 
         // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.)
-        List<JoinWithThingsAndTagTb> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
+        List<JoinReqDto> joinTagTbs = recordsService.selectThingsSomeday(onlyDate, loginId);
         // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
 

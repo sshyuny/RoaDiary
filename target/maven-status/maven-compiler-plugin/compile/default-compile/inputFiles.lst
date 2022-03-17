@@ -2,7 +2,6 @@ C:\MyProject\RoaDiary\src\main\java\config\ControllerConfig.java
 C:\MyProject\RoaDiary\src\main\java\account\validator\RegisterReqDtoValidator.java
 C:\MyProject\RoaDiary\src\main\java\records\controller\SortingController.java
 C:\MyProject\RoaDiary\src\main\java\domain\UserTb.java
-C:\MyProject\RoaDiary\src\main\java\records\dto\AboutEachRecords.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\SortTagQuantity.java
 C:\MyProject\RoaDiary\src\main\java\config\MvcConfig.java
 C:\MyProject\RoaDiary\src\main\java\records\JoinDao.java
@@ -11,6 +10,7 @@ C:\MyProject\RoaDiary\src\main\java\account\validator\LoginReqDtoValidator.java
 C:\MyProject\RoaDiary\src\main\java\account\LoginInfo.java
 C:\MyProject\RoaDiary\src\main\java\domain\JoinWithThingsAndTagTb.java
 C:\MyProject\RoaDiary\src\main\java\account\dto\LoginReqDto.java
+C:\MyProject\RoaDiary\src\main\java\records\dto\JoinReqDto.java
 C:\MyProject\RoaDiary\src\main\java\account\controller\AccountController.java
 C:\MyProject\RoaDiary\src\main\java\records\RecordsService.java
 C:\MyProject\RoaDiary\src\main\java\account\exception\AccountNotFoundException.java

@@ -1,3 +1,17 @@
+// <input type="date" name="calanderDay" id="calanderDay" />에 아무 값도 들어오지 않을 경우, 서버에서 예외가 발생하여 오늘 값으로 응답합니다.
+// 이를 알려주는 부분입니다.
+function  checkCalanderDay() {
+
+    var calanderDay = document.getElementById('calanderDay').value;
+
+    // 길이가 4개 미만일 경우(date값이 선택되지 않은 채로, submit을 눌렀을 경우) 발동되는 if문입니다.
+    if (calanderDay.length < 4) {
+        alert("날짜를 선택해주세요.");
+    }
+    
+    document.getElementById('calanderFrm').submit();
+}
+
 // function fromDatetoString(date) {
 //     var yD = date.getFullYear();
 //     var mD = date.getMonth()+1;
@@ -72,20 +86,6 @@
 
 //     return dateString
 // }
-
-// <input type="date" name="calanderDay" id="calanderDay" />에 아무 값도 들어오지 않을 경우, 서버에서 예외가 발생합니다.
-// 이를 방지하기 위한 함수입니다.
-function  checkCalanderDay() {
-
-    var calanderDay = document.getElementById('calanderDay').value;
-
-    // 길이가 4개 미만일 경우(date값이 선택되지 않은 채로, submit을 눌렀을 경우) 발동되는 if문입니다.
-    if (calanderDay.length < 4) {
-        alert("날짜를 선택해주세요.");
-    }
-    
-    document.getElementById('calanderFrm').submit();
-}
 
 // // onlyDate를 위한 함수
 // function forOnlyDate() {

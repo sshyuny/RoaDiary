@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import records.dto.AboutEachRecords;
+import records.dto.JoinReqDto;
 import records.dto.StoreTagTime;
 
 public class RecordsUtil {
@@ -38,7 +38,7 @@ public class RecordsUtil {
      * @param dataList  해당 태그가 입력된 객체들만 들어간 List
      * @return
      */
-    public static int[] countEachWeekFrequency(LocalDate startDate, int weekNum, List<? extends AboutEachRecords> dataList){
+    public static int[] countEachWeekFrequency(LocalDate startDate, int weekNum, List<JoinReqDto> dataList){
 
         // [배열 results 생성]
         // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
@@ -148,10 +148,20 @@ public class RecordsUtil {
      * @param tagName  찾고자하는 태그의 이름
      * @return  tagId 반환
      */
-    public static int findTagIdFromTagName(List<? extends AboutEachRecords> list, String tagName) {
+    public static int findTagIdFromTagNameForStore(List<StoreTagTime> list, String tagName) {
         
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getTagName() == null) continue;  // (NullPointerException 피하기 위해 넣어줍니다.)
+            if (list.get(i).getTagName() == null) continue;
+
+            if (list.get(i).getTagName().equals(tagName)) return list.get(i).getTagId();
+        }
+
+        return 0;
+    }
+    public static int findTagIdFromTagNameForJoin(List<JoinReqDto> list, String tagName) {
+        
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getTagName() == null) continue;
 
             if (list.get(i).getTagName().equals(tagName)) return list.get(i).getTagId();
         }
