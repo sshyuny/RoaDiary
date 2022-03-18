@@ -8,11 +8,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import account.AccountDao;
 import account.AccountService;
-import records.JoinDao;
-import records.ThingsDao;
 import records.RecordsService;
-import records.TagDao;
-import records.ThingsTagDao;
+import records.dao.JoinDao;
+import records.dao.TagDao;
+import records.dao.ThingsDao;
+import records.dao.ThingsTagDao;
 
 @Configuration
 public class AccountConfig {

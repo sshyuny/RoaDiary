@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import account.LoginInfo;
 import records.RecordsService;
-import records.dto.JoinReqDto;
-import records.dto.SortTagQuantity;
-import records.dto.StoreTagTime;
+import records.dto.JoinThingsTagResDto;
+import records.dto.SortTagQuantityResDto;
+import records.dto.StoreTagTimeResDto;
 
 
 @Controller
@@ -34,19 +34,19 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [12주 동안, 태그와 사용 횟수 객체 List를, 횟수가 높은 순서대로 정렬하여 반환]
-        List<SortTagQuantity> listCategory1 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 1);
-        List<SortTagQuantity> listCategory2 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 2);
-        List<SortTagQuantity> listCategory3 = recordsService.calculJoinTbsByFrequency(joinTagTbs, 3);
-        model.addAttribute("listCategory1", listCategory1);
-        model.addAttribute("listCategory2", listCategory2);
-        model.addAttribute("listCategory3", listCategory3);
+        List<SortTagQuantityResDto> sortResDtoCategory1 = recordsService.calculJoinTbsByFrequency(joinThingTagResDtos, 1);
+        List<SortTagQuantityResDto> sortResDtoCategory2 = recordsService.calculJoinTbsByFrequency(joinThingTagResDtos, 2);
+        List<SortTagQuantityResDto> sortResDtoCategory3 = recordsService.calculJoinTbsByFrequency(joinThingTagResDtos, 3);
+        model.addAttribute("sortResDtoCategory1", sortResDtoCategory1);
+        model.addAttribute("sortResDtoCategory2", sortResDtoCategory2);
+        model.addAttribute("sortResDtoCategory3", sortResDtoCategory3);
 
         // [12주 동안, 태그와 사용 시간 객체 List를, 시간이 높은 순서대로 정렬하여 반환]
-        List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
-        List<SortTagQuantity> listTime = recordsService.calculJoinTbsByTime(listTimeRaw);
+        List<StoreTagTimeResDto> listTimeRaw = recordsService.makeJoinTbsListByTime(joinThingTagResDtos);
+        List<SortTagQuantityResDto> listTime = recordsService.calculJoinTbsByTime(listTimeRaw);
         model.addAttribute("listTime", listTime);
 
         // [12주의 시작일 계산] (중복 코드)
@@ -71,10 +71,10 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 횟수인 int[] 반환]
-        int[] arrayFrequency = recordsService.calculFrequency(joinTagTbs, Integer.parseInt(categoryId), tag);
+        int[] arrayFrequency = recordsService.calculFrequency(joinThingTagResDtos, Integer.parseInt(categoryId), tag);
         model.addAttribute("arrayFrequency", arrayFrequency);
 
         model.addAttribute("tag", tag);
@@ -91,10 +91,10 @@ public class SortingController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinReqDto> joinTagTbs = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsPeriod("", 12, loginId);
 
         // [날짜, 태그, 수행 시간 들어있는 객체들 List로 생성]
-        List<StoreTagTime> listTimeRaw = recordsService.makeJoinTbsListByTime(joinTagTbs);
+        List<StoreTagTimeResDto> listTimeRaw = recordsService.makeJoinTbsListByTime(joinThingTagResDtos);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 시간인 int[] 반환]
         int[] arrayTime = recordsService.calculTime(listTimeRaw, tag);

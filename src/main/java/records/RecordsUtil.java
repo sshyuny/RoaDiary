@@ -2,13 +2,70 @@ package records;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
-import records.dto.JoinReqDto;
-import records.dto.StoreTagTime;
+import org.springframework.util.StringUtils;
+
+import domain.JoinThingsTagDto;
+import records.dto.JoinThingsTagResDto;
+import records.dto.StoreTagTimeResDto;
 
 public class RecordsUtil {
     
+    public static List<JoinThingsTagResDto> editJoinResDtos(List<JoinThingsTagResDto> rawResDtos) {
+
+        List<JoinThingsTagResDto> newResDtos = new ArrayList<>();
+
+        if (rawResDtos.size() == 0) return newResDtos;
+
+        newResDtos.add(rawResDtos.get(0));           // 첫 행 넣어둠
+        for(int i = 1; i < rawResDtos.size() ; i++) {   // 첫 행 넣어두었기 때문에, i는 1부터 시작함
+            JoinThingsTagResDto firstRow = rawResDtos.get(i-1);
+            JoinThingsTagResDto secondRow = rawResDtos.get(i);
+            if(!firstRow.getThingsId().equals(secondRow.getThingsId())) {  // 수정
+                newResDtos.add(secondRow);
+            } else {
+                int lastIdxOfNewResDtos = newResDtos.size() - 1;
+                JoinThingsTagResDto lastRowOfNewList = newResDtos.get(lastIdxOfNewResDtos);
+                String tagNameNewList = lastRowOfNewList.getTagName();
+                String tagNameList = "#" + secondRow.getTagName();
+                String newTagName =tagNameNewList +  tagNameList;
+                // lastRowOfNewList.setName(newTagName); //[?] 왜 아래 코드 대신, 이거만 써도 잘 작동되는지 물어보기
+                newResDtos.get(lastIdxOfNewResDtos).setTagName(newTagName);
+            }
+        }
+
+        // 태그 있는 경우, 앞에 "#" 붙이기
+        for(JoinThingsTagResDto rowOne : newResDtos) {
+            String rowTagName = rowOne.getTagName();
+            if(StringUtils.hasText(rowTagName)) {
+                rowOne.setTagName("#" + rowTagName);
+            }
+        }
+
+        return newResDtos;
+    }
+    /**
+     * JoinWithThingsAndTagDto를 이용하여 JoinResDto를 만듭니다. 
+     * JoinResDto에는 JoinWithThingsAndTagDto에서 몇 가지 매개변수가 추가됩니다.
+     * @param list
+     * @return
+     */
+    public static List<JoinThingsTagResDto> makeJoinResDtos(List<JoinThingsTagDto> list) {
+
+        List<JoinThingsTagResDto> joinResDtos = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            JoinThingsTagDto dto = list.get(i);
+            joinResDtos.add(new JoinThingsTagResDto(dto.getThingsId(), dto.getUserId(), dto.getDateTime(), dto.getContent(), dto.getCategoryId(), dto.getTagId(), dto.getTagName()));
+            joinResDtos.get(i).setDate(dto.getDateTime().toLocalDate());
+            joinResDtos.get(i).setTime(dto.getDateTime().toLocalTime());
+            joinResDtos.get(i).setHour(dto.getDateTime().toLocalTime().getHour());
+        }
+
+        return joinResDtos;
+    }
 
     public static String fromLocalDatetoString(LocalDate date) {
 
@@ -38,7 +95,7 @@ public class RecordsUtil {
      * @param dataList  해당 태그가 입력된 객체들만 들어간 List
      * @return
      */
-    public static int[] countEachWeekFrequency(LocalDate startDate, int weekNum, List<JoinReqDto> dataList){
+    public static int[] countEachWeekFrequency(LocalDate startDate, int weekNum, List<JoinThingsTagResDto> dataList){
 
         // [배열 results 생성]
         // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
@@ -95,7 +152,7 @@ public class RecordsUtil {
      * @param tagId
      * @return
      */
-    public static int[] countEachWeekTime(LocalDate startDate, int weekNum, List<StoreTagTime> dataList, int tagId){
+    public static int[] countEachWeekTime(LocalDate startDate, int weekNum, List<StoreTagTimeResDto> dataList, int tagId){
 
         // [배열 results 생성]
         // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
@@ -109,7 +166,7 @@ public class RecordsUtil {
         int listSize = dataList.size();
         for (int i = 0; i < listSize; i++) {
 
-            StoreTagTime one = dataList.get(i);
+            StoreTagTimeResDto one = dataList.get(i);
             
             Long betweenDays = ChronoUnit.DAYS.between(fromDate, one.getDate());
             int tempMok = betweenDays.intValue() / 7;  // 현재 객체가, 몇 번째 주인지 저장
@@ -148,7 +205,7 @@ public class RecordsUtil {
      * @param tagName  찾고자하는 태그의 이름
      * @return  tagId 반환
      */
-    public static int findTagIdFromTagNameForStore(List<StoreTagTime> list, String tagName) {
+    public static int findTagIdFromTagNameForStore(List<StoreTagTimeResDto> list, String tagName) {
         
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getTagName() == null) continue;
@@ -158,7 +215,7 @@ public class RecordsUtil {
 
         return 0;
     }
-    public static int findTagIdFromTagNameForJoin(List<JoinReqDto> list, String tagName) {
+    public static int findTagIdFromTagNameForJoin(List<JoinThingsTagResDto> list, String tagName) {
         
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getTagName() == null) continue;

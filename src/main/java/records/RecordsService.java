@@ -14,12 +14,17 @@ import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
-import domain.TagTb;
+import domain.JoinThingsTagDto;
+import domain.TagDto;
 import domain.ThingsTagTb;
 import domain.ThingsTb;
-import records.dto.JoinReqDto;
-import records.dto.SortTagQuantity;
-import records.dto.StoreTagTime;
+import records.dao.JoinDao;
+import records.dao.TagDao;
+import records.dao.ThingsDao;
+import records.dao.ThingsTagDao;
+import records.dto.JoinThingsTagResDto;
+import records.dto.SortTagQuantityResDto;
+import records.dto.StoreTagTimeResDto;
 import records.dto.ThingsReqDto;
 
 public class RecordsService {
@@ -71,76 +76,28 @@ public class RecordsService {
         thingsDao.updateContent(thingsReqDto.getContent(), thingsId);
     }
 
-    public List<JoinReqDto> selectThingsToday(Long loginId) {
-        // 현재 시간 가져오기
+    public List<JoinThingsTagResDto> selectThingsToday(Long loginId) {
+        // [현재 시간 가져오기]
         LocalDate date = LocalDate.now();
 
-        // [DB] @@수정 아래 코드와 중복됨. Util로 뺄 것!
-        // recordsDao를 통해 DB에서 select
-        List<JoinReqDto> joinTbList =  joinDao.selectByDate(date, loginId);
-        List<JoinReqDto> newJoinTbList = new ArrayList<>();
-        if(joinTbList.size() > 0) {
-            newJoinTbList.add(joinTbList.get(0));           // 첫 행 넣어둠
-            for(int i = 1; i < joinTbList.size() ; i++) {   // 첫 행 넣어두었기 때문에, i는 1부터 시작함
-                JoinReqDto firstRow = joinTbList.get(i-1);
-                JoinReqDto secondRow = joinTbList.get(i);
-                if(!firstRow.getThingsId().equals(secondRow.getThingsId())) {  // 수정
-                    newJoinTbList.add(secondRow);
-                } else {
-                    int lastIdxOfnewJoinList = newJoinTbList.size() - 1;
-                    JoinReqDto lastRowOfNewList = newJoinTbList.get(lastIdxOfnewJoinList);
-                    String tagNameNewList = lastRowOfNewList.getTagName();
-                    String tagNameList = "#" + secondRow.getTagName();
-                    String newTagName =tagNameNewList +  tagNameList;
-                    // lastRowOfNewList.setName(newTagName); //[?] 왜 아래 코드 대신, 이거만 써도 잘 작동되는지 물어보기
-                    newJoinTbList.get(lastIdxOfnewJoinList).setTagName(newTagName);
-                }
-            }
-        }
-        // 태그 있는 경우, 앞에 "#" 붙이기
-        for(JoinReqDto rowTb : newJoinTbList) {
-            String rowTbTagName = rowTb.getTagName();
-            if(StringUtils.hasText(rowTbTagName)) {
-                rowTb.setTagName("#" + rowTbTagName);
-            }
-        }
-        return newJoinTbList;
-    }
-    public List<JoinReqDto> selectThingsSomeday(LocalDate date, Long loginId) {
-        // date String에서 Localdate로 변환
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // LocalDate date = LocalDate.parse(stringDate, formatter);
+        // [DB에서 select]
+        List<JoinThingsTagDto> joinTbList =  joinDao.selectByDate(date, loginId);
 
-        // [DB]
-        // recordsDao를 통해 DB에서 select
-        List<JoinReqDto> joinTbList =  joinDao.selectByDate(date, loginId);
-        List<JoinReqDto> newJoinTbList = new ArrayList<>();
-        if(joinTbList.size() > 0) {
-            newJoinTbList.add(joinTbList.get(0));           // 첫 행 넣어둠
-            for(int i = 1; i < joinTbList.size() ; i++) {   // 첫 행 넣어두었기 때문에, i는 1부터 시작함
-                JoinReqDto firstRow = joinTbList.get(i-1);
-                JoinReqDto secondRow = joinTbList.get(i);
-                if(!firstRow.getThingsId().equals(secondRow.getThingsId())) {  // 수정
-                    newJoinTbList.add(secondRow);
-                } else {
-                    int lastIdxOfnewJoinList = newJoinTbList.size() - 1;
-                    JoinReqDto lastRowOfNewList = newJoinTbList.get(lastIdxOfnewJoinList);
-                    String tagNameNewList = lastRowOfNewList.getTagName();
-                    String tagNameList = "#" + secondRow.getTagName();
-                    String newTagName =tagNameNewList +  tagNameList;
-                    // lastRowOfNewList.setName(newTagName); //[?] 왜 아래 코드 대신, 이거만 써도 잘 작동되는지 물어보기
-                    newJoinTbList.get(lastIdxOfnewJoinList).setTagName(newTagName);
-                }
-            }
-        }
-        // 태그 있는 경우, 앞에 "#" 붙이기
-        for(JoinReqDto rowTb : newJoinTbList) {
-            String rowTbTagName = rowTb.getTagName();
-            if(StringUtils.hasText(rowTbTagName)) {
-                rowTb.setTagName("#" + rowTbTagName);
-            }
-        }
-        return newJoinTbList;
+        // [DB에서 가져온 List, ResDto로 변경]
+        List<JoinThingsTagResDto> rawJoinResDtos = RecordsUtil.makeJoinResDtos(joinTbList);
+        List<JoinThingsTagResDto> newJoinResDtos = RecordsUtil.editJoinResDtos(rawJoinResDtos);
+        
+        return newJoinResDtos;
+    }
+    public List<JoinThingsTagResDto> selectThingsSomeday(LocalDate date, Long loginId) {
+        // [DB에서 select]
+        List<JoinThingsTagDto> joinTbList =  joinDao.selectByDate(date, loginId);
+
+        // [DB에서 가져온 List, ResDto로 변경]
+        List<JoinThingsTagResDto> rawJoinResDtos = RecordsUtil.makeJoinResDtos(joinTbList);
+        List<JoinThingsTagResDto> newJoinResDtos = RecordsUtil.editJoinResDtos(rawJoinResDtos);
+        
+        return newJoinResDtos;
     }
     
 
@@ -159,14 +116,14 @@ public class RecordsService {
             if(StringUtils.hasText(oneTagContent) ) {
 
                 // 이미 저장된 tag인지 확인
-                TagTb beTagTb = tagDao.selectByName(oneTagContent);
+                TagDto beforeTagDto = tagDao.selectByName(oneTagContent);
 
                 // 이미 저장된 tag일 경우
-                if(beTagTb != null) {
+                if(beforeTagDto != null) {
                     // (tag 내용 저장하는 과정 생략)
 
                     // ThingsTagTb 객체 생성(이미 저장된 tag의 Id값 사용)
-                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, beTagTb.getTagId());
+                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, beforeTagDto.getTagId());
 
                     // [DB]
                     // Dao를 통해 DB에 insert
@@ -174,15 +131,15 @@ public class RecordsService {
 
                 } else { // 새로운 tag일 경우
                     // TagTb 객체 생성
-                    TagTb tagTb = new TagTb(oneTagContent);
+                    TagDto tagDto = new TagDto(oneTagContent);
 
                     // [DB]
                     // Dao를 통해 DB에 insert
-                    tagDao.insert(tagTb);
+                    tagDao.insert(tagDto);
                     // tagTb.getTagId()를 하기 위해선 이 과정 먼저 거쳐야 됨(dao에서 setTagId함)
 
                     // ThingsTagTb 객체 생성
-                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, tagTb.getTagId());
+                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, tagDto.getTagId());
 
                     // [DB]
                     // Dao를 통해 DB에 insert
@@ -221,7 +178,7 @@ public class RecordsService {
      * @param loginId  계정 아이디
      * @return  Join객체들 List로 반환
      */
-    public List<JoinReqDto> selectThingsPeriod(String stringDate, int weekNum, Long loginId) {
+    public List<JoinThingsTagResDto> selectThingsPeriod(String stringDate, int weekNum, Long loginId) {
 
         // [기준 시점 날짜 받기]
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -243,30 +200,32 @@ public class RecordsService {
 
         // [DB]
         // dateoFrom부터 dateTo까지 사이의 기록들 List로 가져오기
-        List<JoinReqDto> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
+        List<JoinThingsTagDto> joinTbList = joinDao.selectByDatePeriod(dateFrom, dateTo, loginId);
+        // [DB에서 가져온 List, ResDto로 변경]
+        List<JoinThingsTagResDto> rawJoinResDtos = RecordsUtil.makeJoinResDtos(joinTbList);
 
-        return joinTbList;
+        return rawJoinResDtos;
     }
 
     /**
      * 각 태그 별로, 총 수행 횟수를 저장하여 반환합니다(태그의 날짜 정보는 들어있지 않습니다).
-     * @param joinTagTbs  기록 객체들 저장돼있는 List
+     * @param joinThingTagResDtos  기록 객체들 저장돼있는 List
      * @param categoryId  카테고리(같은 태그 이름이더라도 다른 카테고리면 제외하고 계산하기 위함)
      * @return  SortTagQuantity 객체(태그, 수행 횟수 또는 시간이 매개 변수) List 반환
      */
-    public List<SortTagQuantity> calculJoinTbsByFrequency(List<JoinReqDto> joinTagTbs, int categoryId) {
+    public List<SortTagQuantityResDto> calculJoinTbsByFrequency(List<JoinThingsTagResDto> joinThingTagResDtos, int categoryId) {
 
         // [Map map 생성]
         // Key: 각 태그 ; value: 해당 태그의 총 사용 횟수
         Map<String, Integer> map = new HashMap<>();
 
         // [map에 각 값들 넣어주기]
-        for (int i = 0; i < joinTagTbs.size(); i++) {
-            String tagName = joinTagTbs.get(i).getTagName();
+        for (int i = 0; i < joinThingTagResDtos.size(); i++) {
+            String tagName = joinThingTagResDtos.get(i).getTagName();
 
             if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
 
-            if (joinTagTbs.get(i).getCategoryId() == categoryId) {
+            if (joinThingTagResDtos.get(i).getCategoryId() == categoryId) {
                 if (map.get(tagName) == null) {
                     map.put(tagName, 1);
                 } else {
@@ -278,9 +237,9 @@ public class RecordsService {
 
         // map 내용을 SortTagQualtity 객체로 저장해줍니다.
         Set<String> set = map.keySet();
-        List<SortTagQuantity> list = new ArrayList<>();
+        List<SortTagQuantityResDto> list = new ArrayList<>();
         for (String one : set) {
-            list.add(new SortTagQuantity(categoryId, one, map.get(one)));
+            list.add(new SortTagQuantityResDto(categoryId, one, map.get(one)));
         }
 
         // 객체를 정렬해줍니다(quantity가 많은 순으로).
@@ -293,13 +252,13 @@ public class RecordsService {
      * @param sortTagTime  태그 기록 객체(태그, 입력된 날짜, 수행 시간이 매개변수)들이 저장된 List
      * @return  SortTagQuantity 객체(태그, 수행 횟수 또는 시간이 매개 변수) List 반환
      */
-    public List<SortTagQuantity> calculJoinTbsByTime(List<StoreTagTime> sortTagTime) {
+    public List<SortTagQuantityResDto> calculJoinTbsByTime(List<StoreTagTimeResDto> sortTagTime) {
         // 메서드명과 다르게 JoinTbs를 계산하진 않고, SortTagTime을 계산합니다(calculJoinTbsByFrequency메서드와 메서드명 맞추기 위해).
 
         // [Map map 생성]
         // Key: 각 태그 ; value: 해당 태그의 총 사용 시간
         Map<String, Integer> map = new HashMap<>();
-        for (StoreTagTime one : sortTagTime) {
+        for (StoreTagTimeResDto one : sortTagTime) {
             String tagName = one.getTagName();
 
             if (tagName == null) continue;  // 태그가 null인 경우는 제외시킵니다(안 할 경우 NullPointerException 발생).
@@ -313,9 +272,9 @@ public class RecordsService {
 
         // map 내용을 SortTagQualtity 객체로 저장해줍니다.
         Set<String> set = map.keySet();
-        List<SortTagQuantity> list = new ArrayList<>();
+        List<SortTagQuantityResDto> list = new ArrayList<>();
         for (String one : set) {
-            list.add(new SortTagQuantity(1, one, map.get(one)));
+            list.add(new SortTagQuantityResDto(1, one, map.get(one)));
         }
 
         // 객체를 정렬해줍니다(quantity가 많은 순으로).
@@ -326,28 +285,28 @@ public class RecordsService {
 
     /**
      * 각 주마다, 선택된 태그의 총 수행 횟수를 계산합니다.
-     * @param joinTagTbs
+     * @param joinThingTagResDtos
      * @param categoryId
      * @param tag
      * @return  매 주의 정보가 들어있는 int[]
      */
-    public int[] calculFrequency(List<JoinReqDto> joinTagTbs, int categoryId, String tag) {
+    public int[] calculFrequency(List<JoinThingsTagResDto> joinThingTagResDtos, int categoryId, String tag) {
 
         // tagId를 찾습니다.
-        int tagId = RecordsUtil.findTagIdFromTagNameForJoin(joinTagTbs, tag);
+        int tagId = RecordsUtil.findTagIdFromTagNameForJoin(joinThingTagResDtos, tag);
 
-        // [List newJoinTagTbs 생성]
+        // [List newjoinThingTagResDtos 생성]
         // 주어진 파라미터 categoryId와 tagId와 일치하는 객체(JoinWithThingsAndTagTb)만 선택하여 새 list에 넣기
-        List<JoinReqDto> newJoinTagTbs = new ArrayList<>();
-        for (JoinReqDto one : joinTagTbs) {
+        List<JoinThingsTagResDto> newjoinThingTagResDtos = new ArrayList<>();
+        for (JoinThingsTagResDto one : joinThingTagResDtos) {
             if (one.getTagName() != null) {  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
-                if ((one.getCategoryId() == categoryId) && (one.getTagId() == tagId)) newJoinTagTbs.add(one);
+                if ((one.getCategoryId() == categoryId) && (one.getTagId() == tagId)) newjoinThingTagResDtos.add(one);
             }
         }
 
         // 각 주마다, 해당 태그를 몇 번씩 했는지 int[]로 반환
-        // 조건에 부합하는 newJoinTagTbs 객체들을 파라미터로 전달
-        int[] array = RecordsUtil.countEachWeekFrequency(LocalDate.now(), 12, newJoinTagTbs);
+        // 조건에 부합하는 newjoinThingTagResDtos 객체들을 파라미터로 전달
+        int[] array = RecordsUtil.countEachWeekFrequency(LocalDate.now(), 12, newjoinThingTagResDtos);
 
         return array;
     }
@@ -358,7 +317,7 @@ public class RecordsService {
      * @param tag
      * @return  매 주의 정보가 들어있는 int[]
      */
-    public int[] calculTime(List<StoreTagTime> sortTagTimes, String tag) {
+    public int[] calculTime(List<StoreTagTimeResDto> sortTagTimes, String tag) {
 
         // tagId를 찾습니다.
         int tagId = RecordsUtil.findTagIdFromTagNameForStore(sortTagTimes, tag);
@@ -366,8 +325,8 @@ public class RecordsService {
         // [List newSortTagTimes 생성]
         // tagId 일치하는 객체(SortTagTime)만 선택하여 새 list에 넣기
         // (categoryId는 이미 sortTagTimes를 만들 때(recordsService.makeJoinTbsListByTime) 적용했기 때문에, 여기서는 안해도 됩니다.)
-        List<StoreTagTime> newSortTagTimes = new ArrayList<>();
-        for (StoreTagTime one : sortTagTimes) {
+        List<StoreTagTimeResDto> newSortTagTimes = new ArrayList<>();
+        for (StoreTagTimeResDto one : sortTagTimes) {
             if (one.getTagName() == null) continue;  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
             
             if (one.getTagId() == tagId) newSortTagTimes.add(one);
@@ -382,25 +341,25 @@ public class RecordsService {
 
     /**
      * 각 태그의 날짜와 날짜별 수행 시간을 객체로 저장하여 반환합니다.
-     * @param joinTagTbs  모든 기록 객체(정해진 기간 동안의)
+     * @param joinThingTagResDtos  모든 기록 객체(정해진 기간 동안의)
      * @return  객체 StoreTagTime들의 List
      */
-    public List<StoreTagTime> makeJoinTbsListByTime(List<JoinReqDto> joinTagTbs) {
+    public List<StoreTagTimeResDto> makeJoinTbsListByTime(List<JoinThingsTagResDto> joinThingTagResDtos) {
 
         // categoryId가 1일 경우에만 시간을 계산하기 위해, 새 List를 만들어줍니다.
-        List<JoinReqDto> newJoinTagTbs = new ArrayList<>();
-        for (JoinReqDto one : joinTagTbs) {
-            if (one.getCategoryId() == 1) newJoinTagTbs.add(one);
+        List<JoinThingsTagResDto> newjoinThingTagResDtos = new ArrayList<>();
+        for (JoinThingsTagResDto one : joinThingTagResDtos) {
+            if (one.getCategoryId() == 1) newjoinThingTagResDtos.add(one);
         }
 
-        List<StoreTagTime> StoreTagTimeList = new ArrayList<>();
+        List<StoreTagTimeResDto> StoreTagTimeList = new ArrayList<>();
         List<Integer> tempList = new ArrayList<>();
 
-        if (newJoinTagTbs.size() > 1) {  // newJoinTagTbs 크기가 2보다 클 때만 계산해줍니다.
-            for (int i = 0; i < newJoinTagTbs.size() - 1; i++) {
+        if (newjoinThingTagResDtos.size() > 1) {  // newjoinThingTagResDtos 크기가 2보다 클 때만 계산해줍니다.
+            for (int i = 0; i < newjoinThingTagResDtos.size() - 1; i++) {
 
-                JoinReqDto join1 = newJoinTagTbs.get(i);
-                JoinReqDto join2 = newJoinTagTbs.get(i+1);
+                JoinThingsTagResDto join1 = newjoinThingTagResDtos.get(i);
+                JoinThingsTagResDto join2 = newjoinThingTagResDtos.get(i+1);
 
                 LocalDateTime dateTime1 = join1.getDateTime();
                 LocalDateTime dateTime2 = join2.getDateTime();
@@ -415,10 +374,10 @@ public class RecordsService {
                 } else {
                     if (betweenMinutes < 12 * 60) {
                         for (Integer one : tempList) {
-                            StoreTagTime sortOne = new StoreTagTime(newJoinTagTbs.get(one).getDate(), betweenMinutes, newJoinTagTbs.get(one).getTagName(), newJoinTagTbs.get(one).getTagId(), newJoinTagTbs.get(one).getCategoryId());
+                            StoreTagTimeResDto sortOne = new StoreTagTimeResDto(newjoinThingTagResDtos.get(one).getDate(), betweenMinutes, newjoinThingTagResDtos.get(one).getTagName(), newjoinThingTagResDtos.get(one).getTagId(), newjoinThingTagResDtos.get(one).getCategoryId());
                             StoreTagTimeList.add(sortOne);
                         }
-                        StoreTagTime sortOne = new StoreTagTime(join1.getDate(), betweenMinutes, join1.getTagName(), join1.getTagId(), join1.getCategoryId());
+                        StoreTagTimeResDto sortOne = new StoreTagTimeResDto(join1.getDate(), betweenMinutes, join1.getTagName(), join1.getTagId(), join1.getCategoryId());
                         StoreTagTimeList.add(sortOne);
                     }
                     tempList.clear();

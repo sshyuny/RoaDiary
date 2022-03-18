@@ -17,6 +17,12 @@
       <h2 style="color:white;">${stringDate}의 기록</h2>
     </figure>
 
+    <div class="position-relative">
+      <div class="position-absolute top-0 end-0">
+        <img src="<c:url value='/resources/image/menu.svg'/>" class="img-thumbnail" alt="">
+      </div>
+    </div>
+
     <div class="container">
       <div class="row">
 
@@ -27,15 +33,15 @@
             </div>
             <div class="row">
               <p class="text-center fs-6">날짜
-              <input name="date" type="text" class="form-control mb-3"/></p>
+              <input name="date" type="text" class="form-control mb-3" placeholder="yyyymmdd"/></p>
             </div>
             <div class="row">
               <p class="text-center fs-6">시간
-              <input name="time" type="text" class="form-control mb-3"/></p>
+              <input name="time" type="text" class="form-control mb-3" placeholder="hhmm"/></p>
             </div>
             <div class="row">
               <p class="text-center fs-6">내용
-              <input name="content" type="text" class="form-control mb-3"/></p>
+              <input name="content" type="text" class="form-control mb-3" placeholder="내용"/></p>
             </div>
             <div class="row">
               <p class="text-center fs-6">카테고리</p>
@@ -51,10 +57,10 @@
             </div>
             <div class="row">
               <p class="text-center fs-6">태그
-              <input name="tag1" type="text" class="form-control"/>
-              <input name="tag2" type="text" class="form-control"/>
-              <input name="tag3" type="text" class="form-control"/>
-              <input name="tag4" type="text" class="form-control mb-3"/></p>
+              <input name="tag1" type="text" class="form-control" placeholder="태그1"/>
+              <input name="tag2" type="text" class="form-control" placeholder="태그2"/>
+              <input name="tag3" type="text" class="form-control" placeholder="태그3"/>
+              <input name="tag4" type="text" class="form-control mb-3" placeholder="태그4"/></p>
             </div>
             <div class="row">
               <button type="submit" class="btn btn-dark btn-outline-primary">제출하기</button>
@@ -175,44 +181,44 @@
                   </form>
                 </div><!-- 빠른내용 추가 닫기 -->
 
-                <c:if test="${!empty joinTagTbs}">
+                <c:if test="${!empty joinThingTagResDtos}">
                 <div class="col"><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
-                  <c:forEach var="i2" begin="0" end="${fn:length(joinTagTbs)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinTagTbs 길이- 1' 을 넣어줌-->
-                    <c:if test="${joinTagTbs[i2].hour == i}">
+                  <c:forEach var="i2" begin="0" end="${fn:length(joinThingTagResDtos)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinThingTagResDtos 길이- 1' 을 넣어줌-->
+                    <c:if test="${joinThingTagResDtos[i2].hour == i}">
                       <form:form action="recordsChange" modelAttribute="thingsReqDto">
                         <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
-                        <input type="hidden" name="thingsId" value="${joinTagTbs[i2].thingsId}"/>
+                        <input type="hidden" name="thingsId" value="${joinThingTagResDtos[i2].thingsId}"/>
                         <div class="row">
                           <div class="col col-1">
                             <button class="btn bg-secondary btn-outline-light mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTime${i2}" aria-expanded="false" aria-controls="collapseTime${i2}">
-                              ${joinTagTbs[i2].time}
+                              ${joinThingTagResDtos[i2].time}
                             </button>
                           </div>
 
                           <div class="col col-2 d-grid">
-                            <c:if test="${joinTagTbs[i2].categoryId == 1}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 1}">
                               <button class="btn bg-secondary btn-outline-light mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
-                                ${joinTagTbs[i2].content}
+                                ${joinThingTagResDtos[i2].content}
                               </button>
                             </c:if>
                           </div>
                           <div class="col col-2 d-grid">
-                            <c:if test="${joinTagTbs[i2].categoryId == 2}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 2}">
                               <button class="btn bg-secondary btn-outline-light mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
-                                ${joinTagTbs[i2].content}
+                                ${joinThingTagResDtos[i2].content}
                               </button>
                             </c:if>
                           </div>
                           <div class="col col-2 d-grid">
-                            <c:if test="${joinTagTbs[i2].categoryId == 3}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 3}">
                               <button class="btn bg-secondary btn-outline-light mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContent${i2}" aria-expanded="false" aria-controls="collapseContent${i2}">
-                                ${joinTagTbs[i2].content}
+                                ${joinThingTagResDtos[i2].content}
                               </button>
                             </c:if>
                           </div>
                           <div class="col col-2">
                             <button class="btn bg-secondary btn-outline-light mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseName${i2}" aria-expanded="false" aria-controls="collapseName${i2}">
-                              ${joinTagTbs[i2].tagName}
+                              ${joinThingTagResDtos[i2].tagName}
                             </button>
                           </div>
                           <div class="col col-1 mb-3">
@@ -226,25 +232,25 @@
                         <div class="row">
                           <div class="col col-lg-1">
                             <div class="collapse" id="collapseTime${i2}">
-                              <input name="time" type="text" class="form-control" placeholder="시간"/>
+                              <input name="time" type="text" class="form-control" placeholder="hhmm"/>
                             </div>
                           </div>
                           <div class="col col-lg-2">
-                            <c:if test="${joinTagTbs[i2].categoryId == 1}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 1}">
                               <div class="collapse" id="collapseContent${i2}">
                                 <input name="content" type="text" class="form-control" placeholder="내용"/>
                               </div>
                             </c:if>
                           </div>
                           <div class="col col-lg-2">
-                            <c:if test="${joinTagTbs[i2].categoryId == 2}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 2}">
                               <div class="collapse" id="collapseContent${i2}">
                                 <input name="content" type="text" class="form-control" placeholder="내용"/>
                               </div>
                             </c:if>
                           </div>
                           <div class="col col-lg-2">
-                            <c:if test="${joinTagTbs[i2].categoryId == 3}">
+                            <c:if test="${joinThingTagResDtos[i2].categoryId == 3}">
                               <div class="collapse" id="collapseContent${i2}">
                                 <input name="content" type="text" class="form-control" placeholder="내용"/>
                               </div>

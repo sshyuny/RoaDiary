@@ -52,22 +52,22 @@
           <c:forEach var="i" begin="0" end="4">
             <div class="row justify-content-md-center">
               <div class="col col-2 mb-2">
-                <a href="./sortingFrequency?category=1&tag=${listCategory1[i].tagName}" class="btn btn-secondary" role="button">${listCategory1[i].tagName}</a>
+                <a href="./sortingFrequency?category=1&tag=${sortResDtoCategory1[i].tagName}" class="btn btn-secondary" role="button">${sortResDtoCategory1[i].tagName}</a>
               </div>
               <div class="col col-1 mb-2">
-                ${listCategory1[i].quantity}회
+                ${sortResDtoCategory1[i].quantity}회
               </div>
               <div class="col col-2 mb-2">
-                <a href="./sortingFrequency?category=2&tag=${listCategory2[i].tagName}" class="btn btn-dark" role="button">${listCategory2[i].tagName}</a>
+                <a href="./sortingFrequency?category=2&tag=${sortResDtoCategory2[i].tagName}" class="btn btn-dark" role="button">${sortResDtoCategory2[i].tagName}</a>
               </div>
               <div class="col col-1 mb-2">
-                ${listCategory2[i].quantity}회
+                ${sortResDtoCategory2[i].quantity}회
               </div>
               <div class="col col-2 mb-2">
-                <a href="./sortingFrequency?category=3&tag=${listCategory3[i].tagName}" class="btn btn-secondary" role="button">${listCategory3[i].tagName}</a>
+                <a href="./sortingFrequency?category=3&tag=${sortResDtoCategory3[i].tagName}" class="btn btn-secondary" role="button">${sortResDtoCategory3[i].tagName}</a>
               </div>
               <div class="col col-1 mb-2">
-                ${listCategory3[i].quantity}회
+                ${sortResDtoCategory3[i].quantity}회
               </div>
             </div>
           </c:forEach>
