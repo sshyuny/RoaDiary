@@ -215,7 +215,7 @@
                 <div class="col"><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
                   <c:forEach var="i2" begin="0" end="${fn:length(joinThingTagResDtos)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinThingTagResDtos 길이- 1' 을 넣어줌-->
                     <c:if test="${joinThingTagResDtos[i2].hour == i}">
-                      <form:form action="recordsChange" modelAttribute="thingsReqDto">
+                      <form action="recordsChange" id="changeFrm" onsubmit="checkChangeDelete()" method="post">
                         <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
                         <input type="hidden" name="thingsId" value="${joinThingTagResDtos[i2].thingsId}"/>
                         <div class="row">
@@ -253,7 +253,7 @@
                           </div>
                           <div class="col col-1 mb-3">
                             <%-- 수정 --%>
-                            <button type="submit" name="save" id="save" class="btn btn-dark btn-outline-primary">
+                            <button type="submit" name="save" id="save" onclick="clickSave()" class="btn btn-dark btn-outline-primary">
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wrench" viewBox="0 0 16 16">
                                 <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
                               </svg>
@@ -261,7 +261,7 @@
                           </div>
                           <div class="col col-1 mb-3">
                             <%-- 삭제 --%>
-                            <button type="submit" name="delete" id="delete" class="btn btn-dark btn-outline-danger">
+                            <button type="submit" name="delete" id="delete" onclick="clickDelete()" class="btn btn-dark btn-outline-danger">
                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
                                 <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
@@ -273,36 +273,36 @@
                         <div class="row">
                           <div class="col col-lg-1">
                             <div class="collapse" id="collapseTime${i2}">
-                              <input name="time" type="text" class="form-control" placeholder="hhmm"/>
+                              <input name="time" id="timeChange" type="text" class="form-control" placeholder="hhmm"/>
                             </div>
                           </div>
                           <div class="col col-lg-2">
                             <c:if test="${joinThingTagResDtos[i2].categoryId == 1}">
                               <div class="collapse" id="collapseContent${i2}">
-                                <input name="content" type="text" class="form-control" placeholder="내용"/>
+                                <input name="content" id="contentChange" type="text" class="form-control" placeholder="내용"/>
                               </div>
                             </c:if>
                           </div>
                           <div class="col col-lg-2">
                             <c:if test="${joinThingTagResDtos[i2].categoryId == 2}">
                               <div class="collapse" id="collapseContent${i2}">
-                                <input name="content" type="text" class="form-control" placeholder="내용"/>
+                                <input name="content" id="contentChange" type="text" class="form-control" placeholder="내용"/>
                               </div>
                             </c:if>
                           </div>
                           <div class="col col-lg-2">
                             <c:if test="${joinThingTagResDtos[i2].categoryId == 3}">
                               <div class="collapse" id="collapseContent${i2}">
-                                <input name="content" type="text" class="form-control" placeholder="내용"/>
+                                <input name="content" id="contentChange" type="text" class="form-control" placeholder="내용"/>
                               </div>
                             </c:if>
                           </div>
                           <div class="col col-lg-2">
                             <div class="collapse" id="collapseName${i2}">
-                              <input name="tag1" type="text" class="form-control" placeholder="태그1"/>
-                              <input name="tag2" type="text" class="form-control" placeholder="태그2"/>
-                              <input name="tag3" type="text" class="form-control" placeholder="태그3"/>
-                              <input name="tag4" type="text" class="form-control" placeholder="태그4"/>
+                              <input name="tag1" id="tag1Change" type="text" class="form-control" placeholder="태그1"/>
+                              <input name="tag2" id="tag2Change" type="text" class="form-control" placeholder="태그2"/>
+                              <input name="tag3" id="tag3Change" type="text" class="form-control" placeholder="태그3"/>
+                              <input name="tag4" id="tag4Change" type="text" class="form-control" placeholder="태그4"/>
                             </div>
                           </div>
                         </div>
@@ -311,7 +311,7 @@
                             <!-- 위 버튼과 간격 맞추기 위해, 빈 공간 넣어둠 -->
                           </div>
                         </div>
-                      </form:form>
+                      </form>
                     </c:if>
                   </c:forEach>
                   

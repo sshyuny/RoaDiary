@@ -12,6 +12,49 @@ function  checkCalanderDay() {
     document.getElementById('calanderFrm').submit();
 }
 
+// 기록 수정 부분에서, 수정 부분에서 아무 글도 쓰지 않고, 버튼 눌렀을 경우
+function clickSave() {
+    if ((document.getElementById('timeChange').value == "") &&
+            (document.getElementById('contentChange').value == "") &&
+            (document.getElementById('tag1Change').value == "") &&
+            (document.getElementById('tag2Change').value == "") &&
+            (document.getElementById('tag3Change').value == "") &&
+            (document.getElementById('tag4Change').value == "")) {
+        alert("수정할 부분의 버튼을 누르시고 내용을 기입하신 뒤 눌러주세요.")
+    }
+}
+// 기록 삭제 버튼 눌렀을 때
+function clickDelete() {
+    if (!confirm("해당 기록을 지우시겠습니까?")) {
+        document.getElementById('changeFrm').action = "recordsShow";
+    } else {
+        document.getElementById('changeFrm').submit();
+    }
+}
+
+// function checkChangeDelete() {
+//     // var changeSubmit = document.getElementById('save').value;
+//     // var deleteSubmit = document.getElementById('delete').value;
+//     // alert(changeSubmit);
+//     // if (changeSubmit =! "") {
+//     //     if ((document.getElementById('timeChange').value == "") &&
+//     //             (document.getElementById('contentChange').value == "") &&
+//     //             (document.getElementById('tag1Change').value == "") &&
+//     //             (document.getElementById('tag2Change').value == "") &&
+//     //             (document.getElementById('tag3Change').value == "") &&
+//     //             (document.getElementById('tag4Change').value == "")) {
+//     //         alert("수정할 부분의 버튼을 누르시고 내용을 기입하신 뒤 눌러주세요.")
+//     //     }
+
+//     // } else if (deleteSubmit =! "") {
+//     //     alert("해당 기록을 지우시겠습니까?");
+//     // }
+    
+//     document.getElementById('changeFrm').submit();
+// }
+
+
+
 // function fromDatetoString(date) {
 //     var yD = date.getFullYear();
 //     var mD = date.getMonth()+1;
