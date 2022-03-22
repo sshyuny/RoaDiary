@@ -76,4 +76,9 @@ public class AccountDao {
         jdbcTemplate.update("UPDATE user SET name=?, password=? WHERE email=?", 
             account.getName(), account.getPassword(), account.getEmail());
     }
+
+    public void updateName(Long loginId, String newName) {
+        jdbcTemplate.update("UPDATE user SET name=? WHERE user_id=?", 
+            newName, loginId);
+    }
 }

@@ -72,7 +72,7 @@
             <a href="./account/logout" class="btn btn-secondary btn-outline-info btn-sm" role="button">로그아웃</a>
           </div>
           <div class="col-2 mb-2 d-grid">
-            <a href="./account/change" class="btn btn-secondary btn-outline-info btn-sm" role="button">비밀번호 변경</a>
+            <a href="./account/change" class="btn btn-secondary btn-outline-info btn-sm" role="button">계정 정보 변경</a>
           </div>
         </div>
       </div>

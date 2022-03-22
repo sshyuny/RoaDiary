@@ -83,4 +83,9 @@ public class AccountService {
         // 비밀번호 변경된 userTb로 DB에 update
         accountDao.update(userTb);
     }
+
+    public void changeAccountName(Long loginId, String newName) {
+        // [DB] update
+        accountDao.updateName(loginId, newName);
+    }
 }

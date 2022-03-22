@@ -174,6 +174,8 @@ public class AccountController {
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         String loginEmail = loginInfo.getEmail();
         model.addAttribute("loginEmail", loginEmail);
+        String currentName = loginInfo.getName();
+        model.addAttribute("currentName", currentName);
 
         if (loginEmail.equals("visitor@visitor.com")) return "account/cannotChangePw";
 
@@ -189,9 +191,10 @@ public class AccountController {
     @PostMapping("/account/change")
     public String changeSubmit(
             @ModelAttribute("command") ChangeAccountReqDto changeReqDto,
-            Errors errors,
+            Errors errors, 
             HttpSession session) {
 
+        // 이미 등록된 세션으로 LoginInfo 객체 생성
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
 
         // validator 설정
@@ -199,9 +202,6 @@ public class AccountController {
         if(errors.hasErrors()) {
             return "account/changeForm";
         }
-
-        // 이미 등록된 세션으로 LoginInfo 객체 생성
-        // LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
 
         // 비밀번호 변경 시도
         try {
@@ -218,5 +218,41 @@ public class AccountController {
             return "account/changeForm";
         }
     }
+
+    // @GetMapping("/account/changeName") 
+    // public String changeNameGet(HttpSession session, Model model, 
+    //         HttpServletRequest httpServletRequest) {
+    //     return "account/changeForm";
+    // }
+    @PostMapping("/account/changeName")
+    public String changeNamePost(HttpSession session, Model model, 
+            HttpServletRequest httpServletRequest) {
+
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+
+        // 변경하고자 하는 name request됨
+        String newName = httpServletRequest.getParameter("newName");
+        accountService.changeAccountName(loginId, newName);
+
+        // login 세션 name변경함(안하면, 로그아웃 전까지 이전 name으로 세션에 저장돼있음)
+        loginInfo.setName(newName);
+
+        String currentName = loginInfo.getName();
+        model.addAttribute("currentName", currentName);
+
+        return "account/changeForm";
+    }
+
+    @GetMapping("/account/withdrawal")
+    public String withdrawalGet() {
+        return "account/withdrawal";
+    }
+    @PostMapping("/account/withdrawal")
+    public String withdrawalPost() {
+        // @@ 탈퇴 부분 추가
+        return "account/withdrawal";
+    }
+
 
 }

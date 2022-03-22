@@ -215,7 +215,7 @@
                 <div class="col"><!-- 시간 오른쪽 col: 기록들 보여주는 부분 -->
                   <c:forEach var="i2" begin="0" end="${fn:length(joinThingTagResDtos)-1}"> <!--begin이 0부터 시작돼야 해서, end에 'joinThingTagResDtos 길이- 1' 을 넣어줌-->
                     <c:if test="${joinThingTagResDtos[i2].hour == i}">
-                      <form action="recordsChange" id="changeFrm" onsubmit="checkChangeDelete()" method="post">
+                      <form action="recordsChange" id="changeFrm" method="post">
                         <input type="hidden" id="onlyDate" name="onlyDate" value="${onlyDate}"/>
                         <input type="hidden" name="thingsId" value="${joinThingTagResDtos[i2].thingsId}"/>
                         <div class="row">
