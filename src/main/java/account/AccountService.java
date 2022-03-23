@@ -9,7 +9,7 @@ import account.exception.AccountNotFoundException;
 import account.exception.DuplicateAccountException;
 import account.exception.WithdrawalAccountException;
 import account.exception.WrongIdPasswordException;
-import domain.UserTb;
+import domain.UserDto;
 
 public class AccountService {
     
@@ -27,17 +27,17 @@ public class AccountService {
     public Long regist(RegisterReqDto req) {
         
         // 이미 등록된 email인지 확인
-        UserTb userTb = accountDao.selectByEmail(req.getEmail());
-        if(userTb != null) {
+        UserDto userDto = accountDao.selectByEmail(req.getEmail());
+        if(userDto != null) {
             throw new DuplicateAccountException("dup email" + req.getEmail());
         }
-        // 새 UserTb 생성
-        UserTb newUserTb = new UserTb(req.getEmail(), req.getName(), req.getPassword(), LocalDateTime.now(), LocalDateTime.now());
+        // 새 UserDto 생성
+        UserDto newUserDto = new UserDto(req.getEmail(), req.getName(), req.getPassword(), LocalDateTime.now(), LocalDateTime.now());
 
         // [DB]
-        // 새 userTb 계정 DB에 insert
-        accountDao.insert(newUserTb);
-        return newUserTb.getId();
+        // 새 userDto 계정 DB에 insert
+        accountDao.insert(newUserDto);
+        return newUserDto.getId();
     }
 
     /**
@@ -47,28 +47,28 @@ public class AccountService {
      * @return
      */
     public LoginInfo authenticate(String email, String password) {
-        // 요청된 이메일과 일치하는 userTb 생성
-        UserTb userTb = accountDao.selectByEmail(email);
-        // userTb 이상 확인
-        if (userTb == null) {
+        // 요청된 이메일과 일치하는 userDto 생성
+        UserDto userDto = accountDao.selectByEmail(email);
+        // userDto 이상 확인
+        if (userDto == null) {
             throw new WrongIdPasswordException();
         }
-        if (userTb.getPassword() == null) {
+        if (userDto.getPassword() == null) {
             // 탈퇴한 계정일 경우 exception
             throw new WithdrawalAccountException();
         }
-        if (!userTb.matchPassword(password)) {
+        if (!userDto.matchPassword(password)) {
             throw new WrongIdPasswordException();
         }
 
         // user 테이블의 regis_date 오늘 날짜로 업데이트
-        accountDao.updateLastVisitDate(LocalDateTime.now(), userTb.getId());
+        accountDao.updateLastVisitDate(LocalDateTime.now(), userDto.getId());
         
         // LoginInfo 객체 반환
         return new LoginInfo(
-            userTb.getId(), 
-            userTb.getEmail(), 
-            userTb.getName()
+            userDto.getId(), 
+            userDto.getEmail(), 
+            userDto.getName()
         );
     }
 
@@ -80,17 +80,17 @@ public class AccountService {
      */
     @Transactional
     public void changeAccount(String email, String oldPwd, String newPwd) {
-        /// 요청된 이메일과 일치하는 userTb 생성
-        UserTb userTb = accountDao.selectByEmail(email);
-        // userTb 이상 확인
-        if(userTb == null)
+        /// 요청된 이메일과 일치하는 userDto 생성
+        UserDto userDto = accountDao.selectByEmail(email);
+        // userDto 이상 확인
+        if(userDto == null)
             throw new AccountNotFoundException();
-        // userTb 비밀번호 변경
-        userTb.changePassword(oldPwd, newPwd);
+        // userDto 비밀번호 변경
+        userDto.changePassword(oldPwd, newPwd);
 
         // [DB]
-        // 비밀번호 변경된 userTb로 DB에 update
-        accountDao.update(userTb);
+        // 비밀번호 변경된 userDto로 DB에 update
+        accountDao.update(userDto);
     }
 
     public void changeAccountName(Long loginId, String newName) {

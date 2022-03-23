@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
-import domain.ThingsTagTb;
+import domain.ThingsTagDto;
 
 public class ThingsTagDao {
     
@@ -19,7 +19,7 @@ public class ThingsTagDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void insert(final ThingsTagTb thingsTagTb) {
+    public void insert(final ThingsTagDto thingsTagDto) {
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -27,8 +27,8 @@ public class ThingsTagDao {
                     "INSERT INTO things_tag(things_id, tag_id) " + 
                     "VALUES (?, ?)"
                 );
-                prstmt.setLong(1, thingsTagTb.getThingsId());
-                prstmt.setInt(2, thingsTagTb.getTagId());
+                prstmt.setLong(1, thingsTagDto.getThingsId());
+                prstmt.setInt(2, thingsTagDto.getTagId());
                 return prstmt;
             }
         };

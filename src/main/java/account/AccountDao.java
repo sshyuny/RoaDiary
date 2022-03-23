@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import domain.UserTb;
+import domain.UserDto;
 
 public class AccountDao {
 
@@ -26,11 +26,11 @@ public class AccountDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    private RowMapper<UserTb> accountRowMapper = 
-        new RowMapper<UserTb>() {
+    private RowMapper<UserDto> accountRowMapper = 
+        new RowMapper<UserDto>() {
             @Override
-            public UserTb mapRow(ResultSet rs, int rowNum) throws SQLException {
-                UserTb account =  new UserTb(
+            public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                UserDto account =  new UserDto(
                     rs.getString("email"),
                     rs.getString("name"),
                     rs.getString("password"),
@@ -42,8 +42,8 @@ public class AccountDao {
             }
         };
 
-    public UserTb selectByEmail(String email) {
-        List<UserTb> results = jdbcTemplate.query(
+    public UserDto selectByEmail(String email) {
+        List<UserDto> results = jdbcTemplate.query(
             "SELECT * FROM user WHERE email = ?", 
             accountRowMapper, email);
 
@@ -57,7 +57,7 @@ public class AccountDao {
         );
     }
 
-    public void insert(final UserTb account) {
+    public void insert(final UserDto account) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
@@ -80,7 +80,7 @@ public class AccountDao {
         account.setId(keyValue.longValue());
     }
 
-    public void update(UserTb account) {
+    public void update(UserDto account) {
         jdbcTemplate.update("UPDATE user SET name=?, password=? WHERE email=?", 
             account.getName(), account.getPassword(), account.getEmail());
     }

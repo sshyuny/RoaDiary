@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import domain.ThingsTb;
+import domain.ThingsDto;
 
 public class ThingsDao {
     
@@ -23,22 +23,22 @@ public class ThingsDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    /*private RowMapper<ThingsTb> thingsRowMapper = 
-        new RowMapper<ThingsTb>() {
+    /*private RowMapper<ThingsDto> thingsRowMapper = 
+        new RowMapper<ThingsDto>() {
             @Override
-            public ThingsTb mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ThingsTb thingsTb = new ThingsTb(
+            public ThingsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ThingsDto thingsDto = new ThingsDto(
                     rs.getTimestamp("time").toLocalDateTime(),
                     rs.getString("content"),
                     rs.getLong("category_id")
                 );
-                thingsTb.setThingsId(rs.getLong("things_id"));
-                thingsTb.setUserId(rs.getLong("user_id"));
-                return thingsTb;
+                thingsDto.setThingsId(rs.getLong("things_id"));
+                thingsDto.setUserId(rs.getLong("user_id"));
+                return thingsDto;
             }
         };*/
 
-    public Long insert(final ThingsTb thingsTb) {
+    public Long insert(final ThingsDto thingsDto) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
             @Override
@@ -48,16 +48,16 @@ public class ThingsDao {
                     "VALUES (?, ?, ?, ?)",
                     new String[] {"things_id"}
                 );
-                pstmt.setLong(1, thingsTb.getUserId());
-                pstmt.setTimestamp(2, Timestamp.valueOf(thingsTb.getTime()));
-                pstmt.setString(3, thingsTb.getContent());
-                pstmt.setLong(4, thingsTb.getCategoryId());
+                pstmt.setLong(1, thingsDto.getUserId());
+                pstmt.setTimestamp(2, Timestamp.valueOf(thingsDto.getTime()));
+                pstmt.setString(3, thingsDto.getContent());
+                pstmt.setLong(4, thingsDto.getCategoryId());
                 return pstmt;
             }
         };
         jdbcTemplate.update(pre, keyHolder);
         Number keyValue = keyHolder.getKey();
-        thingsTb.setThingsId(keyValue.longValue());
+        thingsDto.setThingsId(keyValue.longValue());
         // tag 테이블을 위해 키 return함
         Long keyValue2 = keyValue.longValue();
         return keyValue2;

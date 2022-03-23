@@ -16,8 +16,8 @@ import org.springframework.util.StringUtils;
 
 import domain.JoinThingsTagDto;
 import domain.TagDto;
-import domain.ThingsTagTb;
-import domain.ThingsTb;
+import domain.ThingsTagDto;
+import domain.ThingsDto;
 import records.dao.JoinDao;
 import records.dao.TagDao;
 import records.dao.ThingsDao;
@@ -55,13 +55,13 @@ public class RecordsService {
         if (thingsReqDto.getDate() == null) {
             thingsReqDto.setDate(LocalDate.now());
         }
-        // ThingsTb 객체 생성
-        ThingsTb thingsTb = new ThingsTb(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsReqDto.getContent(), thingsReqDto.getCategory());
-        thingsTb.setUserId(loginId);
+        // ThingsDto 객체 생성
+        ThingsDto thingsDto = new ThingsDto(thingsReqDto.makeDateTime(thingsReqDto.getTime(), thingsReqDto.getDate()), thingsReqDto.getContent(), thingsReqDto.getCategory());
+        thingsDto.setUserId(loginId);
         
         // [DB]
         // recordsDao를 통해 DB에 insert
-        Long key = thingsDao.insert(thingsTb);
+        Long key = thingsDao.insert(thingsDto);
         return key;
     }
 
@@ -122,12 +122,12 @@ public class RecordsService {
                 if(beforeTagDto != null) {
                     // (tag 내용 저장하는 과정 생략)
 
-                    // ThingsTagTb 객체 생성(이미 저장된 tag의 Id값 사용)
-                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, beforeTagDto.getTagId());
+                    // ThingsTagDto 객체 생성(이미 저장된 tag의 Id값 사용)
+                    ThingsTagDto thingsTagDto = new ThingsTagDto(thingsId, beforeTagDto.getTagId());
 
                     // [DB]
                     // Dao를 통해 DB에 insert
-                    thingsTagDao.insert(thingsTagTb);
+                    thingsTagDao.insert(thingsTagDto);
 
                 } else { // 새로운 tag일 경우
                     // TagTb 객체 생성
@@ -138,12 +138,12 @@ public class RecordsService {
                     tagDao.insert(tagDto);
                     // tagTb.getTagId()를 하기 위해선 이 과정 먼저 거쳐야 됨(dao에서 setTagId함)
 
-                    // ThingsTagTb 객체 생성
-                    ThingsTagTb thingsTagTb = new ThingsTagTb(thingsId, tagDto.getTagId());
+                    // ThingsTagDto 객체 생성
+                    ThingsTagDto thingsTagDto = new ThingsTagDto(thingsId, tagDto.getTagId());
 
                     // [DB]
                     // Dao를 통해 DB에 insert
-                    thingsTagDao.insert(thingsTagTb);
+                    thingsTagDao.insert(thingsTagDto);
                 }
             }
         }

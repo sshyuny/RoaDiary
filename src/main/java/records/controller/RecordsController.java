@@ -41,7 +41,7 @@ public class RecordsController {
         // 이미 등록된 세션으로 LoginInfo 객체 생성 -  user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         Long loginId = loginInfo.getId();
-        // 오늘 기록된 ThingsTb 행들, DB에서 가져옴
+        // 오늘 기록된 ThingsDto 행들, DB에서 가져옴
         List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsToday(loginId);
         model.addAttribute("joinThingTagResDtos", joinThingTagResDtos);
         // '오늘' 단어 전하기
@@ -72,7 +72,7 @@ public class RecordsController {
 
         // [클라이언트에 전송할 데이터 처리] 
         // (클라이언트가 입력한 기록의 날짜로 페이지 화면을 바꿔주기 위한 부분입니다.)
-        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        // 요청된 날에 기록된 ThingsDto 행들 가져오기
         LocalDate requestedDate = thingsReqDto.getDate();
         List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsSomeday(requestedDate, loginId);
         // 요청된 날(requestedDate)을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
@@ -111,7 +111,7 @@ public class RecordsController {
         }
         
         // [클라이언트에 전송할 데이터 처리] 
-        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        // 요청된 날에 기록된 ThingsDto 행들 가져오기
         List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsSomeday(onlyDate, loginId);
         // 요청된 날(onlyDate)를 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(onlyDate);
@@ -151,7 +151,7 @@ public class RecordsController {
         }
 
         // [클라이언트에 전송할 데이터 처리] 
-        // 요청된 날에 기록된 ThingsTb 행들 가져오기
+        // 요청된 날에 기록된 ThingsDto 행들 가져오기
         List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsSomeday(calanderDay, loginId);
         // 요청된 날을 String으로 변환하기(어제, 오늘 등의 한글로 변환될 수도 있습니다.)
         String stringDate = RecordsUtil.fromLocalDatetoString(calanderDay);
