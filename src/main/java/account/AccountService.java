@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import account.dto.RegisterReqDto;
 import account.exception.AccountNotFoundException;
 import account.exception.DuplicateAccountException;
+import account.exception.WithdrawalAccountException;
 import account.exception.WrongIdPasswordException;
 import domain.UserTb;
 
@@ -52,9 +53,17 @@ public class AccountService {
         if (userTb == null) {
             throw new WrongIdPasswordException();
         }
+        if (userTb.getPassword() == null) {
+            // 탈퇴한 계정일 경우 exception
+            throw new WithdrawalAccountException();
+        }
         if (!userTb.matchPassword(password)) {
             throw new WrongIdPasswordException();
         }
+
+        // user 테이블의 regis_date 오늘 날짜로 업데이트
+        accountDao.updateLastVisitDate(LocalDateTime.now(), userTb.getId());
+        
         // LoginInfo 객체 반환
         return new LoginInfo(
             userTb.getId(), 
@@ -87,5 +96,10 @@ public class AccountService {
     public void changeAccountName(Long loginId, String newName) {
         // [DB] update
         accountDao.updateName(loginId, newName);
+    }
+
+    public void deleteAccount(Long loginId) {
+        // [DB] delete
+        accountDao.deleteUser(loginId);
     }
 }

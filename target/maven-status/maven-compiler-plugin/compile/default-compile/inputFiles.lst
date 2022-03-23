@@ -6,6 +6,7 @@ C:\MyProject\RoaDiary\src\main\java\domain\JoinThingsTagDto.java
 C:\MyProject\RoaDiary\src\main\java\config\MvcConfig.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountService.java
 C:\MyProject\RoaDiary\src\main\java\account\validator\LoginReqDtoValidator.java
+C:\MyProject\RoaDiary\src\main\java\account\exception\WithdrawalAccountException.java
 C:\MyProject\RoaDiary\src\main\java\account\LoginInfo.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\StoreTagTimeResDto.java
 C:\MyProject\RoaDiary\src\main\java\account\dto\LoginReqDto.java

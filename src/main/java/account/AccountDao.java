@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -49,6 +50,13 @@ public class AccountDao {
         return results.isEmpty() ? null : results.get(0);
     }
 
+    public void updateLastVisitDate(LocalDateTime today, Long loginId) {
+        jdbcTemplate.update(
+            "UPDATE user SET lastvisit_date=? WHERE user_id = ?",
+            today, loginId
+        );
+    }
+
     public void insert(final UserTb account) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator pre = new PreparedStatementCreator() {
@@ -78,7 +86,15 @@ public class AccountDao {
     }
 
     public void updateName(Long loginId, String newName) {
-        jdbcTemplate.update("UPDATE user SET name=? WHERE user_id=?", 
+        jdbcTemplate.update(
+            "UPDATE user SET name=? WHERE user_id=?", 
             newName, loginId);
+    }
+
+    public void deleteUser(Long loginId) {
+        jdbcTemplate.update(
+            "UPDATE user SET password=null WHERE user_id = ?",
+            loginId
+        );
     }
 }

@@ -37,6 +37,23 @@
           </div>
         </div>
       </div>
+
+      <%-- 연락처 --%>
+      <div class="position-absolute bottom-0 start-0 ">
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#placeToConnect" aria-controls="placeToConnect">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-chat-right-fill" viewBox="0 0 16 16">
+            <path d="M14 0a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas offcanvas-bottom" tabindex="-1" id="placeToConnect" aria-labelledby="placeMenuLabel">
+        <div class="offcanvas-header">
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          Contact: devsshyuny@gmail.com
+        </div>
+      </div>
     </c:if>
 
     <%-- 로그인 되어있을 경우 --%>
@@ -77,6 +94,22 @@
         </div>
       </div>
 
+      <%-- 연락처 --%>
+      <div class="position-absolute bottom-0 start-0 ">
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#placeToConnect" aria-controls="placeToConnect">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-chat-right-fill" viewBox="0 0 16 16">
+            <path d="M14 0a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas offcanvas-bottom" tabindex="-1" id="placeToConnect" aria-labelledby="placeMenuLabel">
+        <div class="offcanvas-header">
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          Contact: devsshyuny@gmail.com
+        </div>
+      </div>
     </c:if>
 
   </body>

@@ -17,11 +17,14 @@
     </figure>
 
     <div class="container">
-      <form action="withdrawalPost" method="post">
+      <form action="withdrawal" method="post">
 
         <div class="row justify-content-md-center">
           <div class="col-5">
-            <p class="fs-6">회원 탈퇴를 하실 경우, 회원 정보와 회원님이 입력하실 기록들도 다같이 일괄 삭제되어 복구가 불가능합니다.</p>
+            <p class="fs-6">회원 탈퇴를 하실 경우, 회원 정보가 삭제됩니다.</p>
+            <p class="fs-6">이전에 기록하신 데이터들은 별도의 언급이 없으면 유지됩니다(이때 개인 정보는 저장되지 않습니다.).</p>
+            <br>
+            <p class="fs-6">기록된 데이터의 삭제를 원하실 경우, devsshyuny@gmail.com로 연락해주세요.</p>
           </div>
         </div>
 

@@ -17,6 +17,7 @@ import account.dto.ChangeAccountReqDto;
 import account.dto.LoginReqDto;
 import account.dto.RegisterReqDto;
 import account.exception.DuplicateAccountException;
+import account.exception.WithdrawalAccountException;
 import account.exception.WrongIdPasswordException;
 import account.validator.ChangeAccountReqDtoValidator;
 import account.validator.LoginReqDtoValidator;
@@ -133,6 +134,9 @@ public class AccountController {
             // 이메일과 비밀번호 일치 안되면, 예외처리
             errors.reject("idPasswordNotMatching");
             return "account/loginForm";
+        } catch(WithdrawalAccountException e) {
+            // 탈퇴한 계정이면, 예외처리
+            return "account/withdrawalAccount";
         }
     }
     /**
@@ -165,7 +169,7 @@ public class AccountController {
     }
 
     //===== ===== ===== =====
-    // 비밀번호 변경하기
+    // 계정 정보 변경하기
     //===== ===== ===== =====
     @GetMapping("/account/change")
     public String changeForm(HttpSession session, Model model, 
@@ -177,12 +181,14 @@ public class AccountController {
         String currentName = loginInfo.getName();
         model.addAttribute("currentName", currentName);
 
-        if (loginEmail.equals("visitor@visitor.com")) return "account/cannotChangePw";
+        // 방문자 계정(visitor)일 경우, 계정 정보 변경을 하지 못하도록 다른 페이지로 연결합니다.
+        if (loginEmail.equals("visitor@visitor.com")) return "account/cannotChangeAccount";
 
         return "account/changeForm";
     }
     /**
      * 비밀번호 변경을 진행합니다.
+     * 이는 계정 정보 변경 페이지(changeForm)에서 진행됩니다.
      * @param changeReqDto  dto
      * @param errors  validator
      * @param session  이미 등록된 세션 가져오기 위한
@@ -218,12 +224,14 @@ public class AccountController {
             return "account/changeForm";
         }
     }
-
-    // @GetMapping("/account/changeName") 
-    // public String changeNameGet(HttpSession session, Model model, 
-    //         HttpServletRequest httpServletRequest) {
-    //     return "account/changeForm";
-    // }
+    /**
+     * 계정의 이름(name)을 변경합니다.
+     * 이는 계정 정보 변경 페이지(changeForm)에서 진행됩니다.
+     * @param session
+     * @param model
+     * @param httpServletRequest
+     * @return
+     */
     @PostMapping("/account/changeName")
     public String changeNamePost(HttpSession session, Model model, 
             HttpServletRequest httpServletRequest) {
@@ -245,13 +253,28 @@ public class AccountController {
     }
 
     @GetMapping("/account/withdrawal")
-    public String withdrawalGet() {
+    public String withdrawalGet(HttpSession session) {
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        String loginEmail = loginInfo.getEmail();
+
+        // 방문자 계정(visitor)일 경우, 계정 정보 변경을 하지 못하도록 다른 페이지로 연결합니다.
+        if (loginEmail.equals("visitor@visitor.com")) return "account/cannotChangeAccount";
+
         return "account/withdrawal";
     }
     @PostMapping("/account/withdrawal")
-    public String withdrawalPost() {
-        // @@ 탈퇴 부분 추가
-        return "account/withdrawal";
+    public String withdrawalPost(HttpSession session) {
+        
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        Long loginId = loginInfo.getId();
+        
+        // 탈퇴하기
+        accountService.deleteAccount(loginId);
+
+        // 탈퇴 처리 후 세션 제거
+        session.invalidate();
+
+        return "account/withdrawalCompleted";
     }
 
 
