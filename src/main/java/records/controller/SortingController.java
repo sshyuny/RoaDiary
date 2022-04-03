@@ -9,8 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import account.LoginInfo;
+import account.dto.LoginInfo;
 import records.RecordsService;
 import records.dto.JoinThingsTagResDto;
 import records.dto.SortTagQuantityResDto;
@@ -104,4 +105,8 @@ public class SortingController {
         
         return "records/sortingTime";
     }
+
+    // @GetMapping("/beForeSortingOut")
+    // @ResponseBody
+    // public 
 }

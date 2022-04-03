@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import account.AccountService;
-import account.LoginInfo;
 import account.dto.ChangeAccountReqDto;
+import account.dto.LoginInfo;
 import account.dto.LoginReqDto;
 import account.dto.RegisterReqDto;
 import account.exception.DuplicateAccountException;
@@ -171,6 +171,13 @@ public class AccountController {
     //===== ===== ===== =====
     // 계정 정보 변경하기
     //===== ===== ===== =====
+    /**
+     * 계정 정보 변경 페이지로 이동합니다.
+     * @param session
+     * @param model
+     * @param changeReqDto
+     * @return
+     */
     @GetMapping("/account/change")
     public String changeForm(HttpSession session, Model model, 
             @ModelAttribute("command") ChangeAccountReqDto changeReqDto) {

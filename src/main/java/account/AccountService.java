@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import account.dto.LoginInfo;
 import account.dto.RegisterReqDto;
 import account.exception.AccountNotFoundException;
 import account.exception.DuplicateAccountException;

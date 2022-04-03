@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import account.LoginInfo;
+import account.dto.LoginInfo;
 import records.RecordsService;
 import records.RecordsUtil;
 import records.dto.JoinThingsTagResDto;
