@@ -8,7 +8,6 @@ C:\MyProject\RoaDiary\src\main\java\account\AccountService.java
 C:\MyProject\RoaDiary\src\main\java\account\validator\LoginReqDtoValidator.java
 C:\MyProject\RoaDiary\src\main\java\domain\ThingsDto.java
 C:\MyProject\RoaDiary\src\main\java\account\exception\WithdrawalAccountException.java
-C:\MyProject\RoaDiary\src\main\java\account\LoginInfo.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\StoreTagTimeResDto.java
 C:\MyProject\RoaDiary\src\main\java\account\dto\LoginReqDto.java
 C:\MyProject\RoaDiary\src\main\java\account\controller\AccountController.java
@@ -22,6 +21,7 @@ C:\MyProject\RoaDiary\src\main\java\records\RecordsUtil.java
 C:\MyProject\RoaDiary\src\main\java\domain\TagDto.java
 C:\MyProject\RoaDiary\src\main\java\records\dao\JoinDao.java
 C:\MyProject\RoaDiary\src\main\java\records\dao\ThingsTagDao.java
+C:\MyProject\RoaDiary\src\main\java\account\dto\LoginInfo.java
 C:\MyProject\RoaDiary\src\main\java\records\dao\TagDao.java
 C:\MyProject\RoaDiary\src\main\java\records\dao\ThingsDao.java
 C:\MyProject\RoaDiary\src\main\java\account\AccountDao.java

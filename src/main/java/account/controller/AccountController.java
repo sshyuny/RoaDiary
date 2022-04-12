@@ -46,6 +46,10 @@ public class AccountController {
         
         return "main";
     }
+    @GetMapping("/RoaDiary")
+    public String beforeMain() {
+        return "beforeMain";
+    }
 
     //===== ===== ===== =====
     // 계정 생성

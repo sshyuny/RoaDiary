@@ -1,5 +1,4 @@
 account\AccountService.class
-account\LoginInfo.class
 account\AccountDao.class
 account\AccountDao$2.class
 config\MvcConfig.class

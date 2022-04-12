@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import account.dto.LoginInfo;
 import records.RecordsService;
@@ -69,6 +68,7 @@ public class SortingController {
         
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) return "account/requiredLogin"; // 로그아웃 상태일 경우 안내 페이지로 연결
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
@@ -89,6 +89,7 @@ public class SortingController {
         
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) return "account/requiredLogin"; // 로그아웃 상태일 경우 안내 페이지로 연결
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
