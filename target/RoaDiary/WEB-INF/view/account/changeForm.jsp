@@ -55,6 +55,16 @@
             </label>
           </div>
         </div>
+
+        <div class="row justify-content-md-center">
+          <div class="col-3 mb-1 d-grid">
+            <label>
+              <p class="fs-5">새 비밀번호 확인</p>
+              <input name="newPasswordConfirm" type="password" class="form-control"/>
+              <form:errors path="newPasswordConfirm"/>
+            </label>
+          </div>
+        </div>
         
         <div class="row justify-content-md-center mt-4">
           <div class="col-3 mb-2 d-grid">

@@ -15,7 +15,14 @@ public class ChangeAccountReqDtoValidator implements Validator{
 
     @Override
     public void validate(Object target, Errors errors) {
+        ChangeAccountReqDto regReq = (ChangeAccountReqDto)target;
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPassword", "required");
         ValidationUtils.rejectIfEmpty(errors, "newPassword", "required");
+        if(!regReq.getNewPassword().isEmpty()) {
+            if(!regReq.isConfirmPasswordEqualto()) {
+                errors.rejectValue("newPasswordConfirm", "nonmatch");
+            }
+        }
     }
 }
