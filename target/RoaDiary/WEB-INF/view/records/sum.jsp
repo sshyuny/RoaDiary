@@ -19,6 +19,7 @@
   <body style="background-color:black;">
 
     테스트
+    아이디:<input type="text" id="checkid"><br>
 
     <script type="text/javascript">
 
@@ -27,17 +28,13 @@
             $.ajax({
                 type : "GET",
                 url : "get.do",
-                data : {
-                    kor : "${kor}",
-                    us : "${us}"
-                },
                 error : function(error) {
                     console.log("error");
                 },
                 success : function(data) {
                     console.log("success");
                     alert("check");
-                    alert(data);
+                    alert(data.msg);
                 }
             });
         });
@@ -46,14 +43,11 @@
           $.ajax({ 
               type: "GET", 
               url: "get.do",
-              data: {
-                  kor : "${kor}",
-                  us : "${us}"
-              }, error : function(error) {
+              error : function(error) {
                   console.log("error");
               },
               success: function (data) { 
-                  alert(data);
+                  alert(data.name);
                   alert("clicktest"); 
                   } 
               })
@@ -61,7 +55,7 @@
 
     </script>
 
-    <h1>Ajax Test</h1>
+    <h1>Ajax Test ${data.name} </h1>
     <div id="button_test">
         <button type="button" id="ajaxBtn" onclick="clicktest()">Ajax Test</button>
     </div>

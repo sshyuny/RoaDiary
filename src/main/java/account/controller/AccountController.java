@@ -37,15 +37,12 @@ public class AccountController {
     //===== ===== ===== =====
     @RequestMapping("/")
     public String main() {
-
-        // LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
-        // if (loginInfo != null) {
-        //     String loginEmail = loginInfo.getEmail();
-        //     model.addAttribute("loginEmail", loginEmail);
-        // }
-        
         return "main";
     }
+    /**
+     * 이전 url로 접근했을 경우 안내 페이지로 연결
+     * @return
+     */
     @GetMapping("/RoaDiary")
     public String beforeMain() {
         return "beforeMain";

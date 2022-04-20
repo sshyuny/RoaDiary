@@ -91,12 +91,19 @@ public class SortingController {
     }
 
     @GetMapping("/sortingTime")
-    public String sortingTime(HttpSession session, Model model, 
+    public String sortingTime(Model model, @RequestParam(value = "tag", required = true) String tag) {
+        model.addAttribute("tag", tag);
+        return "records/sortingTime";
+    }
+    @RequestMapping(value="getSortingTime.do") 
+    @ResponseBody
+    public int[] sortingTimeAjax(HttpSession session, Model model, 
             @RequestParam(value = "tag", required = true) String tag) {
-        
+
+
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
-        if (loginInfo == null) return "account/requiredLogin"; // 로그아웃 상태일 경우 안내 페이지로 연결
+        // if (loginInfo == null) return "account/requiredLogin"; // 로그아웃 상태일 경우 안내 페이지로 연결
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
@@ -107,24 +114,24 @@ public class SortingController {
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 시간인 int[] 반환]
         int[] arrayTime = recordsService.calculTime(listTimeRaw, tag);
-        model.addAttribute("arrayTime", arrayTime);
+        // model.addAttribute("arrayTime", arrayTime);
 
-        model.addAttribute("tag", tag);
-        
-        return "records/sortingTime";
+        return arrayTime;
     }
 
     // Ajax 시도
-
     @GetMapping("/sum") 
     public String sum(){
         return "records/sum";
     }
-
     @RequestMapping(value="get.do") 
     @ResponseBody
-    public String ajax() {
+    public Map<String, String> ajax() {
 
-        return "test test";
+        Map<String, String> rmap = new HashMap<>();
+		rmap.put("msg", "메시지입니다");
+		rmap.put("name", "test");
+
+        return rmap;
     }
 }
