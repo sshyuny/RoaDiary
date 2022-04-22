@@ -9,6 +9,7 @@ import account.controller.AccountController;
 import records.RecordsService;
 import records.controller.RecordsController;
 import records.controller.SortingController;
+import records.controller.SortingRestController;
 
 @Configuration
 public class ControllerConfig {
@@ -36,6 +37,13 @@ public class ControllerConfig {
     public SortingController sortingController() {
         SortingController controller = new SortingController();
         controller.setSortingController(recordsService);
+        return controller;
+    }
+
+    @Bean
+    public SortingRestController sortingRestController() {
+        SortingRestController controller = new SortingRestController();
+        controller.setSortingRestController(recordsService);
         return controller;
     }
     
