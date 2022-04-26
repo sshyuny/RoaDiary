@@ -34,7 +34,8 @@
                 success : function(data) {
                     console.log("success");
                     alert("check");
-                    alert(data.msg);
+                    // alert(data.msg);
+                    alert(data);
                 }
             });
         });

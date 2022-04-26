@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,10 +24,11 @@ public class SortingRestController {
         this.recordsService = recordsService;
     }
     
-    @RequestMapping(value="getSortingTime") 
+    @GetMapping(value="/getSortingTime/{dateStandardStr}/{weekNum}/{tag}") 
     public Map<String, String> sortingTimeAjax(HttpSession session, 
-            @RequestParam(value = "tag", required = false) String tag) {
-
+            @PathVariable(value = "dateStandardStr") String dateStandardStr, 
+            @PathVariable(value = "weekNum") int weekNum, 
+            @PathVariable(value = "tag") String tag) {
 
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
@@ -33,13 +36,13 @@ public class SortingRestController {
         Long loginId = loginInfo.getId();
 
         // [12주 동안 입력된 기록(객체)들 List로 생성]
-        List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsPeriod("", 12, loginId);
+        List<JoinThingsTagResDto> joinThingTagResDtos = recordsService.selectThingsPeriod(dateStandardStr, weekNum, loginId);
 
         // [날짜, 태그, 수행 시간 들어있는 객체들 List로 생성]
         List<StoreTagTimeResDto> listTimeRaw = recordsService.makeJoinTbsListByTime(joinThingTagResDtos);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 시간인 int[] 반환]
-        int[] arrayTime = recordsService.calculTime(listTimeRaw, tag);
+        int[] arrayTime = recordsService.calculTime(listTimeRaw, dateStandardStr, tag);
 
         Map<String, String> map = new HashMap<>();
         // model.addAttribute("tag", tag);

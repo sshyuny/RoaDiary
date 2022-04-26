@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,8 +61,17 @@ public class SortingController {
         LocalDate dateStandard = LocalDate.now();
         int restDay = LocalDate.now().getDayOfWeek().getValue();  // 요일을 int로 받기
         LocalDate dateFrom = dateStandard.minusDays(7 * (12 - 1) - 1 + restDay);  // 월요일부터 시작하도록 하기 위한 계산입니다(총 12주 이내).
-        String dateStandardStr = String.valueOf(dateStandard.getYear()) + "-" + String.valueOf(dateStandard.getMonthValue()) + "-" + String.valueOf(dateStandard.getDayOfMonth());
-        String dateFromStr = String.valueOf(dateFrom.getYear()) + "-" + String.valueOf(dateFrom.getMonthValue()) + "-" + String.valueOf(dateFrom.getDayOfMonth());
+        // String dateStandardStr = String.valueOf(dateStandard.getYear()) + "-" + String.valueOf(dateStandard.getMonthValue()) + "-" + String.valueOf(dateStandard.getDayOfMonth());
+        String dateStandardStr, dateFromStr;
+        if (dateStandard.getMonthValue() <= 9) dateStandardStr = String.valueOf(dateStandard.getYear()) + "-0" + String.valueOf(dateStandard.getMonthValue());
+        else dateStandardStr = String.valueOf(dateStandard.getYear()) + "-" + String.valueOf(dateStandard.getMonthValue());
+        if (dateStandard.getDayOfMonth() <= 9) dateStandardStr += "-0" + String.valueOf(dateStandard.getDayOfMonth());
+        else dateStandardStr += "-" + String.valueOf(dateStandard.getDayOfMonth());
+        
+        if (dateFrom.getMonthValue() <= 9) dateFromStr = String.valueOf(dateFrom.getYear()) + "-0" + String.valueOf(dateFrom.getMonthValue());
+        else dateFromStr = String.valueOf(dateFrom.getYear()) + "-" + String.valueOf(dateFrom.getMonthValue());
+        if (dateFrom.getDayOfMonth() <= 9) dateFromStr += "-0" + String.valueOf(dateFrom.getDayOfMonth());
+        else dateFromStr += "-" + String.valueOf(dateFrom.getDayOfMonth());
         model.addAttribute("dateStandardStr", dateStandardStr);
         model.addAttribute("dateFromStr", dateFromStr);
 
@@ -90,8 +100,11 @@ public class SortingController {
         return "records/sortingFrequency";
     }
 
-    @GetMapping("/sortingTime")
-    public String sortingTime(Model model, @RequestParam(value = "tag", required = true) String tag) {
+    @GetMapping("/sortingTime/{dateFromStr}/{weekNum}/{tag}")
+    public String sortingTime(Model model, 
+            @PathVariable(value = "dateFromStr") String dateFromStr, 
+            @PathVariable(value = "weekNum") int weekNum, 
+            @PathVariable(value = "tag") String tag) {
         model.addAttribute("tag", tag);
         return "records/sortingTime";
     }
@@ -132,12 +145,14 @@ public class SortingController {
     }
     @RequestMapping(value="get.do") 
     @ResponseBody
-    public Map<String, String> ajax() {
+    public String[] ajax() {
 
-        Map<String, String> rmap = new HashMap<>();
-		rmap.put("msg", "메시지입니다");
-		rmap.put("name", "test");
+        // Map<String, String> rmap = new HashMap<>();
+		// rmap.put("msg", "메시지입니다");
+		// rmap.put("name", "test");
 
-        return rmap;
+        String[] strArr = {"apple", "banana"};
+
+        return strArr;
     }
 }

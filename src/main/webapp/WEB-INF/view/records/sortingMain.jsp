@@ -85,7 +85,8 @@
           <c:forEach var="i" begin="0" end="4">
             <div class="row justify-content-md-center">
               <div class="col col-2 mb-2">
-                <a href="./sortingTime?tag=${listTime[i].tagName}" class="btn btn-secondary" role="button">${listTime[i].tagName}</a>
+                <%-- <a href="./sortingTime?tag=${listTime[i].tagName}" class="btn btn-secondary" role="button">${listTime[i].tagName}</a> --%>
+                <a href="./sortingTime/${dateStandardStr}/12/${listTime[i].tagName}" class="btn btn-secondary" role="button">${listTime[i].tagName}</a>
               </div>
               <div class="col col-1 mb-2">
                 ${listTime[i].quantity}분

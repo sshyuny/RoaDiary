@@ -30,11 +30,19 @@
     <div style="width:600px; height:600px;" class="mx-auto">
       <canvas id="myChart" width="100" height="100"></canvas>
       <script>
-        
+        var pathfull = new URL(window.location.href);
+        // var pathParam = pathfull.searchParams.get('tag');
+        // var pathNameStr = pathfull.pathname;
+        var pathNameArr = pathfull.pathname.split("/");
+        var pArrLength = pathNameArr.length;
+        // var newUrl = pathfull.hostname + ":8080/RoaDiary/getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
+        var newUrl = "../../../getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
+        alert(newUrl);
+
         $(document).ready(function() {
             $.ajax({
                 type : "GET",
-                url : "getSortingTime?tag=tnwjd",
+                url : newUrl,
                 error : function(error) {
                     console.log("error");
                     alert("error");

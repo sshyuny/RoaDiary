@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -189,7 +190,12 @@ public class RecordsService {
             dateTo = LocalDate.now();
         } else {
             // date String에서 Localdate로 변환
-            dateTo = LocalDate.parse(stringDate, formatter);
+            try {
+                dateTo = LocalDate.parse(stringDate, formatter);
+            } catch(DateTimeParseException e) {
+                dateTo = LocalDate.now();
+                 // @@ 이 경우 어떻게 url 수정할지
+            }
         }
         // dateFrom 생성 과정
         LocalDate dateFrom = LocalDate.of(dateTo.getYear(), dateTo.getMonthValue(), dateTo.getDayOfMonth());
@@ -317,7 +323,7 @@ public class RecordsService {
      * @param tag
      * @return  매 주의 정보가 들어있는 int[]
      */
-    public int[] calculTime(List<StoreTagTimeResDto> sortTagTimes, String tag) {
+    public int[] calculTime(List<StoreTagTimeResDto> sortTagTimes, String dateStandardStr, String tag) {
 
         // tagId를 찾습니다.
         int tagId = RecordsUtil.findTagIdFromTagNameForStore(sortTagTimes, tag);
@@ -332,9 +338,13 @@ public class RecordsService {
             if (one.getTagId() == tagId) newSortTagTimes.add(one);
         }
 
+        // LocalDate로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateTo = LocalDate.parse(dateStandardStr, formatter);
+
         // 각 주마다, 해당 태그를 몇 분씩 했는지 int[]로 반환
         // 각 태그별 수행 시간이 들어있는 객체 전달
-        int[] array = RecordsUtil.countEachWeekTime(LocalDate.now(), 12, newSortTagTimes, tagId);
+        int[] array = RecordsUtil.countEachWeekTime(dateTo, 12, newSortTagTimes, tagId);
 
         return array;
     }
