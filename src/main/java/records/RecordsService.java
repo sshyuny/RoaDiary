@@ -23,6 +23,7 @@ import records.dao.JoinDao;
 import records.dao.TagDao;
 import records.dao.ThingsDao;
 import records.dao.ThingsTagDao;
+import records.dto.EachResultsResDto;
 import records.dto.JoinThingsTagResDto;
 import records.dto.SortTagQuantityResDto;
 import records.dto.StoreTagTimeResDto;
@@ -323,7 +324,7 @@ public class RecordsService {
      * @param tag
      * @return  매 주의 정보가 들어있는 int[]
      */
-    public int[] calculTime(List<StoreTagTimeResDto> sortTagTimes, String dateStandardStr, String tag) {
+    public List<EachResultsResDto> calculTime(List<StoreTagTimeResDto> sortTagTimes, String dateStandardStr, String tag, int weekNum) {
 
         // tagId를 찾습니다.
         int tagId = RecordsUtil.findTagIdFromTagNameForStore(sortTagTimes, tag);
@@ -333,20 +334,31 @@ public class RecordsService {
         // (categoryId는 이미 sortTagTimes를 만들 때(recordsService.makeJoinTbsListByTime) 적용했기 때문에, 여기서는 안해도 됩니다.)
         List<StoreTagTimeResDto> newSortTagTimes = new ArrayList<>();
         for (StoreTagTimeResDto one : sortTagTimes) {
-            if (one.getTagName() == null) continue;  // tag가 없을 경우 제외시킵니다(안 할 경우 NullPointerException 발생).
+            if (one.getTagName() == null) continue;  // tag가 없을 경우 제외시킵니다.
             
             if (one.getTagId() == tagId) newSortTagTimes.add(one);
         }
 
+        // [날짜 계산]
         // LocalDate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateTo = LocalDate.parse(dateStandardStr, formatter);
+        // 시작일을 월요일로 맞추기 위한 계산
+        int restDay = dateTo.getDayOfWeek().getValue();  // 요일을 int로 받기
+        LocalDate fromDate = dateTo.minusDays(7 * (weekNum - 1) - 1 + restDay);  // 시작일을 월요일로 맞추기 위해 restDay를 더해줍니다.
 
         // 각 주마다, 해당 태그를 몇 분씩 했는지 int[]로 반환
         // 각 태그별 수행 시간이 들어있는 객체 전달
-        int[] array = RecordsUtil.countEachWeekTime(dateTo, 12, newSortTagTimes, tagId);
+        int[] arrayTime = RecordsUtil.countEachWeekTime(fromDate, weekNum, newSortTagTimes);
+        String[] arrayStr = RecordsUtil.storeEachWeekDayName(fromDate, weekNum);
 
-        return array;
+        // ResDto 생성
+        List<EachResultsResDto> result = new ArrayList<>();
+        for (int i = 0; i < weekNum; i++) {
+            result.add(new EachResultsResDto(arrayStr[i], arrayTime[i]));
+        }
+
+        return result;
     }
 
     /**

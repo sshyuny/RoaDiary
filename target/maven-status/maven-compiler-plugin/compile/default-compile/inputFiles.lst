@@ -11,6 +11,7 @@ C:\MyProject\RoaDiary\src\main\java\domain\ThingsDto.java
 C:\MyProject\RoaDiary\src\main\java\account\exception\WithdrawalAccountException.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\StoreTagTimeResDto.java
 C:\MyProject\RoaDiary\src\main\java\account\dto\LoginReqDto.java
+C:\MyProject\RoaDiary\src\main\java\records\dto\EachResultsResDto.java
 C:\MyProject\RoaDiary\src\main\java\account\controller\AccountController.java
 C:\MyProject\RoaDiary\src\main\java\records\dto\SortTagQuantityResDto.java
 C:\MyProject\RoaDiary\src\main\java\records\RecordsService.java

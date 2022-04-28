@@ -1,6 +1,7 @@
 package records.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import account.dto.LoginInfo;
 import records.RecordsService;
+import records.dto.EachResultsResDto;
 import records.dto.JoinThingsTagResDto;
 import records.dto.SortTagQuantityResDto;
 import records.dto.StoreTagTimeResDto;
@@ -145,14 +147,18 @@ public class SortingController {
     }
     @RequestMapping(value="get.do") 
     @ResponseBody
-    public String[] ajax() {
+    public List<EachResultsResDto> ajax() {
 
         // Map<String, String> rmap = new HashMap<>();
 		// rmap.put("msg", "메시지입니다");
 		// rmap.put("name", "test");
 
-        String[] strArr = {"apple", "banana"};
+        // Integer[] strArr = {1,2, 3};
 
-        return strArr;
+        List<EachResultsResDto> list = new ArrayList<>();
+        list.add(new EachResultsResDto("apple", 12));
+        list.add(new EachResultsResDto("banana", 13));
+
+        return list;
     }
 }

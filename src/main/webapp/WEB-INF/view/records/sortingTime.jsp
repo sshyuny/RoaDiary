@@ -37,7 +37,6 @@
         var pArrLength = pathNameArr.length;
         // var newUrl = pathfull.hostname + ":8080/RoaDiary/getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
         var newUrl = "../../../getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
-        alert(newUrl);
 
         $(document).ready(function() {
             $.ajax({
@@ -48,22 +47,42 @@
                     alert("error");
                 },
                 success : function(data) {
-                    alert("check " + data.week0 + " " + data.week2 + " " + data.week3 + " " + data.week4);
-                    drawChart(data);
+                    beforeDrawChart(data);
                 }
             });
         });
 
-        function drawChart(data) {
+        function beforeDrawChart(data) {
+          // var dateStandardStr = pathNameArr[pArrLength - 3].split("-");
+          // var dateStandard = new Date(dateStandardStr[0], dateStandardStr[1] - 1, dateStandardStr[2]);
+          // var daysArr = [];
+          var dataLength = Object.keys(data).length;
+
+          // for (var i = dataLength - 1; i >= 0 ; i--) {
+          //   daysArr[i] = dateStandard.getFullYear() + "-" + ((dateStandard.getMonth() + 1) > 9 ? (dateStandard.getMonth() + 1).toString() : "0" + (dateStandard.getMonth() + 1)) + "-" + (dateStandard.getDate() > 9 ? dateStandard.getDate().toString() : "0" + dateStandard.getDate().toString());
+          //   dateStandard.setDate(dateStandard.getDate() - 7);
+          // }          
+          var dataTime = [];
+          var daysArr = [];
+          for (var i = 0; i < dataLength; i++) {
+            dataTime[i] = data[i].extent;
+            daysArr[i] = data[i].eachTime;
+          }
+          alert(dataTime);
+          alert(daysArr);
+          drawChart(dataTime, daysArr);
+        }
+
+        function drawChart(dataTime, daysArr) {
           const ctx = document.getElementById('myChart').getContext('2d');
           const myChart = new Chart(ctx, {
               type: 'line',
               data: {
-                  labels: ['week0', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'week8', 'week9', 'week10', 'week11'],
+                  labels: daysArr,
                   datasets: [{
                       label: '수행 시간(분)',
-                      data: [data.week0, data.week1, data.week2, data.week3, data.week4, data.week5, data.week6, data.week7, data.week8, data.week9, data.week10, data.week11],
-                      // data: dataArr,
+                      // data: [data.week0, data.week1, data.week2, data.week3, data.week4, data.week5, data.week6, data.week7, data.week8, data.week9, data.week10, data.week11],
+                      data: dataTime,
                       fill: false,
                       borderColor: 'rgb(255, 99, 132)',
                       tension: 0.1

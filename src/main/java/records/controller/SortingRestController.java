@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import account.dto.LoginInfo;
 import records.RecordsService;
+import records.dto.EachResultsResDto;
 import records.dto.JoinThingsTagResDto;
 import records.dto.StoreTagTimeResDto;
 
@@ -25,7 +26,7 @@ public class SortingRestController {
     }
     
     @GetMapping(value="/getSortingTime/{dateStandardStr}/{weekNum}/{tag}") 
-    public Map<String, String> sortingTimeAjax(HttpSession session, 
+    public List<EachResultsResDto> sortingTimeAjax(HttpSession session, 
             @PathVariable(value = "dateStandardStr") String dateStandardStr, 
             @PathVariable(value = "weekNum") int weekNum, 
             @PathVariable(value = "tag") String tag) {
@@ -42,15 +43,16 @@ public class SortingRestController {
         List<StoreTagTimeResDto> listTimeRaw = recordsService.makeJoinTbsListByTime(joinThingTagResDtos);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 시간인 int[] 반환]
-        int[] arrayTime = recordsService.calculTime(listTimeRaw, dateStandardStr, tag);
+        List<EachResultsResDto> result = recordsService.calculTime(listTimeRaw, dateStandardStr, tag, 12);
 
-        Map<String, String> map = new HashMap<>();
-        // model.addAttribute("tag", tag);
-        // model.addAttribute("arrayTime", arrayTime);
-        for (int i = 0; i < arrayTime.length; i++) {
-            map.put("week" + i, arrayTime[i] + "");
-        }
-        // map.put("a", value)
-        return map;
+        // Map<String, String> map = new HashMap<>();
+        // // model.addAttribute("tag", tag);
+        // // model.addAttribute("arrayTime", arrayTime);
+        // for (int i = 0; i < arrayTime.length; i++) {
+        //     map.put("week" + i, arrayTime[i] + "");
+        // }
+        // // map.put("a", value)
+
+        return result;
     }
 }

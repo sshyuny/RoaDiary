@@ -152,13 +152,13 @@ public class RecordsUtil {
      * @param tagId
      * @return
      */
-    public static int[] countEachWeekTime(LocalDate startDate, int weekNum, List<StoreTagTimeResDto> dataList, int tagId){
+    public static int[] countEachWeekTime(LocalDate fromDate, int weekNum, List<StoreTagTimeResDto> dataList){
 
         // [배열 results 생성]
         // 각 주마다 주어진 파라미터 tag의 사용 횟수를 넣기 위한 배열
         int[] frequencyResults = new int[weekNum];  // 몇주 동안        
-        int restDay = startDate.getDayOfWeek().getValue();  // 요일을 int로 받기
-        LocalDate fromDate = startDate.minusDays(7 * (weekNum - 1) - 1 + restDay);  // 시작일을 월요일로 맞추기 위해 restDay를 더해줍니다.
+        // int restDay = startDate.getDayOfWeek().getValue();  // 요일을 int로 받기
+        // LocalDate fromDate = startDate.minusDays(7 * (weekNum - 1) - 1 + restDay);  // 시작일을 월요일로 맞추기 위해 restDay를 더해줍니다.
         int mok = 0;  // 몇 번째 주에 해당하는지 저장
         int frequency = 0;  // 해당 tag가 몇 번 사용되는지 저장
 
@@ -197,6 +197,21 @@ public class RecordsUtil {
         }
 
         return frequencyResults;
+    }
+    public static String[] storeEachWeekDayName(LocalDate fromDate, int weekNum) {
+        String[] result = new String[weekNum];
+
+        String dateStr;
+        for (int i = 0; i < weekNum ; i++) {
+            if (fromDate.getMonthValue() <= 9) dateStr = String.valueOf(fromDate.getYear()) + "-0" + String.valueOf(fromDate.getMonthValue());
+            else dateStr = String.valueOf(fromDate.getYear()) + "-" + String.valueOf(fromDate.getMonthValue());
+            if (fromDate.getDayOfMonth() <= 9) dateStr += "-0" + String.valueOf(fromDate.getDayOfMonth());
+            else dateStr += "-" + String.valueOf(fromDate.getDayOfMonth());
+
+            fromDate = fromDate.plusDays(7);
+            result[i] = dateStr;
+        }
+        return result;
     }
 
     /**
