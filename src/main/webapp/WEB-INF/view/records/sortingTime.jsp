@@ -68,8 +68,6 @@
             dataTime[i] = data[i].extent;
             daysArr[i] = data[i].eachTime;
           }
-          alert(dataTime);
-          alert(daysArr);
           drawChart(dataTime, daysArr);
         }
 
@@ -81,7 +79,6 @@
                   labels: daysArr,
                   datasets: [{
                       label: '수행 시간(분)',
-                      // data: [data.week0, data.week1, data.week2, data.week3, data.week4, data.week5, data.week6, data.week7, data.week8, data.week9, data.week10, data.week11],
                       data: dataTime,
                       fill: false,
                       borderColor: 'rgb(255, 99, 132)',

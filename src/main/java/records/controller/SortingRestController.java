@@ -43,7 +43,7 @@ public class SortingRestController {
         List<StoreTagTimeResDto> listTimeRaw = recordsService.makeJoinTbsListByTime(joinThingTagResDtos);
 
         // [각 주마다, 파라미터로 주어진 태그의 수행 시간인 int[] 반환]
-        List<EachResultsResDto> result = recordsService.calculTime(listTimeRaw, dateStandardStr, tag, 12);
+        List<EachResultsResDto> result = recordsService.calculTime(listTimeRaw, dateStandardStr, tag, weekNum);
 
         // Map<String, String> map = new HashMap<>();
         // // model.addAttribute("tag", tag);

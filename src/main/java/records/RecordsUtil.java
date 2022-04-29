@@ -1,6 +1,8 @@
 package records;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +214,26 @@ public class RecordsUtil {
             result[i] = dateStr;
         }
         return result;
+    }
+    
+    public static LocalDate makeLocalDateFromStr(String dayStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // dateTo 생성 과정 - 1
+        LocalDate dateTo;
+        if (dayStr.equals("")) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
+                                      //(java.lang.NoSuchMethodError: java.lang.String.isBlank()Z 때문에 isBlank쓰지 않음)
+            dateTo = LocalDate.now();
+        } else {
+            // date String에서 Localdate로 변환
+            try {
+                dateTo = LocalDate.parse(dayStr, formatter);
+            } catch(DateTimeParseException e) {
+                dateTo = LocalDate.now();
+                 // @@ 이 경우 어떻게 url 수정할지
+            }
+        }
+        
+        return dateTo;
     }
 
     /**
