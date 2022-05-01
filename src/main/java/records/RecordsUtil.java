@@ -200,26 +200,44 @@ public class RecordsUtil {
 
         return frequencyResults;
     }
+
+    /**
+     * 기록 분석 결과에서, 각 결과에 해당되는 날짜를 양식에 맞춰 String[]로 반환합니다.
+     * @param fromDate 기록 분석 시작 날짜
+     * @param weekNum
+     * @return
+     */
     public static String[] storeEachWeekDayName(LocalDate fromDate, int weekNum) {
         String[] result = new String[weekNum];
-
         String dateStr;
+
         for (int i = 0; i < weekNum ; i++) {
+            // 월(month) 양식 맞추기
             if (fromDate.getMonthValue() <= 9) dateStr = String.valueOf(fromDate.getYear()) + "-0" + String.valueOf(fromDate.getMonthValue());
             else dateStr = String.valueOf(fromDate.getYear()) + "-" + String.valueOf(fromDate.getMonthValue());
+            // 일(day) 양식 맞추기
             if (fromDate.getDayOfMonth() <= 9) dateStr += "-0" + String.valueOf(fromDate.getDayOfMonth());
             else dateStr += "-" + String.valueOf(fromDate.getDayOfMonth());
 
+            // 다음 결과 시작 날짜로 설정
             fromDate = fromDate.plusDays(7);
+
             result[i] = dateStr;
         }
+        
         return result;
     }
     
+    /**
+     * 요청받은 날을 String에서 LocalDate로 변환합니다.
+     * 요청값이 없을 경우와 이상한 날짜값 들어올 경우, 오늘 날짜를 사용합니다.
+     * @param dayStr
+     * @return
+     */
     public static LocalDate makeLocalDateFromStr(String dayStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // dateTo 생성 과정 - 1
         LocalDate dateTo;
+
         if (dayStr.equals("")) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
                                       //(java.lang.NoSuchMethodError: java.lang.String.isBlank()Z 때문에 isBlank쓰지 않음)
             dateTo = LocalDate.now();
@@ -228,8 +246,8 @@ public class RecordsUtil {
             try {
                 dateTo = LocalDate.parse(dayStr, formatter);
             } catch(DateTimeParseException e) {
+                // 이상한 날짜값 들어올 경우, 오늘 날짜를 사용
                 dateTo = LocalDate.now();
-                 // @@ 이 경우 어떻게 url 수정할지
             }
         }
         

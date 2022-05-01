@@ -47,10 +47,20 @@
                     alert("error");
                 },
                 success : function(data) {
+                    checkIfItIsNoLoginInfo(data);
                     beforeDrawChart(data);
                 }
             });
         });
+
+        function checkIfItIsNoLoginInfo(data) {
+          if (data[0].extent == "noLoginInfo") {
+            $.ajax({
+                type : "GET",
+                url : "../../../account/requiredLogin",
+            });
+          }
+        }
 
         function beforeDrawChart(data) {
           // var dateStandardStr = pathNameArr[pArrLength - 3].split("-");

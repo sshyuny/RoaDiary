@@ -182,24 +182,7 @@ public class RecordsService {
      */
     public List<JoinThingsTagResDto> selectThingsPeriod(String stringDate, int weekNum, Long loginId) {
 
-        // [기준 시점 날짜 받기]
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // // dateTo 생성 과정 - 1
-        // LocalDate dateTo;
-        // if (stringDate.equals("")) {  // 따로 기입받지 않은 경우, 오늘이 기준 시점이 됩니다.
-        //                               //(java.lang.NoSuchMethodError: java.lang.String.isBlank()Z 때문에 isBlank쓰지 않음)
-        //     dateTo = LocalDate.now();
-        // } else {
-        //     // date String에서 Localdate로 변환
-        //     try {
-        //         dateTo = LocalDate.parse(stringDate, formatter);
-        //     } catch(DateTimeParseException e) {
-        //         dateTo = LocalDate.now();
-        //          // @@ 이 경우 어떻게 url 수정할지
-        //     }
-        // }
-
-        // 받은 date String을 LocalDate로 변환
+        // [받은 date String을 LocalDate로 변환]
         // (변환 불가할 경우 오늘 날짜를 반환)
         LocalDate dateTo = RecordsUtil.makeLocalDateFromStr(stringDate);
         // dateFrom 생성 과정
@@ -343,12 +326,7 @@ public class RecordsService {
             if (one.getTagId() == tagId) newSortTagTimes.add(one);
         }
 
-        // [날짜 계산]
-        // LocalDate로 변환
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // LocalDate dateTo = LocalDate.parse(dateStandardStr, formatter);
-
-        // 받은 date String을 LocalDate로 변환
+        // [받은 date String을 LocalDate로 변환]
         // (변환 불가할 경우 오늘 날짜를 반환)
         LocalDate dateTo = RecordsUtil.makeLocalDateFromStr(dateStandardStr);
         // 시작일을 월요일로 맞추기 위한 계산

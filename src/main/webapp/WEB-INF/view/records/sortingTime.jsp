@@ -47,17 +47,34 @@
                     alert("error");
                 },
                 success : function(data) {
-                    beforeDrawChart(data);
+                    checkIfItIsNoLoginInfo(data);
+                    // beforeDrawChart(data);
                 }
             });
         });
 
-        function beforeDrawChart(data) {
-          // var dateStandardStr = pathNameArr[pArrLength - 3].split("-");
-          // var dateStandard = new Date(dateStandardStr[0], dateStandardStr[1] - 1, dateStandardStr[2]);
-          // var daysArr = [];
-          var dataLength = Object.keys(data).length;
+        function checkIfItIsNoLoginInfo(data) {
+          if (data[0].eachTime == "noLoginInfo") {
+            alert("check");
+            // $.get("http://localhost:8080/RoaDiary/");
+            $.ajax({
+                type : "GET",
+                url : "../../../account/requiredLogin/",  //@@ Url연결 안되는 부분 수정하기
+                error : function(error) {
+                    console.log("error");
+                    alert("checkIfItIsNoLoginInfo error");
+                },
+                success : function(data) {
+                    alert("success");
+                }
+            });
+          } else {
+            beforeDrawChart(data);
+          }
+        }
 
+        function beforeDrawChart(data) {
+          var dataLength = Object.keys(data).length;
           // for (var i = dataLength - 1; i >= 0 ; i--) {
           //   daysArr[i] = dateStandard.getFullYear() + "-" + ((dateStandard.getMonth() + 1) > 9 ? (dateStandard.getMonth() + 1).toString() : "0" + (dateStandard.getMonth() + 1)) + "-" + (dateStandard.getDate() > 9 ? dateStandard.getDate().toString() : "0" + dateStandard.getDate().toString());
           //   dateStandard.setDate(dateStandard.getDate() - 7);
@@ -97,8 +114,6 @@
         
       </script>
     </div>
-
-    
 
   </body>
 </html>
