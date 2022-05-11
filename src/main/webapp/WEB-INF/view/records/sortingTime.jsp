@@ -19,7 +19,7 @@
     <figure class="text-center">
       <h1 style="color:white;">RoaDiary</h1>
       <h3 style="color:white;">태그 시간 분석</h3>
-      <p style="color:white;">12주 동안 "${tag}"의 사용 시간(분)</p>
+      <p style="color:white;">${weekNum}주 동안 "${tag}"의 사용 시간(분)</p>
     </figure>
 
     <c:forEach var="i" begin="0" end="11">
@@ -56,7 +56,6 @@
         function checkIfItIsNoLoginInfo(data) {
           if (data[0].eachTime == "noLoginInfo") {
             alert("check");
-            // $.get("http://localhost:8080/RoaDiary/");
             $.ajax({
                 type : "GET",
                 url : "../../../account/requiredLogin/",  //@@ Url연결 안되는 부분 수정하기

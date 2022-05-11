@@ -19,7 +19,7 @@
     <figure class="text-center">
       <h1 style="color:white;">RoaDiary</h1>
       <h3 style="color:white;">태그 시간 분석</h3>
-      <p style="color:white;">12주 동안 "${tag}"의 사용 시간(분)</p>
+      <p style="color:white;">${weekNum}주 동안 "${tag}"의 사용 시간(분)</p>
     </figure>
 
     <c:forEach var="i" begin="0" end="11">
@@ -48,26 +48,33 @@
                 },
                 success : function(data) {
                     checkIfItIsNoLoginInfo(data);
-                    beforeDrawChart(data);
+                    // beforeDrawChart(data);
                 }
             });
         });
 
         function checkIfItIsNoLoginInfo(data) {
-          if (data[0].extent == "noLoginInfo") {
+          if (data[0].eachTime == "noLoginInfo") {
+            alert("check");
+            // $.get("http://localhost:8080/RoaDiary/");
             $.ajax({
                 type : "GET",
-                url : "../../../account/requiredLogin",
+                url : "../../../account/requiredLogin/",  //@@ Url연결 안되는 부분 수정하기
+                error : function(error) {
+                    console.log("error");
+                    alert("checkIfItIsNoLoginInfo error");
+                },
+                success : function(data) {
+                    alert("success");
+                }
             });
+          } else {
+            beforeDrawChart(data);
           }
         }
 
         function beforeDrawChart(data) {
-          // var dateStandardStr = pathNameArr[pArrLength - 3].split("-");
-          // var dateStandard = new Date(dateStandardStr[0], dateStandardStr[1] - 1, dateStandardStr[2]);
-          // var daysArr = [];
           var dataLength = Object.keys(data).length;
-
           // for (var i = dataLength - 1; i >= 0 ; i--) {
           //   daysArr[i] = dateStandard.getFullYear() + "-" + ((dateStandard.getMonth() + 1) > 9 ? (dateStandard.getMonth() + 1).toString() : "0" + (dateStandard.getMonth() + 1)) + "-" + (dateStandard.getDate() > 9 ? dateStandard.getDate().toString() : "0" + dateStandard.getDate().toString());
           //   dateStandard.setDate(dateStandard.getDate() - 7);
@@ -107,8 +114,6 @@
         
       </script>
     </div>
-
-    
 
   </body>
 </html>

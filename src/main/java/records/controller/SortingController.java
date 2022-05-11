@@ -102,12 +102,22 @@ public class SortingController {
         return "records/sortingFrequency";
     }
 
+    /**
+     * 수행 시간별 정리 그래프 페이지 반환합니다.
+     * 데이터는 RestController의 sortingTimeAjax()에서 반환합니다. 
+     * @param model
+     * @param dateFromStr
+     * @param weekNum
+     * @param tag
+     * @return
+     */
     @GetMapping("/sortingTime/{dateFromStr}/{weekNum}/{tag}")
     public String sortingTime(Model model, 
             @PathVariable(value = "dateFromStr") String dateFromStr, 
             @PathVariable(value = "weekNum") int weekNum, 
             @PathVariable(value = "tag") String tag) {
 
+        model.addAttribute("weekNum", weekNum);
         model.addAttribute("tag", tag);
         return "records/sortingTime";
     }
@@ -117,7 +127,7 @@ public class SortingController {
         return "account/requiredLogin";
     }
 
-    // Ajax 시도
+    // Ajax 테스트
     @GetMapping("/sum") 
     public String sum(){
         return "records/sum";
