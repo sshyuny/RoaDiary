@@ -18,5 +18,7 @@
       <a href="./" class="btn btn-dark" role="button">메인 페이지로 돌아가기</a>
     </figure>
 
+    
+
   </body>
 </html>

@@ -34,10 +34,10 @@ public class SortingRestController {
 
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
-        if (loginInfo == null) {
-            result.add(new EachResultsResDto("noLoginInfo", 0));
-            return result;
-        }
+        // if (loginInfo == null) {
+        //     result.add(new EachResultsResDto("noLoginInfo", 0));
+        //     return result;
+        // }
         Long loginId = loginInfo.getId();
 
         // [weekNum에 이상값 들어올 경우 12로 바꿔줌]

@@ -22,11 +22,7 @@
       <p style="color:white;">${weekNum}주 동안 "${tag}"의 사용 시간(분)</p>
     </figure>
 
-    <c:forEach var="i" begin="0" end="11">
-      <input type="hidden" id="week${i}" value="${arrayTime[i]}"/>
-    </c:forEach>
     <br>
-
     <div style="width:600px; height:600px;" class="mx-auto">
       <canvas id="myChart" width="100" height="100"></canvas>
       <script>
@@ -35,7 +31,6 @@
         // var pathNameStr = pathfull.pathname;
         var pathNameArr = pathfull.pathname.split("/");
         var pArrLength = pathNameArr.length;
-        // var newUrl = pathfull.hostname + ":8080/RoaDiary/getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
         var newUrl = "../../../getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
 
         $(document).ready(function() {
@@ -47,8 +42,8 @@
                     alert("error");
                 },
                 success : function(data) {
-                    checkIfItIsNoLoginInfo(data);
-                    // beforeDrawChart(data);
+                    // checkIfItIsNoLoginInfo(data);
+                    beforeDrawChart(data);
                 }
             });
         });
@@ -73,11 +68,7 @@
         }
 
         function beforeDrawChart(data) {
-          var dataLength = Object.keys(data).length;
-          // for (var i = dataLength - 1; i >= 0 ; i--) {
-          //   daysArr[i] = dateStandard.getFullYear() + "-" + ((dateStandard.getMonth() + 1) > 9 ? (dateStandard.getMonth() + 1).toString() : "0" + (dateStandard.getMonth() + 1)) + "-" + (dateStandard.getDate() > 9 ? dateStandard.getDate().toString() : "0" + dateStandard.getDate().toString());
-          //   dateStandard.setDate(dateStandard.getDate() - 7);
-          // }          
+          var dataLength = Object.keys(data).length;         
           var dataTime = [];
           var daysArr = [];
           for (var i = 0; i < dataLength; i++) {

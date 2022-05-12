@@ -106,17 +106,25 @@ public class SortingController {
      * 수행 시간별 정리 그래프 페이지 반환합니다.
      * 데이터는 RestController의 sortingTimeAjax()에서 반환합니다. 
      * @param model
-     * @param dateFromStr
+     * @param dateStandardStr
      * @param weekNum
      * @param tag
      * @return
      */
-    @GetMapping("/sortingTime/{dateFromStr}/{weekNum}/{tag}")
-    public String sortingTime(Model model, 
-            @PathVariable(value = "dateFromStr") String dateFromStr, 
+    @GetMapping("/sortingTime/{dateStandardStr}/{weekNum}/{tag}")
+    public String sortingTime(Model model, HttpSession session, 
+            @PathVariable(value = "dateStandardStr") String dateStandardStr, 
             @PathVariable(value = "weekNum") int weekNum, 
             @PathVariable(value = "tag") String tag) {
 
+        // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) {
+            String url = "./sortingTime/" + dateStandardStr + "/12/" + tag;
+            model.addAttribute("redirectURL", url);
+            return "account/loginForm";
+        }
+        
         model.addAttribute("weekNum", weekNum);
         model.addAttribute("tag", tag);
         return "records/sortingTime";

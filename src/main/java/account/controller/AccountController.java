@@ -115,7 +115,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/account/login")
-    public String loginSubmit(LoginReqDto loginReqDto, Errors errors, HttpSession session) {
+    public String loginSubmit(LoginReqDto loginReqDto, Errors errors, HttpSession session, HttpServletRequest request) {
         // validator 설정
         new LoginReqDtoValidator().validate(loginReqDto, errors);
         if(errors.hasErrors()) {
@@ -129,6 +129,8 @@ public class AccountController {
                 loginReqDto.getPassword()
                 );
             session.setAttribute("loginInfo", loginInfo);
+            String redirectURL = request.getParameter("redirectURL");
+            if (redirectURL != "") return redirectURL;
             // 로그인 성공 페이지로
             return "account/loginSuccess";
         } catch(WrongIdPasswordException e) {

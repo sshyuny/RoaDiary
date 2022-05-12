@@ -16,7 +16,7 @@
       <h3 style="color:white;">로그인</h3>
     </figure>
 
-    <form:form modelAttribute="loginReqDto">
+    <form:form action="account/login" modelAttribute="loginReqDto">
 
       <figure class="text-center mt-2 mb-4">
         <form:errors />
@@ -47,6 +47,8 @@
           <button type="submit" class="btn btn-dark">제출하기</button>
         </div>
       </div>
+
+      <input type="hidden" id="redirectURL" name="redirectURL" value="${redirectURL}"/>
 
     </form:form>
   </body>
