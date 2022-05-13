@@ -1,5 +1,6 @@
 package records.controller;
 
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,7 +112,7 @@ public class SortingController {
      * @param tag
      * @return
      */
-    @GetMapping("/sortingTime/{dateStandardStr}/{weekNum}/{tag}")
+    @RequestMapping("/sortingTime/{dateStandardStr}/{weekNum}/{tag}")
     public String sortingTime(Model model, HttpSession session, 
             @PathVariable(value = "dateStandardStr") String dateStandardStr, 
             @PathVariable(value = "weekNum") int weekNum, 
@@ -120,9 +121,13 @@ public class SortingController {
         // [이미 등록된 세션으로 LoginInfo 객체 생성] user key Id 가져옴
         LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
         if (loginInfo == null) {
-            String url = "./sortingTime/" + dateStandardStr + "/12/" + tag;
-            model.addAttribute("redirectURL", url);
-            return "account/loginForm";
+            String url = "sortingTime/" + dateStandardStr + "/12/" + tag;
+            try {
+                String urlEncoded = URLEncoder.encode(url, "UTF-8");
+                return "redirect:/account/login?redirect=" + urlEncoded;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         
         model.addAttribute("weekNum", weekNum);

@@ -16,7 +16,7 @@
       <h3 style="color:white;">로그인</h3>
     </figure>
 
-    <form:form action="account/login" modelAttribute="loginReqDto">
+    <form:form action="login" modelAttribute="loginReqDto">
 
       <figure class="text-center mt-2 mb-4">
         <form:errors />
@@ -48,7 +48,21 @@
         </div>
       </div>
 
-      <input type="hidden" id="redirectURL" name="redirectURL" value="${redirectURL}"/>
+      <%-- url 정보 가져오기(없을 경우는, 일반 경로 로그인 페이지인 경우) --%>
+      <input type="hidden" id="redirectUrl" name="redirectUrl"/>
+      <input type="hidden" id="redirectUrlTag" name="redirectUrlTag"/>
+
+      <script>
+        var pathfull = new URL(window.location.href);
+        var pathParam = pathfull.searchParams.get('redirect');
+        var pathParamDevided = pathParam.split("/");
+
+        window.onload = function() {
+          // 서버에서는 태그만 따로 urlEncode하기 때문에, 따로 보내줍니다.
+          document.getElementById('redirectUrl').value = pathParamDevided[0] + "/" + pathParamDevided[1] + "/" + pathParamDevided[2] + "/";
+          document.getElementById('redirectUrlTag').value = pathParamDevided[3];
+        }
+      </script>
 
     </form:form>
   </body>

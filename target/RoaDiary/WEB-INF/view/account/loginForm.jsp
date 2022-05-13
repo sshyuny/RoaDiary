@@ -16,7 +16,7 @@
       <h3 style="color:white;">로그인</h3>
     </figure>
 
-    <form:form action="account/login" modelAttribute="loginReqDto">
+    <form:form action="login" modelAttribute="loginReqDto">
 
       <figure class="text-center mt-2 mb-4">
         <form:errors />
@@ -48,7 +48,28 @@
         </div>
       </div>
 
-      <input type="hidden" id="redirectURL" name="redirectURL" value="${redirectURL}"/>
+      
+      <input type="hidden" id="redirectUrl" name="redirectUrl"/>
+      <input type="hidden" id="redirectUrlTag" name="redirectUrlTag"/>
+
+      <%-- <script>
+        alert(document. getElementsByTagName("aredirectURL").value);
+      </script> --%>
+      <script>
+        var pathfull = new URL(window.location.href);
+        var pathParam = pathfull.searchParams.get('redirect');
+        var pathParamDevided = pathParam.split("/");
+
+        window.onload = function() {
+          alert(pathParam);
+          document.getElementById('redirectUrl').value = pathParamDevided[0] + "/" + pathParamDevided[1] + "/" + pathParamDevided[2] + "/";
+          document.getElementById('redirectUrlTag').value = pathParamDevided[3];
+        }
+        // var pathNameStr = pathfull.pathname;
+        // var pathNameArr = pathfull.pathname.split("/");
+        // var pArrLength = pathNameArr.length;
+        // var newUrl = "../../../getSortingTime/" + pathNameArr[pArrLength - 3] + "/" + pathNameArr[pArrLength - 2] + "/" + pathNameArr[pArrLength - 1];
+      </script>
 
     </form:form>
   </body>

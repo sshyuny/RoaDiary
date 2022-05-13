@@ -1,5 +1,7 @@
 package account.controller;
 
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import account.AccountService;
 import account.dto.ChangeAccountReqDto;
@@ -121,6 +124,7 @@ public class AccountController {
         if(errors.hasErrors()) {
             return "account/loginForm";
         }
+
         // 로그인 시도
         try{
             // 세션 생성
@@ -129,9 +133,23 @@ public class AccountController {
                 loginReqDto.getPassword()
                 );
             session.setAttribute("loginInfo", loginInfo);
-            String redirectURL = request.getParameter("redirectURL");
-            if (redirectURL != "") return redirectURL;
-            // 로그인 성공 페이지로
+
+            // 페이지에서 보내는 정보 가져오기
+            String redirectURL = request.getParameter("redirectUrl");
+            String redirectUrlTag = request.getParameter("redirectUrlTag");
+
+            // 페이지에서 보내는 정보가 있을 경우(일반 경로 로그인 페이지가 아닐 경우)
+            if (redirectURL != "") {
+                try {
+                    String tagEncoded = URLEncoder.encode(redirectUrlTag, "UTF-8");
+                    String urlEncoded = redirectURL + tagEncoded;
+                    return "redirect:/"+ urlEncoded;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } 
+            
+            // 일반 경로 로그인 페이지일 경우, 로그인 성공 페이지로
             return "account/loginSuccess";
         } catch(WrongIdPasswordException e) {
             // 이메일과 비밀번호 일치 안되면, 예외처리
