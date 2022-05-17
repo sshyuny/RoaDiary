@@ -205,7 +205,9 @@
                         <input name="tag4" type="text" class="form-control" placeholder="태그4"/>
                       </div>
                       <div class="col col-lg-2">
-                        <button type="submit" class="btn btn-dark btn-outline-primary">빠른 제출</button>
+                        <%-- <button type="submit" class="btn btn-dark btn-outline-primary">빠른 제출</button> --%>
+                        <%-- 버튼 눌리면 함수 호출하여 ajax로 post 메서드 사용하도록 수정 --%>
+                        <button type="button" onclick="quickSave()" class="btn btn-dark btn-outline-primary">빠른 제출</button>
                       </div>
                     </div>
                   </form>
